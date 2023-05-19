@@ -20,8 +20,8 @@ task prepareWorkspace {
 
 loom {
     customManifest.set(custom_manifest_url)
-    noIntermediateMappings()
     clientOnlyMinecraftJar()
+    intermediaryUrl = "https://github.com/BluSpring/maven-repo/raw/main/xyz/bluspring/intermediary/empty/intermediary-empty.jar"
 }
 
 sourceSets {
@@ -40,7 +40,7 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
     minecraft "com.mojang:minecraft:${minecraft_version}"
-    mappings "org.mcphackers:retromcp:b1.2-client"
+    mappings files("${project.rootDir}/libs/retromcp-${minecraft_version}-client.jar")
 
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
 
@@ -49,6 +49,9 @@ dependencies {
     implementation "org.concentus:Concentus:${concentus_version}"
     implementation "de.maxhenkel.rnnoise4j:rnnoise4j:${rnnoise4j_version}"
     implementation "de.maxhenkel.lame4j:lame4j:${lame4j_version}"
+
+    implementation 'org.apache.logging.log4j:log4j-api:2.20.0'
+    implementation 'org.apache.logging.log4j:log4j-core:2.20.0'
 
     implementation project(':api')
 }
