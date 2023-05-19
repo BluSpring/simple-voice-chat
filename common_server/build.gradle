@@ -41,7 +41,7 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
     minecraft "com.mojang:minecraft:${minecraft_version}"
-    mappings files("${project.rootDir}/libs/retromcp-${minecraft_version}-server.jar")
+    mappings "org.mcphackers:retromcp:${minecraft_version}-server"
 
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
 
