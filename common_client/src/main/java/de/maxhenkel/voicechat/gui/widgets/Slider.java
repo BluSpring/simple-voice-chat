@@ -1,11 +1,8 @@
 package de.maxhenkel.voicechat.gui.widgets;
 
 import de.maxhenkel.voicechat.util.MathHelper2;
-import de.maxhenkel.voicechat.util.TextureHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.GuiButton;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.src.MathHelper;
 import org.lwjgl.opengl.GL11;
 
 public abstract class Slider extends GuiButton {

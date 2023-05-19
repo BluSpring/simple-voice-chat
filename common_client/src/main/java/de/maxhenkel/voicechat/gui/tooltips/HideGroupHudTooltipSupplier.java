@@ -6,7 +6,7 @@ import de.maxhenkel.voicechat.gui.widgets.ImageButton;
 import de.maxhenkel.voicechat.util.TextureHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.GuiScreen;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.src.StringTranslate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,9 +24,9 @@ public class HideGroupHudTooltipSupplier implements ImageButton.TooltipSupplier 
         List<String> tooltip = new ArrayList<>();
 
         if (VoicechatClient.CLIENT_CONFIG.showGroupHUD.get()) {
-            tooltip.add(new TextComponentTranslation("message.voicechat.show_group_hud.enabled").getUnformattedComponentText());
+            tooltip.add(StringTranslate.getInstance().translateKey("message.voicechat.show_group_hud.enabled"));
         } else {
-            tooltip.add(new TextComponentTranslation("message.voicechat.show_group_hud.disabled").getUnformattedComponentText());
+            tooltip.add(StringTranslate.getInstance().translateKey("message.voicechat.show_group_hud.disabled"));
         }
 
         Minecraft mc = MinecraftAccessor.getMinecraft();

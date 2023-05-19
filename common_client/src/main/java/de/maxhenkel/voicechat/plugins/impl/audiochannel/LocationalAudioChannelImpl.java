@@ -11,7 +11,7 @@ import de.maxhenkel.voicechat.voice.common.LocationSoundPacket;
 import de.maxhenkel.voicechat.voice.common.Utils;
 import de.maxhenkel.voicechat.voice.server.Server;
 import de.maxhenkel.voicechat.voice.server.ServerWorldUtils;
-import net.minecraft.world.WorldServer;
+import net.minecraft.src.World;
 
 import java.util.UUID;
 
@@ -68,7 +68,7 @@ public class LocationalAudioChannelImpl extends AudioChannelImpl implements Loca
     }
 
     private void broadcast(LocationSoundPacket packet) {
-        server.broadcast(ServerWorldUtils.getPlayersInRange(level.getServerLevel(), position.getPosition(), server.getBroadcastRange(distance), filter == null ? player -> true : player -> filter.test(new ServerPlayerImpl(player))), packet, null, null, null, SoundPacketEvent.SOURCE_PLUGIN);
+        server.broadcast(ServerWorldUtils.getPlayersInRange((World) level.getServerLevel(), position.getPosition(), server.getBroadcastRange(distance), filter == null ? player -> true : player -> filter.test(new ServerPlayerImpl(player))), packet, null, null, null, SoundPacketEvent.SOURCE_PLUGIN);
     }
 
 }

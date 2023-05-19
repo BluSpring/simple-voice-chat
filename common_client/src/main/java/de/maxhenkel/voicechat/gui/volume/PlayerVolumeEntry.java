@@ -6,7 +6,6 @@ import de.maxhenkel.voicechat.gui.GameProfileUtils;
 import de.maxhenkel.voicechat.util.TextureHelper;
 import de.maxhenkel.voicechat.voice.common.PlayerState;
 import net.minecraft.src.Gui;
-import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
@@ -40,10 +39,10 @@ public class PlayerVolumeEntry extends VolumeEntry {
         } else {
             TextureHelper.bindTexture(OTHER_VOLUME_ICON);
             ((GuiExtension) screen).drawScaledCustomSizeModalRect(skinX, skinY, 16, 16, 16, 16, SKIN_SIZE, SKIN_SIZE, 16, 16);
-            minecraft.fontRenderer.drawString(OTHER_VOLUME.getUnformattedComponentText(), textX, textY, PLAYER_NAME_COLOR);
+            minecraft.fontRenderer.drawString(OTHER_VOLUME, textX, textY, PLAYER_NAME_COLOR);
             if (isSelected) {
                 screen.postRender(() -> {
-                    screen.drawHoveringText(OTHER_VOLUME_DESCRIPTION.getUnformattedComponentText(), mouseX, mouseY);
+                    screen.drawHoveringText(OTHER_VOLUME_DESCRIPTION, mouseX, mouseY);
                 });
             }
         }

@@ -8,11 +8,7 @@ import de.maxhenkel.voicechat.voice.client.ClientManager;
 import de.maxhenkel.voicechat.voice.client.ClientVoicechat;
 import de.maxhenkel.voicechat.voice.client.DataLines;
 import net.minecraft.src.GuiScreen;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.src.StringTranslate;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -20,8 +16,8 @@ import java.util.List;
 public class SelectSpeakerScreen extends SelectDeviceScreen {
 
     protected static final String SPEAKER_ICON = TextureHelper.format(Voicechat.MODID, "textures/icons/speaker.png");
-    protected static final ITextComponent TITLE = new TextComponentTranslation("gui.voicechat.select_speaker.title");
-    protected static final ITextComponent NO_SPEAKER = new TextComponentTranslation("message.voicechat.no_speaker").setStyle(new Style().setColor(TextFormatting.GRAY));
+    protected static final String TITLE = StringTranslate.getInstance().translateKey("gui.voicechat.select_speaker.title");
+    protected static final String NO_SPEAKER = StringTranslate.getInstance().translateKey("message.voicechat.no_speaker");
 
     public SelectSpeakerScreen(@Nullable GuiScreen parent) {
         super(TITLE, parent);
@@ -44,7 +40,7 @@ public class SelectSpeakerScreen extends SelectDeviceScreen {
     }
 
     @Override
-    public ITextComponent getEmptyListComponent() {
+    public String getEmptyListComponent() {
         return NO_SPEAKER;
     }
 

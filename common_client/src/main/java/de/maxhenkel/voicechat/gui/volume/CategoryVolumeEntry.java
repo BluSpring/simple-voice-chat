@@ -6,8 +6,6 @@ import de.maxhenkel.voicechat.plugins.impl.VolumeCategoryImpl;
 import de.maxhenkel.voicechat.util.TextureHelper;
 import de.maxhenkel.voicechat.voice.client.ClientManager;
 import net.minecraft.src.Gui;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 public class CategoryVolumeEntry extends VolumeEntry {

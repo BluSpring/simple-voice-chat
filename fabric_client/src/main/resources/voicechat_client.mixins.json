@@ -10,6 +10,7 @@
     "NetClientHandlerMixin",
     "NetHandlerMixin",
     "PacketMixin",
+    "StringTranslateMixin",
     "TexturePackBaseMixin",
     "TexturePackCustomMixin"
   ],

@@ -7,7 +7,7 @@ import de.maxhenkel.voicechat.voice.client.ClientManager;
 import de.maxhenkel.voicechat.voice.client.ClientVoicechat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.GuiScreen;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.src.StringTranslate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,9 +30,9 @@ public class RecordingTooltipSupplier implements ImageButton.TooltipSupplier {
         List<String> tooltip = new ArrayList<>();
 
         if (client.getRecorder() == null) {
-            tooltip.add(new TextComponentTranslation("message.voicechat.recording.disabled").getUnformattedComponentText());
+            tooltip.add(StringTranslate.getInstance().translateKey("message.voicechat.recording.disabled"));
         } else {
-            tooltip.add(new TextComponentTranslation("message.voicechat.recording.enabled").getUnformattedComponentText());
+            tooltip.add(StringTranslate.getInstance().translateKey("message.voicechat.recording.enabled"));
         }
 
         Minecraft mc = MinecraftAccessor.getMinecraft();

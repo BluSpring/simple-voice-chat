@@ -12,6 +12,7 @@ import de.maxhenkel.voicechat.voice.server.Server;
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.EntityPlayerSP;
 import net.minecraft.src.NetClientHandler;
+import net.minecraft.src.StringTranslate;
 
 import javax.annotation.Nullable;
 import java.net.InetSocketAddress;
@@ -94,20 +95,6 @@ public class ClientManager {
         if (player == null) {
             return;
         }
-        Style style = new Style().setColor(TextFormatting.RED);
-        if (e != null) {
-            style.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString(e.getMessage()).setStyle(new Style().setColor(TextFormatting.RED))));
-        }
-        player.sendChatMessage(
-                wrapInSquareBrackets(new TextComponentString(CommonCompatibilityManager.INSTANCE.getModName()))
-                        .setStyle(new Style().setColor(TextFormatting.GREEN))
-                        .appendText(" ")
-                        .appendSibling(new TextComponentTranslation(translationKey).setStyle(style))
-        );
-    }
-
-    private static ITextComponent wrapInSquareBrackets(ITextComponent component) {
-        return new TextComponentString("[").appendSibling(component).appendText("]");
     }
 
     private void onDisconnect() {
@@ -138,7 +125,7 @@ public class ClientManager {
         } catch (Exception e) {
             Voicechat.LOGGER.error("Failed to change voice chat port: {}", e.getMessage());
         }
-        MinecraftAccessor.getMinecraft().ingameGUI.addChatMessage(new TextComponentTranslation("message.voicechat.server_port", server.getPort()));
+        MinecraftAccessor.getMinecraft().ingameGUI.addChatMessage(String.format(StringTranslate.getInstance().translateKey("message.voicechat.server_port"), server.getPort()));
     }
 
     @Nullable

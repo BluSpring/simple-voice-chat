@@ -8,7 +8,6 @@ import de.maxhenkel.voicechat.extensions.EntityPlayerExtension;
 import de.maxhenkel.voicechat.voice.common.PlayerState;
 import de.maxhenkel.voicechat.voice.server.PlayerStateManager;
 import de.maxhenkel.voicechat.voice.server.Server;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.src.EntityPlayer;
 
 import javax.annotation.Nullable;

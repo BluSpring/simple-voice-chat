@@ -6,7 +6,7 @@ import de.maxhenkel.voicechat.util.TextureHelper;
 import de.maxhenkel.voicechat.voice.client.ClientPlayerStateManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.GuiScreen;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.src.StringTranslate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,11 +26,11 @@ public class DisableTooltipSupplier implements ImageButton.TooltipSupplier {
         List<String> tooltip = new ArrayList<>();
 
         if (!stateManager.canEnable()) {
-            tooltip.add(new TextComponentTranslation("message.voicechat.disable.no_speaker").getUnformattedComponentText());
+            tooltip.add(StringTranslate.getInstance().translateKey("message.voicechat.disable.no_speaker"));
         } else if (stateManager.isDisabled()) {
-            tooltip.add(new TextComponentTranslation("message.voicechat.disable.enabled").getUnformattedComponentText());
+            tooltip.add(StringTranslate.getInstance().translateKey("message.voicechat.disable.enabled"));
         } else {
-            tooltip.add(new TextComponentTranslation("message.voicechat.disable.disabled").getUnformattedComponentText());
+            tooltip.add(StringTranslate.getInstance().translateKey("message.voicechat.disable.disabled"));
         }
 
         Minecraft mc = MinecraftAccessor.getMinecraft();

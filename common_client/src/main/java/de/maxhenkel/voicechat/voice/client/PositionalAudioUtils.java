@@ -2,6 +2,7 @@ package de.maxhenkel.voicechat.voice.client;
 
 import de.maxhenkel.voicechat.MinecraftAccessor;
 import de.maxhenkel.voicechat.VoicechatClient;
+import de.maxhenkel.voicechat.util.ActiveRenderInfo;
 import de.maxhenkel.voicechat.voice.client.speaker.AudioType;
 import de.maxhenkel.voicechat.voice.common.Utils;
 import net.minecraft.client.Minecraft;
@@ -25,7 +26,7 @@ public class PositionalAudioUtils {
         Vector2f diff = new Vector2f((float) d.xCoord, (float) d.zCoord);
         float diffAngle = Utils.angle(diff, new Vector2f(-1F, 0F));
         float angle = Utils.normalizeAngle(diffAngle - (yRot % 360F));
-        float dif = (float) (Math.abs(cameraPos.y - soundPos.y) / 32);
+        float dif = (float) (Math.abs(cameraPos.yCoord - soundPos.yCoord) / 32);
 
         float rot = angle / 180F;
         float perc = rot;
@@ -189,7 +190,8 @@ public class PositionalAudioUtils {
     }
 
     public static Vec3D getCameraPosition() {
-        return ActiveRenderInfo.getCameraPosition().add(mc.player == null ? Vec3D.createVector(0.0, 0.0, 0.0) : mc.thePlayer.getLookVec());
+        Vec3D vec = mc.thePlayer == null ? Vec3D.createVector(0.0, 0.0, 0.0) : mc.thePlayer.getLookVec();
+        return ActiveRenderInfo.getCameraPosition().addVector(vec.xCoord, vec.yCoord, vec.zCoord);
     }
 
 }

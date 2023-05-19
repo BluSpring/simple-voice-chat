@@ -8,6 +8,7 @@ import de.maxhenkel.voicechat.util.TextureHelper;
 import de.maxhenkel.voicechat.voice.common.ClientGroup;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.src.StringTranslate;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -18,10 +19,10 @@ import java.io.IOException;
 public class EnterPasswordScreen extends VoiceChatScreenBase {
 
     private static final String TEXTURE = TextureHelper.format(Voicechat.MODID, "textures/gui/gui_enter_password.png");
-    private static final ITextComponent TITLE = new TextComponentTranslation("gui.voicechat.enter_password.title");
-    private static final ITextComponent JOIN_GROUP = new TextComponentTranslation("message.voicechat.join_group");
-    private static final ITextComponent ENTER_GROUP_PASSWORD = new TextComponentTranslation("message.voicechat.enter_group_password");
-    private static final ITextComponent PASSWORD = new TextComponentTranslation("message.voicechat.password");
+    private static final String TITLE = StringTranslate.getInstance().translateKey("gui.voicechat.enter_password.title");
+    private static final String JOIN_GROUP = StringTranslate.getInstance().translateKey("message.voicechat.join_group");
+    private static final String ENTER_GROUP_PASSWORD = StringTranslate.getInstance().translateKey("message.voicechat.enter_group_password");
+    private static final String PASSWORD = StringTranslate.getInstance().translateKey("message.voicechat.password");
 
     private GuiTextField password;
     private ButtonBase joinGroup;
@@ -40,7 +41,7 @@ public class EnterPasswordScreen extends VoiceChatScreenBase {
 
         Keyboard.enableRepeatEvents(true);
 
-        password = new GuiTextField(0, fontRenderer, guiLeft + 7, guiTop + 7 + (fontRenderer.FONT_HEIGHT + 5) * 2 - 5 + 2, xSize - 7 * 2, 10);
+        password = new GuiTextField(0, fontRenderer, guiLeft + 7, guiTop + 7 + (TextureHelper.FONT_HEIGHT + 5) * 2 - 5 + 2, xSize - 7 * 2, 10);
         password.setMaxStringLength(32);
         password.setValidator(s -> s.isEmpty() || Voicechat.GROUP_REGEX.matcher(s).matches());
 
@@ -86,12 +87,12 @@ public class EnterPasswordScreen extends VoiceChatScreenBase {
         if (password != null) {
             password.drawTextBox();
         }
-        fontRenderer.drawString(ENTER_GROUP_PASSWORD.getUnformattedComponentText(), guiLeft + xSize / 2 - fontRenderer.getStringWidth(ENTER_GROUP_PASSWORD.getUnformattedComponentText()) / 2, guiTop + 7, FONT_COLOR);
-        fontRenderer.drawString(PASSWORD.getUnformattedComponentText(), guiLeft + 8, guiTop + 7 + fontRenderer.FONT_HEIGHT + 5, FONT_COLOR);
+        fontRenderer.drawString(ENTER_GROUP_PASSWORD, guiLeft + xSize / 2 - fontRenderer.getStringWidth(ENTER_GROUP_PASSWORD) / 2, guiTop + 7, FONT_COLOR);
+        fontRenderer.drawString(PASSWORD, guiLeft + 8, guiTop + 7 + (int) TextureHelper.FONT_HEIGHT + 5, FONT_COLOR);
     }
 
     @Override
-    protected void keyTyped(char typedChar, int keyCode) throws IOException {
+    protected void keyTyped(char typedChar, int keyCode) {
         super.keyTyped(typedChar, keyCode);
         if (password == null) {
             return;
@@ -106,7 +107,7 @@ public class EnterPasswordScreen extends VoiceChatScreenBase {
     }
 
     @Override
-    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) {
         super.mouseClicked(mouseX, mouseY, mouseButton);
         if (password == null) {
             return;
@@ -117,7 +118,7 @@ public class EnterPasswordScreen extends VoiceChatScreenBase {
     @Override
     public void setWorldAndResolution(Minecraft minecraft, int width, int height) {
         String passwordText = password.getText();
-        super.onResize(minecraft, width, height);
+        super.setWorldAndResolution(minecraft, width, height);
         password.setText(passwordText);
     }
 }

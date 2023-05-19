@@ -2,7 +2,7 @@ package de.maxhenkel.voicechat.intercompatibility;
 
 import de.maxhenkel.voicechat.service.Service;
 import de.maxhenkel.voicechat.voice.client.ClientVoicechatConnection;
-import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.src.KeyBinding;
 import net.minecraft.src.Entity;
 import net.minecraft.src.NetworkManager;
 
@@ -25,7 +25,7 @@ public abstract class ClientCompatibilityManager {
 
     public abstract void onHandleKeyBinds(Runnable onHandleKeyBinds);
 
-    public abstract KeyBinding registerKeyBinding(KeyBinding keyBinding);
+    public abstract KeyBinding registerKeyBinding(KeyBinding keyBinding, String translation);
 
     public abstract void emitVoiceChatConnectedEvent(ClientVoicechatConnection client);
 

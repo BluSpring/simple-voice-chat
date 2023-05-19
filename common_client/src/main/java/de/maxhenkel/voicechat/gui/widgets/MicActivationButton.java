@@ -2,8 +2,7 @@ package de.maxhenkel.voicechat.gui.widgets;
 
 import de.maxhenkel.voicechat.VoicechatClient;
 import de.maxhenkel.voicechat.voice.client.MicrophoneActivationType;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.src.StringTranslate;
 
 public class MicActivationButton extends EnumButton<MicrophoneActivationType> {
 
@@ -17,8 +16,8 @@ public class MicActivationButton extends EnumButton<MicrophoneActivationType> {
     }
 
     @Override
-    protected ITextComponent getText(MicrophoneActivationType type) {
-        return new TextComponentTranslation("message.voicechat.activation_type", type.getText());
+    protected String getText(MicrophoneActivationType type) {
+        return String.format(StringTranslate.getInstance().translateKey("message.voicechat.activation_type"), type.getText());
     }
 
     @Override

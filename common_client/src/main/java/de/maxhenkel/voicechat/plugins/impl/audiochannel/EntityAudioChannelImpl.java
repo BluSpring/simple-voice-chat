@@ -10,7 +10,6 @@ import de.maxhenkel.voicechat.voice.common.Utils;
 import de.maxhenkel.voicechat.voice.server.Server;
 import de.maxhenkel.voicechat.voice.server.ServerWorldUtils;
 import net.minecraft.src.Vec3D;
-import net.minecraft.world.WorldServer;
 
 import java.util.UUID;
 

@@ -8,9 +8,7 @@ import de.maxhenkel.voicechat.voice.client.speaker.SpeakerException;
 import de.maxhenkel.voicechat.voice.common.SoundPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.EntityPlayerSP;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.src.StringTranslate;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -154,17 +152,17 @@ public class ClientVoicechat {
         if (recording == (recorder != null)) {
             return false;
         }
-        EntityPlayerSP player = MinecraftAccessor.getMinecraft().player;
+        EntityPlayerSP player = MinecraftAccessor.getMinecraft().thePlayer;
         if (recording) {
             if (connection == null || !connection.getData().allowRecording()) {
                 if (player != null) {
-                    player.sendChatMessage(new TextComponentTranslation("message.voicechat.recording_disabled"), true);
+                    player.sendChatMessage(StringTranslate.getInstance().translateKey("message.voicechat.recording_disabled"));
                 }
                 return false;
             }
             recorder = AudioRecorder.create();
             if (player != null) {
-                player.sendChatMessage(new TextComponentTranslation("message.voicechat.recording_started").setStyle(new Style().setColor(TextFormatting.DARK_RED)), true);
+                player.sendChatMessage("§4" + StringTranslate.getInstance().translateKey("message.voicechat.recording_started"));
             }
             return true;
         }
@@ -172,7 +170,7 @@ public class ClientVoicechat {
         AudioRecorder rec = recorder;
         recorder = null;
         if (player != null) {
-            player.sendChatMessage(new TextComponentTranslation("message.voicechat.recording_stopped").setStyle(new Style().setColor(TextFormatting.DARK_RED)), true);
+            player.sendChatMessage("§4" + StringTranslate.getInstance().translateKey("message.voicechat.recording_stopped"));
         }
         rec.saveAndClose();
         return true;

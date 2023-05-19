@@ -6,6 +6,7 @@ import de.maxhenkel.voicechat.gui.widgets.ButtonBase;
 import de.maxhenkel.voicechat.gui.widgets.ListScreenBase;
 import de.maxhenkel.voicechat.util.TextureHelper;
 import net.minecraft.src.GuiScreen;
+import net.minecraft.src.StringTranslate;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -15,7 +16,7 @@ import java.util.stream.Collectors;
 public abstract class SelectDeviceScreen extends ListScreenBase {
 
     protected static final String TEXTURE = TextureHelper.format(Voicechat.MODID, "textures/gui/gui_audio_devices.png");
-    protected static final ITextComponent BACK = new TextComponentTranslation("message.voicechat.back");
+    protected static final String BACK = StringTranslate.getInstance().translateKey("message.voicechat.back");
 
     protected static final int HEADER_SIZE = 16;
     protected static final int FOOTER_SIZE = 32;
@@ -28,7 +29,7 @@ public abstract class SelectDeviceScreen extends ListScreenBase {
     protected ButtonBase back;
     protected int units;
 
-    public SelectDeviceScreen(ITextComponent title, @Nullable GuiScreen parent) {
+    public SelectDeviceScreen(String title, @Nullable GuiScreen parent) {
         super(title, 236, 0);
         this.parent = parent;
     }
@@ -41,7 +42,7 @@ public abstract class SelectDeviceScreen extends ListScreenBase {
 
     public abstract String getIcon(String device);
 
-    public abstract ITextComponent getEmptyListComponent();
+    public abstract String getEmptyListComponent();
 
     public abstract String getVisibleName(String device);
 
@@ -83,14 +84,14 @@ public abstract class SelectDeviceScreen extends ListScreenBase {
 
     @Override
     public void renderForeground(int mouseX, int mouseY, float delta) {
-        fontRenderer.drawString(title.getUnformattedComponentText(), width / 2 - fontRenderer.getStringWidth(title.getUnformattedComponentText()) / 2, guiTop + 5, isIngame() ? VoiceChatScreenBase.FONT_COLOR : 0xFFFFFF);
+        fontRenderer.drawString(title, width / 2 - fontRenderer.getStringWidth(title) / 2, guiTop + 5, isIngame() ? VoiceChatScreenBase.FONT_COLOR : 0xFFFFFF);
         if (deviceList == null || deviceList.isEmpty()) {
-            drawCenteredString(fontRenderer, getEmptyListComponent().getUnformattedComponentText(), width / 2, guiTop + HEADER_SIZE + (units * UNIT_SIZE) / 2 - fontRenderer.FONT_HEIGHT / 2, -1);
+            drawCenteredString(fontRenderer, getEmptyListComponent(), width / 2, guiTop + HEADER_SIZE + (units * UNIT_SIZE) / 2 - (int) TextureHelper.FONT_HEIGHT / 2, -1);
         }
     }
 
     @Override
-    public void mouseClicked(int mouseX, int mouseY, int button) throws IOException {
+    public void mouseClicked(int mouseX, int mouseY, int button) {
         super.mouseClicked(mouseX, mouseY, button);
         if (deviceList == null) {
             return;

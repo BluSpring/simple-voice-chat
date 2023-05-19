@@ -4,8 +4,6 @@ import de.maxhenkel.voicechat.MinecraftAccessor;
 import de.maxhenkel.voicechat.extensions.GuiExtension;
 import de.maxhenkel.voicechat.util.TextureHelper;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TextComponentString;
 
 public class ImageButton extends ButtonBase {
 
@@ -15,7 +13,7 @@ public class ImageButton extends ButtonBase {
     protected TooltipSupplier tooltipSupplier;
 
     public ImageButton(int id, int x, int y, String texture, PressAction onPress, TooltipSupplier tooltipSupplier) {
-        super(id, x, y, 20, 20, new TextComponentString(""));
+        super(id, x, y, 20, 20, "");
         mc = MinecraftAccessor.getMinecraft();
         this.texture = texture;
         this.onPress = onPress;

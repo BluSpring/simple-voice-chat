@@ -6,7 +6,7 @@ import de.maxhenkel.voicechat.gui.widgets.ImageButton;
 import de.maxhenkel.voicechat.util.TextureHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.GuiScreen;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.src.StringTranslate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,9 +24,9 @@ public class HideTooltipSupplier implements ImageButton.TooltipSupplier {
         List<String> tooltip = new ArrayList<>();
 
         if (VoicechatClient.CLIENT_CONFIG.hideIcons.get()) {
-            tooltip.add(new TextComponentTranslation("message.voicechat.hide_icons.enabled").getUnformattedComponentText());
+            tooltip.add(StringTranslate.getInstance().translateKey("message.voicechat.hide_icons.enabled"));
         } else {
-            tooltip.add(new TextComponentTranslation("message.voicechat.hide_icons.disabled").getUnformattedComponentText());
+            tooltip.add(StringTranslate.getInstance().translateKey("message.voicechat.hide_icons.disabled"));
         }
 
         Minecraft mc = MinecraftAccessor.getMinecraft();

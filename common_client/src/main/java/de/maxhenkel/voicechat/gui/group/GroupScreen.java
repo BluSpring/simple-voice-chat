@@ -18,10 +18,7 @@ import de.maxhenkel.voicechat.voice.client.ClientPlayerStateManager;
 import de.maxhenkel.voicechat.voice.client.MicrophoneActivationType;
 import de.maxhenkel.voicechat.voice.common.ClientGroup;
 import net.minecraft.src.MathHelper;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.src.StringTranslate;
 
 public class GroupScreen extends ListScreenBase {
 
@@ -30,8 +27,8 @@ public class GroupScreen extends ListScreenBase {
     protected static final String MICROPHONE = TextureHelper.format(Voicechat.MODID, "textures/icons/microphone_button.png");
     protected static final String SPEAKER = TextureHelper.format(Voicechat.MODID, "textures/icons/speaker_button.png");
     protected static final String GROUP_HUD = TextureHelper.format(Voicechat.MODID, "textures/icons/group_hud_button.png");
-    protected static final String TITLE = new TextComponentTranslation("gui.voicechat.group.title");
-    protected static final String LEAVE_GROUP = new TextComponentTranslation("message.voicechat.leave_group");
+    protected static final String TITLE = StringTranslate.getInstance().translateKey("gui.voicechat.group.title");
+    protected static final String LEAVE_GROUP = StringTranslate.getInstance().translateKey("message.voicechat.leave_group");
 
     protected static final int HEADER_SIZE = 16;
     protected static final int FOOTER_SIZE = 32;
@@ -88,7 +85,7 @@ public class GroupScreen extends ListScreenBase {
             NetManager.sendToServer(new LeaveGroupPacket());
             mc.displayGuiScreen(new JoinGroupScreen());
         }, (button, mouseX, mouseY) -> {
-            mc.fontRenderer.drawStringWithShadow(LEAVE_GROUP.getUnformattedComponentText(), mouseX, mouseY);
+            mc.fontRenderer.drawStringWithShadow(LEAVE_GROUP, mouseX, mouseY, 16777215);
         });
         controlList.add(leave);
 
@@ -123,14 +120,14 @@ public class GroupScreen extends ListScreenBase {
 
     @Override
     public void renderForeground(int mouseX, int mouseY, float delta) {
-        ITextComponent title;
+        String title;
         if (group.getType().equals(Group.Type.NORMAL)) {
-            title = new TextComponentTranslation("message.voicechat.group_title", new TextComponentString(group.getName()));
+            title = String.format(StringTranslate.getInstance().translateKey("message.voicechat.group_title"), group.getName());
         } else {
-            title = new TextComponentTranslation("message.voicechat.group_type_title", new TextComponentString(group.getName()), GroupType.fromType(group.getType()).getTranslation());
+            title = String.format(StringTranslate.getInstance().translateKey("message.voicechat.group_type_title"), group.getName(), GroupType.fromType(group.getType()).getTranslation());
         }
 
-        fontRenderer.drawString(title.getFormattedText(), guiLeft + xSize / 2 - fontRenderer.getStringWidth(title.getUnformattedComponentText()) / 2, guiTop + 5, FONT_COLOR);
+        fontRenderer.drawString(title, guiLeft + xSize / 2 - fontRenderer.getStringWidth(title) / 2, guiTop + 5, FONT_COLOR);
     }
 
 }

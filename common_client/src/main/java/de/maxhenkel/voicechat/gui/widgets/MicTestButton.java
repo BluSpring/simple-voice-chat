@@ -6,17 +6,15 @@ import de.maxhenkel.voicechat.voice.client.*;
 import de.maxhenkel.voicechat.voice.client.speaker.*;
 import de.maxhenkel.voicechat.voice.common.Utils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.src.StringTranslate;
 
 import javax.annotation.Nullable;
 
 public class MicTestButton extends ButtonBase {
 
-    private static final ITextComponent TEST_UNAVAILABLE = new TextComponentTranslation("message.voicechat.mic_test_unavailable");
-    private static final ITextComponent TEST_ON = new TextComponentTranslation("message.voicechat.mic_test_on");
-    private static final ITextComponent TEST_OFF = new TextComponentTranslation("message.voicechat.mic_test_off");
+    private static final String TEST_UNAVAILABLE = StringTranslate.getInstance().translateKey("message.voicechat.mic_test_unavailable");
+    private static final String TEST_ON = StringTranslate.getInstance().translateKey("message.voicechat.mic_test_on");
+    private static final String TEST_OFF = StringTranslate.getInstance().translateKey("message.voicechat.mic_test_off");
 
     private boolean micActive;
     @Nullable
@@ -26,7 +24,7 @@ public class MicTestButton extends ButtonBase {
     private final ClientVoicechat client;
 
     public MicTestButton(int id, int xIn, int yIn, int widthIn, int heightIn, MicListener micListener) {
-        super(id, xIn, yIn, widthIn, heightIn, new TextComponentString(""));
+        super(id, xIn, yIn, widthIn, heightIn, "");
         this.micListener = micListener;
         this.client = ClientManager.getClient();
         // enabled = client == null || client.getSoundManager() != null;
@@ -35,13 +33,13 @@ public class MicTestButton extends ButtonBase {
 
     private void updateText() {
         if (!enabled) {
-            displayString = TEST_UNAVAILABLE.getUnformattedComponentText();
+            displayString = TEST_UNAVAILABLE;
             return;
         }
         if (micActive) {
-            displayString = TEST_ON.getUnformattedComponentText();
+            displayString = TEST_ON;
         } else {
-            displayString = TEST_OFF.getUnformattedComponentText();
+            displayString = TEST_OFF;
         }
     }
 

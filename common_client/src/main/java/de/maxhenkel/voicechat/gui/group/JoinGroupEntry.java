@@ -14,9 +14,7 @@ import de.maxhenkel.voicechat.voice.common.ClientGroup;
 import de.maxhenkel.voicechat.voice.common.PlayerState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.GuiScreen;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.*;
+import net.minecraft.src.StringTranslate;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
@@ -25,8 +23,8 @@ import java.util.List;
 public class JoinGroupEntry extends ListScreenEntryBase {
 
     protected static final String LOCK = TextureHelper.format(Voicechat.MODID, "textures/icons/lock.png");
-    protected static final ITextComponent GROUP_MEMBERS = new TextComponentTranslation("message.voicechat.group_members").setStyle(new Style().setColor(TextFormatting.GRAY));
-    protected static final ITextComponent NO_GROUP_MEMBERS = new TextComponentTranslation("message.voicechat.no_group_members").setStyle(new Style().setColor(TextFormatting.GRAY));
+    protected static final String GROUP_MEMBERS = StringTranslate.getInstance().translateKey("message.voicechat.group_members");
+    protected static final String NO_GROUP_MEMBERS = StringTranslate.getInstance().translateKey("message.voicechat.no_group_members");
 
     protected static final int SKIN_SIZE = 12;
     protected static final int PADDING = 4;
@@ -100,22 +98,22 @@ public class JoinGroupEntry extends ListScreenEntryBase {
         List<String> tooltip = Lists.newArrayList();
 
         if (group.getGroup().getType().equals(de.maxhenkel.voicechat.api.Group.Type.NORMAL)) {
-            tooltip.add(new TextComponentTranslation("message.voicechat.group_title", new TextComponentString(group.getGroup().getName())).getFormattedText());
+            tooltip.add(String.format(StringTranslate.getInstance().translateKey("message.voicechat.group_title"), group.getGroup().getName()));
         } else {
-            tooltip.add(new TextComponentTranslation("message.voicechat.group_type_title", new TextComponentString(group.getGroup().getName()), GroupType.fromType(group.getGroup().getType()).getTranslation()).getFormattedText());
+            tooltip.add(String.format(StringTranslate.getInstance().translateKey("message.voicechat.group_type_title"), group.getGroup().getName(), GroupType.fromType(group.getGroup().getType()).getTranslation()));
         }
         if (group.getMembers().isEmpty()) {
-            tooltip.add(NO_GROUP_MEMBERS.getFormattedText());
+            tooltip.add(NO_GROUP_MEMBERS);
         } else {
-            tooltip.add(GROUP_MEMBERS.getFormattedText());
+            tooltip.add(GROUP_MEMBERS);
             int maxMembers = 10;
             for (int i = 0; i < group.getMembers().size(); i++) {
                 if (i >= maxMembers) {
-                    tooltip.add(new TextComponentTranslation("message.voicechat.more_members", group.getMembers().size() - maxMembers).setStyle(new Style().setColor(TextFormatting.GRAY)).getFormattedText());
+                    tooltip.add(String.format(StringTranslate.getInstance().translateKey("message.voicechat.more_members"), group.getMembers().size() - maxMembers));
                     break;
                 }
                 PlayerState state = group.getMembers().get(i);
-                tooltip.add(new TextComponentString("  " + state.getName()).setStyle(new Style().setColor(TextFormatting.GRAY)).getFormattedText());
+                tooltip.add("  " + state.getName());
             }
         }
 

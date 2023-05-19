@@ -12,7 +12,7 @@ public abstract class ListScreenBase extends VoiceChatScreenBase {
     private Runnable postRender;
     private ListScreenListBase<?> list;
 
-    public ListScreenBase(ITextComponent title, int xSize, int ySize) {
+    public ListScreenBase(String title, int xSize, int ySize) {
         super(title, xSize, ySize);
     }
 

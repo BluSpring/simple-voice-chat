@@ -1,5 +1,6 @@
 package de.maxhenkel.voicechat.voice.client;
 
+import de.maxhenkel.voicechat.MinecraftAccessor;
 import de.maxhenkel.voicechat.Voicechat;
 import de.maxhenkel.voicechat.gui.volume.AdjustVolumeList;
 import de.maxhenkel.voicechat.intercompatibility.ClientCompatibilityManager;
@@ -7,10 +8,7 @@ import de.maxhenkel.voicechat.intercompatibility.CommonCompatibilityManager;
 import de.maxhenkel.voicechat.plugins.CategoryManager;
 import de.maxhenkel.voicechat.plugins.impl.VolumeCategoryImpl;
 import de.maxhenkel.voicechat.util.TextureHelper;
-import net.minecraft.client.renderer.texture.SimpleTexture;
-import net.minecraft.client.renderer.texture.TextureUtil;
-import net.minecraft.client.resources.IResourceManager;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.Minecraft;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -96,23 +94,39 @@ public class ClientCategoryManager extends CategoryManager {
         return customTextureObject.getResourceLocation();
     }
 
-    private static class CustomTextureObject extends SimpleTexture {
+    private static class CustomTextureObject {
+        private static final Minecraft mc = MinecraftAccessor.getMinecraft();
 
         private final BufferedImage image;
-        private final ResourceLocation resourceLocation;
+        private final String resourceLocation;
+        private int id = -1;
 
-        public CustomTextureObject(ResourceLocation textureResourceLocation, BufferedImage image) {
-            super(textureResourceLocation);
+        public CustomTextureObject(String textureResourceLocation, BufferedImage image) {
             this.resourceLocation = textureResourceLocation;
             this.image = image;
         }
 
-        @Override
-        public void loadTexture(IResourceManager resourceManager) throws IOException {
-            TextureUtil.uploadTextureImage(super.getGlTextureId(), image);
+        public void uploadGlTexture() {
+            if (id != -1)
+                deleteGlTexture();
+            id = mc.renderEngine.allocateAndSetupTexture(this.image);
         }
 
-        public ResourceLocation getResourceLocation() {
+        public void bindTexture() {
+            this.uploadGlTexture();
+            mc.renderEngine.bindTexture(id);
+        }
+
+        public void deleteGlTexture() {
+            if (id != -1)
+                mc.renderEngine.deleteTexture(id);
+            else {
+                int index = mc.renderEngine.getTexture(resourceLocation);
+                mc.renderEngine.deleteTexture(index);
+            }
+        }
+
+        public String getResourceLocation() {
             return resourceLocation;
         }
     }

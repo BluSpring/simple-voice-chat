@@ -9,16 +9,17 @@ import de.maxhenkel.voicechat.net.JoinGroupPacket;
 import de.maxhenkel.voicechat.net.NetManager;
 import de.maxhenkel.voicechat.util.TextureHelper;
 import de.maxhenkel.voicechat.voice.common.ClientGroup;
+import net.minecraft.src.StringTranslate;
 
 import java.io.IOException;
 
 public class JoinGroupScreen extends ListScreenBase {
 
     protected static final String TEXTURE = TextureHelper.format(Voicechat.MODID, "textures/gui/gui_join_group.png");
-    protected static final ITextComponent TITLE = new TextComponentTranslation("gui.voicechat.join_create_group.title");
-    protected static final ITextComponent CREATE_GROUP = new TextComponentTranslation("message.voicechat.create_group_button");
-    protected static final ITextComponent JOIN_CREATE_GROUP = new TextComponentTranslation("message.voicechat.join_create_group");
-    protected static final ITextComponent NO_GROUPS = new TextComponentTranslation("message.voicechat.no_groups").setStyle(new Style().setColor(TextFormatting.GRAY));
+    protected static final String TITLE = StringTranslate.getInstance().translateKey("gui.voicechat.join_create_group.title");
+    protected static final String CREATE_GROUP = StringTranslate.getInstance().translateKey("message.voicechat.create_group_button");
+    protected static final String JOIN_CREATE_GROUP = StringTranslate.getInstance().translateKey("message.voicechat.join_create_group");
+    protected static final String NO_GROUPS = StringTranslate.getInstance().translateKey("message.voicechat.no_groups");
 
     protected static final int HEADER_SIZE = 16;
     protected static final int FOOTER_SIZE = 32;
@@ -67,17 +68,17 @@ public class JoinGroupScreen extends ListScreenBase {
 
     @Override
     public void renderForeground(int mouseX, int mouseY, float delta) {
-        fontRenderer.drawString(JOIN_CREATE_GROUP.getFormattedText(), guiLeft + xSize / 2 - fontRenderer.getStringWidth(JOIN_CREATE_GROUP.getUnformattedComponentText()) / 2, guiTop + 5, FONT_COLOR);
+        fontRenderer.drawString(JOIN_CREATE_GROUP, guiLeft + xSize / 2 - fontRenderer.getStringWidth(JOIN_CREATE_GROUP) / 2, guiTop + 5, FONT_COLOR);
 
         if (groupList != null && !groupList.isEmpty()) {
             groupList.drawScreen(mouseX, mouseY, delta);
         } else {
-            drawCenteredString(fontRenderer, NO_GROUPS.getUnformattedComponentText(), width / 2, guiTop + HEADER_SIZE + (units * UNIT_SIZE) / 2 - fontRenderer.FONT_HEIGHT / 2, -1);
+            drawCenteredString(fontRenderer, NO_GROUPS, width / 2, guiTop + HEADER_SIZE + (units * UNIT_SIZE) / 2 - (int)TextureHelper.FONT_HEIGHT / 2, -1);
         }
     }
 
     @Override
-    public void mouseClicked(int mouseX, int mouseY, int button) throws IOException {
+    public void mouseClicked(int mouseX, int mouseY, int button) {
         super.mouseClicked(mouseX, mouseY, button);
         if (groupList == null) {
             return;

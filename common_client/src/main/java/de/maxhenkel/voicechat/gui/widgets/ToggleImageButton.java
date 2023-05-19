@@ -2,7 +2,6 @@ package de.maxhenkel.voicechat.gui.widgets;
 
 import de.maxhenkel.voicechat.extensions.GuiExtension;
 import de.maxhenkel.voicechat.util.TextureHelper;
-import net.minecraft.util.ResourceLocation;
 
 import java.util.function.Supplier;
 

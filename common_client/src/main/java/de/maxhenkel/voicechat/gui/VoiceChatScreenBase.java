@@ -1,9 +1,9 @@
 package de.maxhenkel.voicechat.gui;
 
 import de.maxhenkel.voicechat.gui.widgets.ButtonBase;
+import de.maxhenkel.voicechat.util.TextureHelper;
 import net.minecraft.src.GuiButton;
 import net.minecraft.src.GuiScreen;
-import net.minecraft.util.text.ITextComponent;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -20,9 +20,9 @@ public abstract class VoiceChatScreenBase extends GuiScreen {
     protected int guiTop;
     protected int xSize;
     protected int ySize;
-    protected ITextComponent title;
+    protected String title;
 
-    protected VoiceChatScreenBase(ITextComponent title, int xSize, int ySize) {
+    protected VoiceChatScreenBase(String title, int xSize, int ySize) {
         this.title = title;
         this.xSize = xSize;
         this.ySize = ySize;
@@ -80,7 +80,7 @@ public abstract class VoiceChatScreenBase extends GuiScreen {
     }
 
     protected boolean isIngame() {
-        return mc.world != null;
+        return mc.theWorld != null;
     }
 
     protected int getFontColor() {
@@ -92,6 +92,16 @@ public abstract class VoiceChatScreenBase extends GuiScreen {
             if (hoverArea.tooltip != null && hoverArea.isHovered(guiLeft, guiTop, mouseX, mouseY)) {
                 drawHoveringText(hoverArea.tooltip.get(), mouseX - guiLeft, mouseY - guiTop);
             }
+        }
+    }
+
+    public void drawHoveringText(String tooltip, int x, int y) {
+        mc.fontRenderer.drawStringWithShadow(tooltip, x, y, 16777215);
+    }
+
+    public void drawHoveringText(List<String> list, int x, int y) {
+        for (int i = 0; i < list.size(); i++) {
+            mc.fontRenderer.drawStringWithShadow(list.get(i), x, y + (i * (int) TextureHelper.FONT_HEIGHT), 16777215);
         }
     }
 

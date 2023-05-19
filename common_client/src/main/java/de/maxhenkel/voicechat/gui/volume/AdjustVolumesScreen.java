@@ -7,6 +7,7 @@ import de.maxhenkel.voicechat.util.TextureHelper;
 import net.minecraft.client.gui.GuiPageButtonList;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.src.StringTranslate;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.src.MathHelper;
 import net.minecraft.util.text.ITextComponent;
@@ -22,9 +23,9 @@ import java.util.Locale;
 public class AdjustVolumesScreen extends ListScreenBase {
 
     protected static final String TEXTURE = TextureHelper.format(Voicechat.MODID, "textures/gui/gui_volumes.png");
-    protected static final ITextComponent TITLE = new TextComponentTranslation("gui.voicechat.adjust_volume.title");
-    protected static final ITextComponent SEARCH_HINT = new TextComponentTranslation("message.voicechat.search_hint").setStyle(new Style().setColor(TextFormatting.GRAY).setItalic(true));
-    protected static final ITextComponent EMPTY_SEARCH = new TextComponentTranslation("message.voicechat.search_empty").setStyle(new Style().setColor(TextFormatting.GRAY));
+    protected static final String TITLE = StringTranslate.getInstance().translateKey("gui.voicechat.adjust_volume.title");
+    protected static final String SEARCH_HINT = StringTranslate.getInstance().translateKey("message.voicechat.search_hint").setStyle(new Style().setColor(TextFormatting.GRAY).setItalic(true));
+    protected static final String EMPTY_SEARCH = StringTranslate.getInstance().translateKey("message.voicechat.search_empty").setStyle(new Style().setColor(TextFormatting.GRAY));
 
     protected static final int HEADER_SIZE = 16;
     protected static final int FOOTER_SIZE = 8;
@@ -103,7 +104,7 @@ public class AdjustVolumesScreen extends ListScreenBase {
 
     @Override
     public void renderForeground(int mouseX, int mouseY, float delta) {
-        fontRenderer.drawString(TITLE.getFormattedText(), width / 2 - fontRenderer.getStringWidth(TITLE.getUnformattedComponentText()) / 2, guiTop + 5, VoiceChatScreenBase.FONT_COLOR);
+        fontRenderer.drawString(TITLE, width / 2 - fontRenderer.getStringWidth(TITLE) / 2, guiTop + 5, VoiceChatScreenBase.FONT_COLOR);
 
         if (volumeList == null) {
             return;
@@ -112,7 +113,7 @@ public class AdjustVolumesScreen extends ListScreenBase {
         if (!volumeList.isEmpty()) {
             volumeList.drawScreen(mouseX, mouseY, delta);
         } else if (!searchBox.getText().isEmpty()) {
-            drawCenteredString(fontRenderer, EMPTY_SEARCH.getFormattedText(), width / 2, guiTop + HEADER_SIZE + (units * UNIT_SIZE) / 2 - fontRenderer.FONT_HEIGHT / 2, -1);
+            drawCenteredString(fontRenderer, EMPTY_SEARCH, width / 2, guiTop + HEADER_SIZE + (units * UNIT_SIZE) / 2 - (int) TextureHelper.FONT_HEIGHT / 2, -1);
         }
         if (!searchBox.isFocused() && searchBox.getText().isEmpty()) {
             drawString(fontRenderer, SEARCH_HINT.getFormattedText(), searchBox.x, searchBox.y, -1);

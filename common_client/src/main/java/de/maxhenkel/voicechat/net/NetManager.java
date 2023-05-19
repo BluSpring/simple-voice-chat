@@ -72,7 +72,7 @@ public abstract class NetManager {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        player.connection.sendPacket(new Packet136ServerCustomPayload(packet.getIdentifier().toString(), outputStream.toByteArray()));
+        Voicechat.serverInstance.sendToPlayer(player, new Packet136ServerCustomPayload(packet.getIdentifier().toString(), outputStream.toByteArray()));
     }
 
     public interface ServerReceiver<T extends Packet<T>> {

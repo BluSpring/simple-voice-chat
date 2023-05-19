@@ -8,7 +8,7 @@ import de.maxhenkel.voicechat.voice.client.ClientPlayerStateManager;
 import de.maxhenkel.voicechat.voice.client.MicrophoneActivationType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.GuiScreen;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.src.StringTranslate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,11 +28,11 @@ public class MuteTooltipSupplier implements ImageButton.TooltipSupplier {
         List<String> tooltip = new ArrayList<>();
 
         if (!canMuteMic()) {
-            tooltip.add(new TextComponentTranslation("message.voicechat.mute.disabled_ptt").getUnformattedComponentText());
+            tooltip.add(StringTranslate.getInstance().translateKey("message.voicechat.mute.disabled_ptt"));
         } else if (stateManager.isMuted()) {
-            tooltip.add(new TextComponentTranslation("message.voicechat.mute.enabled").getUnformattedComponentText());
+            tooltip.add(StringTranslate.getInstance().translateKey("message.voicechat.mute.enabled"));
         } else {
-            tooltip.add(new TextComponentTranslation("message.voicechat.mute.disabled").getUnformattedComponentText());
+            tooltip.add(StringTranslate.getInstance().translateKey("message.voicechat.mute.disabled"));
         }
 
         Minecraft mc = MinecraftAccessor.getMinecraft();
