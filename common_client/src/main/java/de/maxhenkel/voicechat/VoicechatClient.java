@@ -7,8 +7,8 @@ import de.maxhenkel.voicechat.intercompatibility.CommonCompatibilityManager;
 import de.maxhenkel.voicechat.macos.VersionCheck;
 import de.maxhenkel.voicechat.plugins.impl.opus.OpusManager;
 import de.maxhenkel.voicechat.profile.UsernameCache;
+import de.maxhenkel.voicechat.util.PlatformUtils;
 import de.maxhenkel.voicechat.voice.client.ClientManager;
-import jdk.internal.org.jline.utils.OSUtils;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -39,7 +39,7 @@ public abstract class VoicechatClient {
 
         OpusManager.opusNativeCheck();
 
-        if (OSUtils.IS_OSX) {
+        if (PlatformUtils.isMac()) {
             if (!VersionCheck.isMacOSNativeCompatible()) {
                 Voicechat.LOGGER.warn("Your MacOS version is incompatible with {}", CommonCompatibilityManager.INSTANCE.getModName());
             }

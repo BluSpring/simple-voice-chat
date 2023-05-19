@@ -1,17 +1,17 @@
 package de.maxhenkel.voicechat.voice.client;
 
-import com.mojang.authlib.GameProfile;
 import de.maxhenkel.lame4j.ShortArrayBuffer;
+import de.maxhenkel.voicechat.MinecraftAccessor;
 import de.maxhenkel.voicechat.Voicechat;
 import de.maxhenkel.voicechat.VoicechatClient;
 import de.maxhenkel.voicechat.api.mp3.Mp3Encoder;
+import de.maxhenkel.voicechat.extensions.EntityPlayerExtension;
 import de.maxhenkel.voicechat.intercompatibility.CommonCompatibilityManager;
 import de.maxhenkel.voicechat.plugins.impl.mp3.Mp3EncoderImpl;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.util.text.*;
-import net.minecraft.util.text.event.ClickEvent;
-import net.minecraft.util.text.event.HoverEvent;
+import net.minecraft.src.EntityPlayer;
+import net.minecraft.src.EntityPlayerSP;
+import net.minecraft.src.StringTranslate;
 import org.apache.commons.io.FileUtils;
 
 import javax.annotation.Nullable;
@@ -37,7 +37,6 @@ public class AudioRecorder {
     private final long timestamp;
     private final Path location;
 
-    private final GameProfile ownProfile;
     private final Map<UUID, AudioChunk> chunks;
     private final Map<UUID, EncoderData> encoders;
 
@@ -45,13 +44,19 @@ public class AudioRecorder {
 
     private final ExecutorService threadPool;
 
+    private final String ownName;
+    private final UUID ownUUID;
+
     public AudioRecorder(Path location, long timestamp) {
         this.timestamp = timestamp;
         this.location = location;
         location.toFile().mkdirs();
         chunks = new ConcurrentHashMap<>();
         encoders = new ConcurrentHashMap<>();
-        ownProfile = Minecraft.getMinecraft().getSession().getProfile();
+
+        EntityPlayer player = MinecraftAccessor.getMinecraft().thePlayer;
+        ownName = player.username;
+        ownUUID = ((EntityPlayerExtension) player).getUniqueID();
 
         stereoFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, SoundManager.SAMPLE_RATE, 16, 2, 4, SoundManager.SAMPLE_RATE, false);
 
@@ -106,8 +111,8 @@ public class AudioRecorder {
     }
 
     private String lookupName(UUID uuid) {
-        if (uuid.equals(ownProfile.getId())) {
-            return ownProfile.getName();
+        if (uuid.equals(ownUUID)) {
+            return ownName;
         }
         String username = VoicechatClient.USERNAME_CACHE.getUsername(uuid);
         if (username == null) {
@@ -239,7 +244,7 @@ public class AudioRecorder {
 
     private void save() {
         threadPool.execute(() -> {
-            send(new TextComponentTranslation("message.voicechat.processing_recording_session"));
+            send(StringTranslate.getInstance().translateKey("message.voicechat.processing_recording_session"));
             try {
                 Exception error = null;
                 sendProgress(0F);
@@ -265,35 +270,26 @@ public class AudioRecorder {
                     throw error;
                 }
                 sendProgress(1F);
-                send(new TextComponentTranslation("message.voicechat.save_session",
-                        new TextComponentString(location.normalize().toString())
-                                .setStyle(new Style()
-                                        .setColor(TextFormatting.GRAY)
-                                        .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentTranslation("message.voicechat.open_folder")))
-                                        .setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, location.normalize().toString()))
-                                )
-                ));
+                send(StringTranslate.getInstance().translateKeyFormat("message.voicechat.save_session", location.normalize().toString()));
             } catch (Exception e) {
                 Voicechat.LOGGER.error("Failed to save recording session", e);
-                send(new TextComponentTranslation("message.voicechat.save_session_failed", e.getMessage()));
+                send(StringTranslate.getInstance().translateKeyFormat("message.voicechat.save_session_failed", e.getMessage()));
             }
         });
     }
 
     private void sendProgress(float progress) {
-        send(new TextComponentTranslation("message.voicechat.processing_progress",
-                new TextComponentString(String.valueOf((int) (progress * 100F)))
-                        .setStyle(new Style().setColor(TextFormatting.GRAY)))
-        );
+        send(StringTranslate.getInstance().translateKeyFormat("message.voicechat.processing_progress",
+                (String.valueOf((int) (progress * 100F)))));
     }
 
-    private void send(ITextComponent msg) {
-        Minecraft mc = Minecraft.getMinecraft();
-        EntityPlayerSP player = mc.player;
-        if (player != null && mc.world != null) {
-            player.sendMessage(msg);
+    private void send(String msg) {
+        Minecraft mc = MinecraftAccessor.getMinecraft();
+        EntityPlayerSP player = mc.thePlayer;
+        if (player != null && mc.theWorld != null) {
+            player.sendChatMessage(msg);
         } else {
-            Voicechat.LOGGER.info("{}", msg.getUnformattedComponentText());
+            Voicechat.LOGGER.info("{}", msg);
         }
     }
 

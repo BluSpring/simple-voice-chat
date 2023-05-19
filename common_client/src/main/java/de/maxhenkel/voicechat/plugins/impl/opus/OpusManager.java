@@ -8,12 +8,12 @@ import de.maxhenkel.voicechat.api.opus.OpusEncoder;
 import de.maxhenkel.voicechat.api.opus.OpusEncoderMode;
 import de.maxhenkel.voicechat.intercompatibility.CommonCompatibilityManager;
 import de.maxhenkel.voicechat.macos.VersionCheck;
+import de.maxhenkel.voicechat.util.PlatformUtils;
 import de.maxhenkel.voicechat.voice.client.ClientManager;
 import de.maxhenkel.voicechat.voice.client.ClientVoicechat;
 import de.maxhenkel.voicechat.voice.client.ClientVoicechatConnection;
 import de.maxhenkel.voicechat.voice.client.SoundManager;
 import de.maxhenkel.voicechat.voice.common.Utils;
-import jdk.internal.org.jline.utils.OSUtils;
 
 import javax.annotation.Nullable;
 
@@ -133,7 +133,7 @@ public class OpusManager {
     }
 
     public static boolean useNatives() {
-        if (OSUtils.IS_OSX) {
+        if (PlatformUtils.isMac()) {
             if (!VersionCheck.isMacOSNativeCompatible()) {
                 return false;
             }

@@ -4,8 +4,8 @@ import de.maxhenkel.voicechat.MinecraftAccessor;
 import de.maxhenkel.voicechat.extensions.FontRendererExtension;
 import de.maxhenkel.voicechat.util.ChatAllowedCharacters;
 import de.maxhenkel.voicechat.util.MathHelper2;
+import de.maxhenkel.voicechat.util.PlatformUtils;
 import de.maxhenkel.voicechat.util.TextureHelper;
-import jdk.internal.org.jline.utils.OSUtils;
 import net.minecraft.src.FontRenderer;
 import net.minecraft.src.Gui;
 import net.minecraft.src.GuiScreen;
@@ -714,7 +714,7 @@ public class GuiTextField extends Gui {
 
     public static boolean isCtrlKeyDown()
     {
-        if (OSUtils.IS_OSX)
+        if (PlatformUtils.isMac())
         {
             return Keyboard.isKeyDown(219) || Keyboard.isKeyDown(220);
         }

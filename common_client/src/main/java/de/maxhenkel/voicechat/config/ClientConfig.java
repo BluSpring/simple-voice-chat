@@ -4,10 +4,10 @@ import de.maxhenkel.configbuilder.ConfigBuilder;
 import de.maxhenkel.configbuilder.ConfigEntry;
 import de.maxhenkel.voicechat.intercompatibility.CommonCompatibilityManager;
 import de.maxhenkel.voicechat.macos.VersionCheck;
+import de.maxhenkel.voicechat.util.PlatformUtils;
 import de.maxhenkel.voicechat.voice.client.GroupPlayerIconOrientation;
 import de.maxhenkel.voicechat.voice.client.MicrophoneActivationType;
 import de.maxhenkel.voicechat.voice.client.speaker.AudioType;
-import jdk.internal.org.jline.utils.OSUtils;
 
 public class ClientConfig {
 
@@ -194,7 +194,7 @@ public class ClientConfig {
             javaMicrophoneImplementation.set(true).save();
         }
 
-        if (OSUtils.IS_OSX && useNatives.get() && !VersionCheck.isMacOSNativeCompatible()) {
+        if (PlatformUtils.isMac() && useNatives.get() && !VersionCheck.isMacOSNativeCompatible()) {
             useNatives.set(false).save();
         }
     }

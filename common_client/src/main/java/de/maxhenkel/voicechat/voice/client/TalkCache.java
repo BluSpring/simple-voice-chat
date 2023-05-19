@@ -1,6 +1,7 @@
 package de.maxhenkel.voicechat.voice.client;
 
-import net.minecraft.entity.Entity;
+import de.maxhenkel.voicechat.extensions.EntityExtension;
+import net.minecraft.src.Entity;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,11 +29,11 @@ public class TalkCache {
     }
 
     public boolean isTalking(Entity entity) {
-        return isTalking(entity.getUniqueID());
+        return isTalking(((EntityExtension) entity).getUniqueID());
     }
 
     public boolean isWhispering(Entity entity) {
-        return isWhispering(entity.getUniqueID());
+        return isWhispering(((EntityExtension) entity).getUniqueID());
     }
 
     public boolean isTalking(UUID entity) {

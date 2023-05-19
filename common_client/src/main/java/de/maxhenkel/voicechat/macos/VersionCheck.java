@@ -1,6 +1,6 @@
 package de.maxhenkel.voicechat.macos;
 
-import jdk.internal.org.jline.utils.OSUtils;
+import de.maxhenkel.voicechat.util.PlatformUtils;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -40,7 +40,7 @@ public class VersionCheck {
     }
 
     public static boolean isMacOSNativeCompatible() {
-        return OSUtils.IS_OSX && isMinimumVersion(10, 15, 0);
+        return PlatformUtils.isMac() && isMinimumVersion(10, 15, 0);
     }
 
 }

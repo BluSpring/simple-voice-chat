@@ -1,37 +1,36 @@
 package de.maxhenkel.voicechat.voice.client;
 
+import de.maxhenkel.voicechat.MinecraftAccessor;
 import de.maxhenkel.voicechat.Voicechat;
 import de.maxhenkel.voicechat.VoicechatClient;
+import de.maxhenkel.voicechat.extensions.GuiExtension;
 import de.maxhenkel.voicechat.intercompatibility.ClientCompatibilityManager;
+import de.maxhenkel.voicechat.util.TextureHelper;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.src.Entity;
+import net.minecraft.src.EntityPlayer;
+import net.minecraft.src.ScaledResolution;
+import net.minecraft.src.Tessellator;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL14;
 
 import java.util.UUID;
 
 public class RenderEvents {
 
-    private static final ResourceLocation MICROPHONE_ICON = new ResourceLocation(Voicechat.MODID, "textures/icons/microphone.png");
-    private static final ResourceLocation WHISPER_MICROPHONE_ICON = new ResourceLocation(Voicechat.MODID, "textures/icons/microphone_whisper.png");
-    private static final ResourceLocation MICROPHONE_OFF_ICON = new ResourceLocation(Voicechat.MODID, "textures/icons/microphone_off.png");
-    private static final ResourceLocation SPEAKER_ICON = new ResourceLocation(Voicechat.MODID, "textures/icons/speaker.png");
-    private static final ResourceLocation WHISPER_SPEAKER_ICON = new ResourceLocation(Voicechat.MODID, "textures/icons/speaker_whisper.png");
-    private static final ResourceLocation SPEAKER_OFF_ICON = new ResourceLocation(Voicechat.MODID, "textures/icons/speaker_off.png");
-    private static final ResourceLocation DISCONNECT_ICON = new ResourceLocation(Voicechat.MODID, "textures/icons/disconnected.png");
-    private static final ResourceLocation GROUP_ICON = new ResourceLocation(Voicechat.MODID, "textures/icons/group.png");
+    private static final String MICROPHONE_ICON = TextureHelper.format(Voicechat.MODID, "textures/icons/microphone.png");
+    private static final String WHISPER_MICROPHONE_ICON = TextureHelper.format(Voicechat.MODID, "textures/icons/microphone_whisper.png");
+    private static final String MICROPHONE_OFF_ICON = TextureHelper.format(Voicechat.MODID, "textures/icons/microphone_off.png");
+    private static final String SPEAKER_ICON = TextureHelper.format(Voicechat.MODID, "textures/icons/speaker.png");
+    private static final String WHISPER_SPEAKER_ICON = TextureHelper.format(Voicechat.MODID, "textures/icons/speaker_whisper.png");
+    private static final String SPEAKER_OFF_ICON = TextureHelper.format(Voicechat.MODID, "textures/icons/speaker_off.png");
+    private static final String DISCONNECT_ICON = TextureHelper.format(Voicechat.MODID, "textures/icons/disconnected.png");
+    private static final String GROUP_ICON = TextureHelper.format(Voicechat.MODID, "textures/icons/group.png");
 
     private final Minecraft minecraft;
 
     public RenderEvents() {
-        minecraft = Minecraft.getMinecraft();
+        minecraft = MinecraftAccessor.getMinecraft();
         ClientCompatibilityManager.INSTANCE.onRenderNamePlate(this::onRenderName);
         ClientCompatibilityManager.INSTANCE.onRenderHUD(this::onRenderHUD);
     }
@@ -75,24 +74,24 @@ public class RenderEvents {
         return client != null && (System.currentTimeMillis() - client.getStartTime()) < 5000;
     }
 
-    private void renderIcon(ResourceLocation texture) {
-        GlStateManager.pushMatrix();
-        ScaledResolution scaledResolution = new ScaledResolution(minecraft);
-        minecraft.getTextureManager().bindTexture(texture);
+    private void renderIcon(String texture) {
+        GL11.glPushMatrix();
+        ScaledResolution scaledResolution = new ScaledResolution(minecraft.displayWidth, minecraft.displayHeight);
+        TextureHelper.bindTexture(texture);
         int posX = VoicechatClient.CLIENT_CONFIG.hudIconPosX.get();
         int posY = VoicechatClient.CLIENT_CONFIG.hudIconPosY.get();
         if (posX < 0) {
-            GlStateManager.translate(scaledResolution.getScaledWidth(), 0D, 0D);
+            GL11.glTranslated(scaledResolution.getScaledWidth(), 0D, 0D);
         }
         if (posY < 0) {
-            GlStateManager.translate(0D, scaledResolution.getScaledHeight(), 0D);
+            GL11.glTranslated(0D, scaledResolution.getScaledHeight(), 0D);
         }
-        GlStateManager.translate(posX, posY, 0D);
+        GL11.glTranslated(posX, posY, 0D);
         float scale = VoicechatClient.CLIENT_CONFIG.hudIconScale.get().floatValue();
-        GlStateManager.scale(scale, scale, 1F);
+        GL11.glScalef(scale, scale, 1F);
 
-        GuiScreen.drawModalRectWithCustomSizedTexture(posX < 0 ? -16 : 0, posY < 0 ? -16 : 0, 0, 0, 16, 16, 16, 16);
-        GlStateManager.popMatrix();
+        GuiExtension.staticDrawModalRectWithCustomSizedTexture(posX < 0 ? -16 : 0, posY < 0 ? -16 : 0, 0, 0, 16, 16, 16, 16);
+        GL11.glPopMatrix();
     }
 
     private void onRenderName(Entity entity, String str, double x, double y, double z, int maxDistance) {
@@ -106,11 +105,11 @@ public class RenderEvents {
             return;
         }
         EntityPlayer player = (EntityPlayer) entity;
-        if (entity == minecraft.player) {
+        if (entity == minecraft.thePlayer) {
             return;
         }
 
-        if (!minecraft.gameSettings.hideGUI) {
+        if (false) {
             ClientPlayerStateManager manager = ClientManager.getPlayerStateManager();
             ClientVoicechat client = ClientManager.getClient();
             UUID groupId = manager.getGroup(player);
@@ -129,52 +128,55 @@ public class RenderEvents {
         }
     }
 
-    private void renderPlayerIcon(EntityPlayer entity, String str, double x, double y, double z, int maxDistance, ResourceLocation texture) {
-        RenderManager renderManager = minecraft.getRenderManager();
-        boolean isThirdPersonFrontal = renderManager.options.thirdPersonView == 2;
+    private void renderPlayerIcon(EntityPlayer entity, String str, double x, double y, double z, int maxDistance, String texture) {
+        boolean isThirdPersonFrontal = false;
         int verticalShift = "deadmau5".equals(str) ? -10 : 0;
 
         float height = entity.height + 0.5F - (entity.isSneaking() ? 0.25F : 0F);
 
-        GlStateManager.pushMatrix();
-        GlStateManager.translate(x, y + height, z);
-        GlStateManager.glNormal3f(0F, 1F, 0F);
-        GlStateManager.rotate(-renderManager.playerViewY, 0F, 1F, 0F);
-        GlStateManager.rotate((float) (isThirdPersonFrontal ? -1 : 1) * renderManager.playerViewX, 1F, 0F, 0F);
-        GlStateManager.scale(-0.025F, -0.025F, 0.025F);
-        GlStateManager.disableLighting();
-        GlStateManager.depthMask(false);
+        GL11.glPushMatrix();
+        GL11.glTranslated(x, y + height, z);
+        GL11.glNormal3f(0F, 1F, 0F);
+        GL11.glRotatef(-minecraft.thePlayer.rotationYaw, 0F, 1F, 0F);
+        GL11.glRotatef((float) (isThirdPersonFrontal ? -1 : 1) * minecraft.thePlayer.rotationPitch, 1F, 0F, 0F);
+        GL11.glScalef(-0.025F, -0.025F, 0.025F);
+        GL11.glDisable(GL11.GL_LIGHTING);
+        GL11.glDepthMask(false);
 
         if (!entity.isSneaking()) {
-            GlStateManager.disableDepth();
+            GL11.glDisable(GL11.GL_DEPTH);
         }
 
-        GlStateManager.enableBlend();
-        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+        GL11.glEnable(GL11.GL_BLEND);
+        GL14.glBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
         int halfNameWidth = minecraft.fontRenderer.getStringWidth(str) / 2;
-        GlStateManager.translate(halfNameWidth, verticalShift - 1F, 0F);
+        GL11.glTranslatef(halfNameWidth, verticalShift - 1F, 0F);
         if (!entity.isSneaking()) {
             drawIcon(texture, true);
-            GlStateManager.enableDepth();
+            GL11.glEnable(GL11.GL_DEPTH);
         }
 
-        GlStateManager.depthMask(true);
+        GL11.glDepthMask(true);
         drawIcon(texture, false);
-        GlStateManager.enableLighting();
-        GlStateManager.disableBlend();
-        GlStateManager.color(1F, 1F, 1F, 1F);
-        GlStateManager.popMatrix();
+        GL11.glEnable(GL11.GL_LIGHTING);
+        GL11.glDisable(GL11.GL_BLEND);
+        GL11.glColor4f(1F, 1F, 1F, 1F);
+        GL11.glPopMatrix();
     }
 
-    private void drawIcon(ResourceLocation texture, boolean transparent) {
-        minecraft.getTextureManager().bindTexture(texture);
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder bufferbuilder = tessellator.getBuffer();
-        bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
-        bufferbuilder.pos(2D, 10D, 0D).tex(0D, 1D).color(255, 255, 255, transparent ? 32 : 255).endVertex();
-        bufferbuilder.pos(2D + 10D, 10D, 0D).tex(1D, 1D).color(255, 255, 255, transparent ? 32 : 255).endVertex();
-        bufferbuilder.pos(2D + 10D, 0D, 0D).tex(1D, 0D).color(255, 255, 255, transparent ? 32 : 255).endVertex();
-        bufferbuilder.pos(2D, 0D, 0D).tex(0D, 0D).color(255, 255, 255, transparent ? 32 : 255).endVertex();
+    private void drawIcon(String texture, boolean transparent) {
+        TextureHelper.bindTexture(texture);
+        Tessellator tessellator = Tessellator.instance;
+
+        tessellator.startDrawing(7);
+        tessellator.setColorRGBA(255, 255, 255, transparent ? 32 : 255);
+        tessellator.addVertexWithUV(2D, 10D, 0D, 0D, 1D);
+        tessellator.setColorRGBA(255, 255, 255, transparent ? 32 : 255);
+        tessellator.addVertexWithUV(2D + 10D, 10D, 0D, 1D, 1D);
+        tessellator.setColorRGBA(255, 255, 255, transparent ? 32 : 255);
+        tessellator.addVertexWithUV(2D + 10D, 0D, 0D, 1D, 0D);
+        tessellator.setColorRGBA(255, 255, 255, transparent ? 32 : 255);
+        tessellator.addVertexWithUV(2D, 0D, 0D, 0D, 0D);
         tessellator.draw();
     }
 
@@ -182,7 +184,7 @@ public class RenderEvents {
         if (ClientManager.getClient() != null && ClientManager.getClient().getConnection() != null && ClientManager.getClient().getConnection().isInitialized()) {
             return true;
         }
-        return minecraft.getIntegratedServer() != null && !minecraft.getIntegratedServer().getPublic();
+        return minecraft.isMultiplayerWorld();
     }
 
 }
