@@ -1,7 +1,10 @@
 package de.maxhenkel.voicechat.mixin;
 
+import de.maxhenkel.voicechat.FabricVoicechatClientMod;
+import de.maxhenkel.voicechat.MinecraftAccessor;
 import de.maxhenkel.voicechat.intercompatibility.FabricClientCompatibilityManager;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.MinecraftApplet;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.World;
 import org.spongepowered.asm.mixin.Mixin;
@@ -9,8 +12,16 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.awt.*;
+
 @Mixin(Minecraft.class)
 public class MinecraftMixin {
+    @Inject(method = "startGame", at = @At("TAIL"))
+    public void assignMinecraft(CallbackInfo ci) {
+        MinecraftAccessor.setInstance((Minecraft) (Object) this);
+        FabricVoicechatClientMod.instance.initializeClient();
+    }
+
     @Inject(method = "runTick", at = @At("TAIL"))
     public void postTick(CallbackInfo ci) {
         FabricClientCompatibilityManager.getInstance().onInput();

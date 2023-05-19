@@ -17,7 +17,7 @@ import java.util.function.Consumer;
 
 public class FabricClientCompatibilityManager extends ClientCompatibilityManager {
     private static FabricClientCompatibilityManager instance;
-    private final Minecraft minecraft;
+    private Minecraft minecraft;
 
     private final List<RenderNameplateEvent> renderNameplateEvents;
     private final List<RenderHUDEvent> renderHUDEvents;
@@ -54,6 +54,9 @@ public class FabricClientCompatibilityManager extends ClientCompatibilityManager
     public void onRenderName(Entity entity, String str, double x, double y, double z, int maxDistance) {
         renderNameplateEvents.forEach(renderNameplateEvent -> renderNameplateEvent.render(entity, str, x, y, z, maxDistance));
         //TODO Check if player can be seen
+        if (minecraft == null)
+            minecraft = MinecraftAccessor.getMinecraft();
+
         if (minecraft.thePlayer == null /*|| entity.isInvisibleTo(minecraft.player)*/) {
             return;
         }
@@ -82,6 +85,9 @@ public class FabricClientCompatibilityManager extends ClientCompatibilityManager
     }
 
     public void onJoinWorld(Entity entity) {
+        if (minecraft == null)
+            minecraft = MinecraftAccessor.getMinecraft();
+
         if (entity != minecraft.thePlayer) {
             return;
         }
@@ -124,6 +130,9 @@ public class FabricClientCompatibilityManager extends ClientCompatibilityManager
 
     @Override
     public KeyBinding registerKeyBinding(KeyBinding keyBinding, String translation) {
+        if (minecraft == null)
+            minecraft = MinecraftAccessor.getMinecraft();
+
         KeyBinding[] oldArray = minecraft.gameSettings.keyBindings;
         KeyBinding[] newArray = Arrays.copyOf(oldArray, oldArray.length + 1);
         newArray[oldArray.length] = keyBinding;

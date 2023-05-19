@@ -9,6 +9,7 @@
     "GuiButtonMixin",
     "GuiMixin",
     "GuiScreenMixin",
+    "KeyBindingMixin",
     "MinecraftMixin",
     "NetClientHandlerMixin",
     "NetHandlerMixin",
@@ -18,8 +19,5 @@
     "TexturePackBaseMixin",
     "TexturePackCustomMixin",
     "WorldMixin"
-  ],
-  "client": [
-    "MinecraftImplMixin"
   ]
 }
