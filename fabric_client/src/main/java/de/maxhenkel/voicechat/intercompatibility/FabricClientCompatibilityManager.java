@@ -36,6 +36,7 @@ public class FabricClientCompatibilityManager extends ClientCompatibilityManager
     }
 
     public FabricClientCompatibilityManager() {
+        instance = this;
         minecraft = MinecraftAccessor.getMinecraft();
         renderNameplateEvents = new ArrayList<>();
         renderHUDEvents = new ArrayList<>();

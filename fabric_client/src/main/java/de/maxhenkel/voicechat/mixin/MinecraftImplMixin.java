@@ -1,5 +1,6 @@
 package de.maxhenkel.voicechat.mixin;
 
+import de.maxhenkel.voicechat.FabricVoicechatClientMod;
 import de.maxhenkel.voicechat.MinecraftAccessor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.MinecraftApplet;
@@ -16,5 +17,6 @@ public class MinecraftImplMixin {
     @Inject(method = "<init>", at = @At("TAIL"))
     public void assignMinecraftInstance(Component canvas, Canvas minecraftApplet, MinecraftApplet i, int j, int bl, boolean frame, Frame par7, CallbackInfo ci) {
         MinecraftAccessor.setInstance((Minecraft) (Object) this);
+        FabricVoicechatClientMod.instance.initializeClient();
     }
 }
