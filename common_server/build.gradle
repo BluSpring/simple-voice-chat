@@ -1,0 +1,55 @@
+plugins {
+    id 'java'
+    id 'common-loom' version "${common_loom_version}"
+}
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(java_version as int)
+
+repositories {
+    mavenCentral()
+    maven { url = 'https://maven.maxhenkel.de/repository/public' }
+    mavenLocal()
+    maven {
+        url = "https://maven.bluspring.xyz/"
+    }
+}
+
+task prepareWorkspace {
+
+}
+
+loom {
+    customManifest.set(custom_manifest_url)
+
+    noIntermediateMappings()
+    serverOnlyMinecraftJar()
+}
+
+sourceSets {
+    template {
+        java {
+            srcDir 'src/template/java'
+        }
+    }
+    main {
+        compileClasspath += sourceSets.template.output
+        runtimeClasspath += sourceSets.template.output
+    }
+}
+
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+
+dependencies {
+    minecraft "com.mojang:minecraft:${minecraft_version}"
+    mappings "org.mcphackers:retromcp:b1.2-server"
+
+    implementation 'com.google.code.findbugs:jsr305:3.0.2'
+
+    implementation "de.maxhenkel.configbuilder:configbuilder:${configbuilder_version}"
+    implementation "de.maxhenkel.opus4j:opus4j:${opus4j_version}"
+    implementation "org.concentus:Concentus:${concentus_version}"
+    implementation "de.maxhenkel.rnnoise4j:rnnoise4j:${rnnoise4j_version}"
+    implementation "de.maxhenkel.lame4j:lame4j:${lame4j_version}"
+
+    implementation project(':api')
+}

@@ -3,9 +3,10 @@ pluginManagement {
         gradlePluginPortal()
         maven { url = 'https://maven.minecraftforge.net/' }
         maven { url = 'https://maven.maxhenkel.de/repository/public' }
+        maven { url = "https://maven.fabricmc.net/" }
         mavenCentral()
     }
 }
 
 rootProject.name = 'voicechat'
-include('api', 'common', 'forge', 'bukkit')
+include('api', 'common_client', 'common_server', 'fabric_client', 'fabric_server')
