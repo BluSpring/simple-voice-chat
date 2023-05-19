@@ -15,20 +15,20 @@ public class PTTKeyHandler {
     }
 
     public void onKeyboardEvent() {
-        if (KeyEvents.KEY_PTT.getKeyCode() > 0 && KeyEvents.KEY_PTT.getKeyCode() < 256) {
-            pttKeyDown = Keyboard.isKeyDown(KeyEvents.KEY_PTT.getKeyCode());
+        if (KeyEvents.KEY_PTT.keyCode > 0 && KeyEvents.KEY_PTT.keyCode < 256) {
+            pttKeyDown = Keyboard.isKeyDown(KeyEvents.KEY_PTT.keyCode);
         }
-        if (KeyEvents.KEY_WHISPER.getKeyCode() > 0 && KeyEvents.KEY_PTT.getKeyCode() < 256) {
-            whisperKeyDown = Keyboard.isKeyDown(KeyEvents.KEY_WHISPER.getKeyCode());
+        if (KeyEvents.KEY_WHISPER.keyCode > 0 && KeyEvents.KEY_PTT.keyCode < 256) {
+            whisperKeyDown = Keyboard.isKeyDown(KeyEvents.KEY_WHISPER.keyCode);
         }
     }
 
     public void onMouseEvent() {
-        if (KeyEvents.KEY_PTT.getKeyCode() < 0) {
-            pttKeyDown = Mouse.isButtonDown(KeyEvents.KEY_PTT.getKeyCode() + 100);
+        if (KeyEvents.KEY_PTT.keyCode < 0) {
+            pttKeyDown = Mouse.isButtonDown(KeyEvents.KEY_PTT.keyCode + 100);
         }
-        if (KeyEvents.KEY_WHISPER.getKeyCode() < 0) {
-            whisperKeyDown = Mouse.isButtonDown(KeyEvents.KEY_WHISPER.getKeyCode() + 100);
+        if (KeyEvents.KEY_WHISPER.keyCode < 0) {
+            whisperKeyDown = Mouse.isButtonDown(KeyEvents.KEY_WHISPER.keyCode + 100);
         }
     }
 
