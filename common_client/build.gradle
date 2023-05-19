@@ -4,6 +4,8 @@ plugins {
 }
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(java_version as int)
+sourceCompatibility = JavaLanguageVersion.of(java_version as int)
+targetCompatibility = JavaLanguageVersion.of(java_version as int)
 
 repositories {
     mavenCentral()

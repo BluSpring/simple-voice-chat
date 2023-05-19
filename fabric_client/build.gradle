@@ -11,6 +11,8 @@ loom {
     customManifest.set(custom_manifest_url)
     intermediaryUrl = "https://github.com/BluSpring/maven-repo/raw/main/xyz/bluspring/intermediary/empty/intermediary-empty.jar"
     clientOnlyMinecraftJar()
+
+    accessWidenerPath = project(":common_client").file("src/main/resources/voicechat_client.accesswidener")
 }
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(java_version as int)
@@ -85,7 +87,7 @@ tasks.withType(JavaCompile).configureEach {
 
 tasks.withType(JavaCompile).configureEach {
     it.options.encoding = 'UTF-8'
-    it.options.release = java_version as int
+    //it.options.release = java_version as int
 }
 
 java {
