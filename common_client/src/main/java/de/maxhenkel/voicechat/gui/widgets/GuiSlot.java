@@ -206,20 +206,20 @@ public abstract class GuiSlot {
             tessellator.setColorRGBA(0, 0, 0, 0);
             tessellator.addVertexWithUV((double)this.right, (double)(this.top + 4), 0.0D, 1.0D, 1.0D);
 
-            tessellator.setColorRGBA(0, 0, 0, 255);
+            tessellator.setColorRGBA(0, 0, 0, modifiedAlpha());
             tessellator.addVertexWithUV((double)this.right, (double)this.top, 0.0D, 1.0D, 0.0D);
 
-            tessellator.setColorRGBA(0, 0, 0, 255);
+            tessellator.setColorRGBA(0, 0, 0, modifiedAlpha());
             tessellator.addVertexWithUV((double)this.left, (double)this.top, 0.0D, 0.0D, 0.0D);
 
             tessellator.draw();
 
             tessellator.startDrawing(7);
 
-            tessellator.setColorRGBA(0, 0, 0, 255);
+            tessellator.setColorRGBA(0, 0, 0, modifiedAlpha());
             tessellator.addVertexWithUV((double)this.left, (double)this.bottom, 0.0D, 0.0D, 1.0D);
 
-            tessellator.setColorRGBA(0, 0, 0, 255);
+            tessellator.setColorRGBA(0, 0, 0, modifiedAlpha());
             tessellator.addVertexWithUV((double)this.right, (double)this.bottom, 0.0D, 1.0D, 1.0D);
 
             tessellator.setColorRGBA(0, 0, 0, 0);
@@ -521,5 +521,13 @@ public abstract class GuiSlot {
 
     public static long getSystemTime() {
         return Sys.getTime() * 1000L / Sys.getTimerResolution();
+    }
+
+    private boolean isVoicechatList() {
+        return this instanceof ListScreenListBase;
+    }
+
+    private int modifiedAlpha() {
+        return isVoicechatList() ? 0 : 255;
     }
 }

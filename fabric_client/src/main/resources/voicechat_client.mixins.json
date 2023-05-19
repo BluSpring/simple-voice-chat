@@ -8,12 +8,16 @@
     "FontRendererMixin",
     "GuiButtonMixin",
     "GuiMixin",
+    "GuiScreenMixin",
+    "MinecraftMixin",
     "NetClientHandlerMixin",
     "NetHandlerMixin",
+    "NetworkManagerAccessor",
     "PacketMixin",
     "StringTranslateMixin",
     "TexturePackBaseMixin",
-    "TexturePackCustomMixin"
+    "TexturePackCustomMixin",
+    "WorldMixin"
   ],
   "client": [
     "MinecraftImplMixin"
