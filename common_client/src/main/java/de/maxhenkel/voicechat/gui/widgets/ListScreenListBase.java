@@ -2,7 +2,6 @@ package de.maxhenkel.voicechat.gui.widgets;
 
 import de.maxhenkel.voicechat.MinecraftAccessor;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiListExtended;
 import net.minecraft.src.ScaledResolution;
 import net.minecraft.src.Tessellator;
 import org.lwjgl.opengl.GL11;
@@ -70,7 +69,7 @@ public abstract class ListScreenListBase<T extends ListScreenEntryBase> extends 
 
     @Override
     public void drawScreen(int mouseXIn, int mouseYIn, float partialTicks) {
-        ScaledResolution scaledResolution = new ScaledResolution(mc);
+        ScaledResolution scaledResolution = new ScaledResolution(mc.displayWidth, mc.displayHeight);
         double scale = scaledResolution.scaleFactor;
         enableScissor((int) ((double) getRowLeft() * scale), (int) ((double) (height - bottom) * scale), (int) ((double) (getScrollBarX() + 6) * scale), (int) ((double) (height - (height - bottom + 4) - top + 4) * scale));
         super.drawScreen(mouseXIn, mouseYIn, partialTicks);

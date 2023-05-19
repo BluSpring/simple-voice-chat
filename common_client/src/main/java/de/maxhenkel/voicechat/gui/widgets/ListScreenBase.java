@@ -3,7 +3,6 @@ package de.maxhenkel.voicechat.gui.widgets;
 import de.maxhenkel.voicechat.gui.VoiceChatScreenBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.GuiButton;
-import net.minecraft.util.text.ITextComponent;
 
 import java.io.IOException;
 
@@ -25,7 +24,7 @@ public abstract class ListScreenBase extends VoiceChatScreenBase {
     }
 
     @Override
-    protected void actionPerformed(GuiButton button) throws IOException {
+    protected void actionPerformed(GuiButton button) {
         super.actionPerformed(button);
         if (list != null) {
             list.actionPerformed(button);
@@ -56,7 +55,7 @@ public abstract class ListScreenBase extends VoiceChatScreenBase {
     protected void mouseMovedOrUp(int mouseX, int mouseY, int mouseButton) {
         super.mouseMovedOrUp(mouseX, mouseY, mouseButton);
         if (list != null) {
-            list.mouseMovedOrUp(mouseX, mouseY, mouseButton);
+            list.mouseReleased(mouseX, mouseY, mouseButton);
         }
     }
 

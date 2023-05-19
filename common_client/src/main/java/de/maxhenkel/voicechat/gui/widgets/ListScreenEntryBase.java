@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import de.maxhenkel.voicechat.MinecraftAccessor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.GuiButton;
-import net.minecraft.client.gui.GuiListExtended;
 
 import java.util.List;
 

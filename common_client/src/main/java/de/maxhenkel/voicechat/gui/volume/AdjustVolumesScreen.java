@@ -2,18 +2,11 @@ package de.maxhenkel.voicechat.gui.volume;
 
 import de.maxhenkel.voicechat.Voicechat;
 import de.maxhenkel.voicechat.gui.VoiceChatScreenBase;
+import de.maxhenkel.voicechat.gui.widgets.GuiPageButtonList;
+import de.maxhenkel.voicechat.gui.widgets.GuiTextField;
 import de.maxhenkel.voicechat.gui.widgets.ListScreenBase;
 import de.maxhenkel.voicechat.util.TextureHelper;
-import net.minecraft.client.gui.GuiPageButtonList;
-import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.src.StringTranslate;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.src.MathHelper;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.util.text.TextFormatting;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
@@ -24,8 +17,8 @@ public class AdjustVolumesScreen extends ListScreenBase {
 
     protected static final String TEXTURE = TextureHelper.format(Voicechat.MODID, "textures/gui/gui_volumes.png");
     protected static final String TITLE = StringTranslate.getInstance().translateKey("gui.voicechat.adjust_volume.title");
-    protected static final String SEARCH_HINT = StringTranslate.getInstance().translateKey("message.voicechat.search_hint").setStyle(new Style().setColor(TextFormatting.GRAY).setItalic(true));
-    protected static final String EMPTY_SEARCH = StringTranslate.getInstance().translateKey("message.voicechat.search_empty").setStyle(new Style().setColor(TextFormatting.GRAY));
+    protected static final String SEARCH_HINT = StringTranslate.getInstance().translateKey("message.voicechat.search_hint");
+    protected static final String EMPTY_SEARCH = StringTranslate.getInstance().translateKey("message.voicechat.search_empty");
 
     protected static final int HEADER_SIZE = 16;
     protected static final int FOOTER_SIZE = 8;
@@ -116,7 +109,7 @@ public class AdjustVolumesScreen extends ListScreenBase {
             drawCenteredString(fontRenderer, EMPTY_SEARCH, width / 2, guiTop + HEADER_SIZE + (units * UNIT_SIZE) / 2 - (int) TextureHelper.FONT_HEIGHT / 2, -1);
         }
         if (!searchBox.isFocused() && searchBox.getText().isEmpty()) {
-            drawString(fontRenderer, SEARCH_HINT.getFormattedText(), searchBox.x, searchBox.y, -1);
+            drawString(fontRenderer, SEARCH_HINT, searchBox.x, searchBox.y, -1);
         } else {
             GL11.glDisable(GL11.GL_LIGHTING);
             GL11.glDisable(GL11.GL_BLEND);
@@ -125,7 +118,7 @@ public class AdjustVolumesScreen extends ListScreenBase {
     }
 
     @Override
-    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) {
         super.mouseClicked(mouseX, mouseY, mouseButton);
         if (volumeList == null) {
             return;
@@ -135,7 +128,7 @@ public class AdjustVolumesScreen extends ListScreenBase {
     }
 
     @Override
-    protected void keyTyped(char typedChar, int keyCode) throws IOException {
+    protected void keyTyped(char typedChar, int keyCode) {
         super.keyTyped(typedChar, keyCode);
         if (searchBox == null) {
             return;

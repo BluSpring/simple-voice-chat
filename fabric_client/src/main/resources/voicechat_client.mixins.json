@@ -5,6 +5,7 @@
   "package": "de.maxhenkel.voicechat.mixin",
   "mixins": [
     "EntityPlayerMixin",
+    "FontRendererMixin",
     "GuiButtonMixin",
     "GuiMixin",
     "NetClientHandlerMixin",

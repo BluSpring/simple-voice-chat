@@ -1,17 +1,15 @@
 package de.maxhenkel.voicechat.gui;
 
 import de.maxhenkel.voicechat.Voicechat;
+import de.maxhenkel.voicechat.extensions.FontRendererExtension;
 import de.maxhenkel.voicechat.extensions.GuiButtonExtension;
 import de.maxhenkel.voicechat.gui.widgets.ButtonBase;
+import de.maxhenkel.voicechat.gui.widgets.GuiTextField;
 import de.maxhenkel.voicechat.net.CreateGroupPacket;
 import de.maxhenkel.voicechat.net.NetManager;
 import de.maxhenkel.voicechat.util.TextureHelper;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.src.StringTranslate;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
 import org.lwjgl.input.Keyboard;
 
 import java.io.IOException;
@@ -112,7 +110,7 @@ public class CreateGroupScreen extends VoiceChatScreenBase {
         fontRenderer.drawString(OPTIONAL_PASSWORD, guiLeft + 8, guiTop + 7 + ((int)TextureHelper.FONT_HEIGHT + 5) * 2 + 10 + 2, FONT_COLOR);
 
         if (mouseX >= groupTypeButton.xPosition && mouseY >= groupTypeButton.yPosition && mouseX < groupTypeButton.xPosition + ((GuiButtonExtension) groupTypeButton).getWidth() && mouseY < groupTypeButton.yPosition + ((GuiButtonExtension) groupTypeButton).getHeight()) {
-            drawHoveringText(mc.fontRenderer.listFormattedStringToWidth(groupType.getDescription(), 200), mouseX, mouseY);
+            drawHoveringText(((FontRendererExtension) mc.fontRenderer).listFormattedStringToWidth(groupType.getDescription(), 200), mouseX, mouseY);
         }
     }
 

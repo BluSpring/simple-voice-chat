@@ -2,16 +2,13 @@ package de.maxhenkel.voicechat.gui;
 
 import de.maxhenkel.voicechat.Voicechat;
 import de.maxhenkel.voicechat.gui.widgets.ButtonBase;
+import de.maxhenkel.voicechat.gui.widgets.GuiTextField;
 import de.maxhenkel.voicechat.net.JoinGroupPacket;
 import de.maxhenkel.voicechat.net.NetManager;
 import de.maxhenkel.voicechat.util.TextureHelper;
 import de.maxhenkel.voicechat.voice.common.ClientGroup;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.src.StringTranslate;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
 import org.lwjgl.input.Keyboard;
 
 import java.io.IOException;
@@ -41,7 +38,7 @@ public class EnterPasswordScreen extends VoiceChatScreenBase {
 
         Keyboard.enableRepeatEvents(true);
 
-        password = new GuiTextField(0, fontRenderer, guiLeft + 7, guiTop + 7 + (TextureHelper.FONT_HEIGHT + 5) * 2 - 5 + 2, xSize - 7 * 2, 10);
+        password = new GuiTextField(0, fontRenderer, guiLeft + 7, guiTop + 7 + ((int)TextureHelper.FONT_HEIGHT + 5) * 2 - 5 + 2, xSize - 7 * 2, 10);
         password.setMaxStringLength(32);
         password.setValidator(s -> s.isEmpty() || Voicechat.GROUP_REGEX.matcher(s).matches());
 
