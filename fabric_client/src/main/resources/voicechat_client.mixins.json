@@ -1,0 +1,19 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "compatibilityLevel": "JAVA_8",
+  "package": "de.maxhenkel.voicechat.mixin",
+  "mixins": [
+    "EntityPlayerMixin",
+    "GuiButtonMixin",
+    "GuiMixin",
+    "NetClientHandlerMixin",
+    "NetHandlerMixin",
+    "PacketMixin",
+    "TexturePackBaseMixin",
+    "TexturePackCustomMixin"
+  ],
+  "client": [
+    "MinecraftImplMixin"
+  ]
+}

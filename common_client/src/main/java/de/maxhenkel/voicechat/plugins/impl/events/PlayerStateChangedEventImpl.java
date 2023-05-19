@@ -6,7 +6,7 @@ import de.maxhenkel.voicechat.api.events.PlayerStateChangedEvent;
 import de.maxhenkel.voicechat.plugins.impl.VoicechatConnectionImpl;
 import de.maxhenkel.voicechat.voice.common.PlayerState;
 import de.maxhenkel.voicechat.voice.server.Server;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.src.EntityPlayer;
 
 import javax.annotation.Nullable;
 import java.util.UUID;
@@ -44,7 +44,7 @@ public class PlayerStateChangedEventImpl extends ServerEventImpl implements Play
             if (server == null) {
                 return null;
             }
-            EntityPlayerMP player = server.getServer().getPlayerList().getPlayerByUUID(state.getUuid());
+            EntityPlayer player = Voicechat.serverInstance.getPlayerByName(state.getName());
             if (player == null) {
                 return null;
             }

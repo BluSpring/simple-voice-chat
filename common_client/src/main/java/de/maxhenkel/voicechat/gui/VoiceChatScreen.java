@@ -12,6 +12,7 @@ import de.maxhenkel.voicechat.gui.volume.AdjustVolumesScreen;
 import de.maxhenkel.voicechat.gui.widgets.ButtonBase;
 import de.maxhenkel.voicechat.gui.widgets.ImageButton;
 import de.maxhenkel.voicechat.gui.widgets.ToggleImageButton;
+import de.maxhenkel.voicechat.util.TextureHelper;
 import de.maxhenkel.voicechat.voice.client.*;
 import de.maxhenkel.voicechat.voice.common.ClientGroup;
 import net.minecraft.util.ResourceLocation;
@@ -22,12 +23,12 @@ import java.io.IOException;
 
 public class VoiceChatScreen extends VoiceChatScreenBase {
 
-    private static final ResourceLocation TEXTURE = new ResourceLocation(Voicechat.MODID, "textures/gui/gui_voicechat.png");
-    private static final ResourceLocation MICROPHONE = new ResourceLocation(Voicechat.MODID, "textures/icons/microphone_button.png");
-    private static final ResourceLocation HIDE = new ResourceLocation(Voicechat.MODID, "textures/icons/hide_button.png");
-    private static final ResourceLocation VOLUMES = new ResourceLocation(Voicechat.MODID, "textures/icons/adjust_volumes.png");
-    private static final ResourceLocation SPEAKER = new ResourceLocation(Voicechat.MODID, "textures/icons/speaker_button.png");
-    private static final ResourceLocation RECORD = new ResourceLocation(Voicechat.MODID, "textures/icons/record_button.png");
+    private static final String TEXTURE = TextureHelper.format(Voicechat.MODID, "textures/gui/gui_voicechat.png");
+    private static final String MICROPHONE = TextureHelper.format(Voicechat.MODID, "textures/icons/microphone_button.png");
+    private static final String HIDE = TextureHelper.format(Voicechat.MODID, "textures/icons/hide_button.png");
+    private static final String VOLUMES = TextureHelper.format(Voicechat.MODID, "textures/icons/adjust_volumes.png");
+    private static final String SPEAKER = TextureHelper.format(Voicechat.MODID, "textures/icons/speaker_button.png");
+    private static final String RECORD = TextureHelper.format(Voicechat.MODID, "textures/icons/record_button.png");
     private static final ITextComponent TITLE = new TextComponentTranslation("gui.voicechat.voice_chat.title");
     private static final ITextComponent SETTINGS = new TextComponentTranslation("message.voicechat.settings");
     private static final ITextComponent GROUP = new TextComponentTranslation("message.voicechat.group");
@@ -52,31 +53,31 @@ public class VoiceChatScreen extends VoiceChatScreenBase {
         mute = new ToggleImageButton(0, guiLeft + 6, guiTop + ySize - 6 - 20, MICROPHONE, stateManager::isMuted, button -> {
             stateManager.setMuted(!stateManager.isMuted());
         }, new MuteTooltipSupplier(this, stateManager));
-        addButton(mute);
+        controlList.add(mute);
 
         disable = new ToggleImageButton(1, guiLeft + 6 + 20 + 2, guiTop + ySize - 6 - 20, SPEAKER, stateManager::isDisabled, button -> {
             stateManager.setDisabled(!stateManager.isDisabled());
         }, new DisableTooltipSupplier(this, stateManager));
-        addButton(disable);
+        controlList.add(disable);
 
         ImageButton volumes = new ImageButton(2, guiLeft + 6 + 20 + 2 + 20 + 2, guiTop + ySize - 6 - 20, VOLUMES, button -> {
             mc.displayGuiScreen(new AdjustVolumesScreen());
         }, (button, mouseX, mouseY) -> {
             drawHoveringText(ADJUST_PLAYER_VOLUMES.getUnformattedComponentText(), mouseX, mouseY);
         });
-        addButton(volumes);
+        controlList.add(volumes);
 
         if (client != null && VoicechatClient.CLIENT_CONFIG.useNatives.get()) {
             if (client.getRecorder() != null || (client.getConnection() != null && client.getConnection().getData().allowRecording())) {
                 ToggleImageButton record = new ToggleImageButton(3, guiLeft + xSize - 6 - 20 - 2 - 20, guiTop + ySize - 6 - 20, RECORD, () -> ClientManager.getClient() != null && ClientManager.getClient().getRecorder() != null, button -> toggleRecording(), new RecordingTooltipSupplier(this));
-                addButton(record);
+                controlList.add(record);
             }
         }
 
         ToggleImageButton hide = new ToggleImageButton(4, guiLeft + xSize - 6 - 20, guiTop + ySize - 6 - 20, HIDE, VoicechatClient.CLIENT_CONFIG.hideIcons::get, button -> {
             VoicechatClient.CLIENT_CONFIG.hideIcons.set(!VoicechatClient.CLIENT_CONFIG.hideIcons.get()).save();
         }, new HideTooltipSupplier(this));
-        addButton(hide);
+        controlList.add(hide);
 
         ButtonBase settings = new ButtonBase(5, guiLeft + 6, guiTop + 6 + 15, 75, 20, SETTINGS) {
             @Override
@@ -84,7 +85,7 @@ public class VoiceChatScreen extends VoiceChatScreenBase {
                 mc.displayGuiScreen(new VoiceChatSettingsScreen());
             }
         };
-        addButton(settings);
+        controlList.add(settings);
 
         ButtonBase group = new ButtonBase(6, guiLeft + xSize - 6 - 75 + 1, guiTop + 6 + 15, 75, 20, GROUP) {
             @Override
@@ -97,7 +98,7 @@ public class VoiceChatScreen extends VoiceChatScreenBase {
                 }
             }
         };
-        addButton(group);
+        controlList.add(group);
         group.enabled = client != null && client.getConnection() != null && client.getConnection().getData().groupsEnabled();
         recordingHoverArea = new HoverArea(6 + 20 + 2 + 20 + 2 + 20 + 2, ySize - 6 - 20, xSize - ((6 + 20 + 2 + 20 + 2) * 2 + 20 + 2), 20);
 
@@ -128,7 +129,7 @@ public class VoiceChatScreen extends VoiceChatScreenBase {
     }
 
     @Override
-    public void keyTyped(char typedChar, int keyCode) throws IOException {
+    public void keyTyped(char typedChar, int keyCode) {
         if (keyCode == KeyEvents.KEY_VOICE_CHAT.getKeyCode()) {
             mc.displayGuiScreen(null);
             return;
@@ -138,7 +139,7 @@ public class VoiceChatScreen extends VoiceChatScreenBase {
 
     @Override
     public void renderBackground(int mouseX, int mouseY, float delta) {
-        mc.getTextureManager().bindTexture(TEXTURE);
+        TextureHelper.bindTexture(TEXTURE);
         drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
     }
 

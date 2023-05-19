@@ -1,15 +1,15 @@
 package de.maxhenkel.voicechat.net;
 
+import de.maxhenkel.voicechat.MinecraftAccessor;
 import de.maxhenkel.voicechat.Voicechat;
-import io.netty.buffer.Unpooled;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.network.NetHandlerPlayClient;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.network.NetHandlerPlayServer;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.network.play.client.CPacketCustomPayload;
-import net.minecraft.network.play.server.SPacketCustomPayload;
-import net.minecraft.server.MinecraftServer;
+import net.minecraft.src.EntityPlayer;
+import net.minecraft.src.NetClientHandler;
+import net.minecraft.src.NetHandler;
+
+import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 
 public abstract class NetManager {
 
@@ -48,29 +48,39 @@ public abstract class NetManager {
     public abstract <T extends Packet<T>> Channel<T> registerReceiver(Class<T> packetType, boolean toClient, boolean toServer);
 
     public static void sendToServer(Packet<?> packet) {
-        PacketBuffer buffer = new PacketBuffer(Unpooled.buffer());
-        packet.toBytes(buffer);
-        NetHandlerPlayClient connection = Minecraft.getMinecraft().getConnection();
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        DataOutputStream buffer = new DataOutputStream(outputStream);
+        try {
+            packet.toBytes(buffer);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        NetClientHandler connection = MinecraftAccessor.getMinecraft().func_20001_q();
         if (connection != null) {
-            connection.sendPacket(new CPacketCustomPayload(packet.getIdentifier().toString(), buffer));
+            connection.addToSendQueue(new Packet135ClientCustomPayload(packet.getIdentifier().toString(), outputStream.toByteArray()));
         }
     }
 
-    public static void sendToClient(EntityPlayerMP player, Packet<?> packet) {
+    public static void sendToClient(EntityPlayer player, Packet<?> packet) {
         if (!Voicechat.SERVER.isCompatible(player)) {
             return;
         }
-        PacketBuffer buffer = new PacketBuffer(Unpooled.buffer());
-        packet.toBytes(buffer);
-        player.connection.sendPacket(new SPacketCustomPayload(packet.getIdentifier().toString(), buffer));
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        DataOutputStream buffer = new DataOutputStream(outputStream);
+        try {
+            packet.toBytes(buffer);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        player.connection.sendPacket(new Packet136ServerCustomPayload(packet.getIdentifier().toString(), outputStream.toByteArray()));
     }
 
     public interface ServerReceiver<T extends Packet<T>> {
-        void onPacket(MinecraftServer server, EntityPlayerMP player, NetHandlerPlayServer handler, T packet);
+        void onPacket(EntityPlayer player, NetHandler handler, T packet);
     }
 
     public interface ClientReceiver<T extends Packet<T>> {
-        void onPacket(Minecraft client, NetHandlerPlayClient handler, T packet);
+        void onPacket(Minecraft client, NetHandler handler, T packet);
     }
 
 }

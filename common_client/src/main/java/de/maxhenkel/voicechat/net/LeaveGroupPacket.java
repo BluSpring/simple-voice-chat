@@ -1,28 +1,30 @@
 package de.maxhenkel.voicechat.net;
 
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
+import de.maxhenkel.voicechat.util.ConnectionUtil;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 
 public class LeaveGroupPacket implements Packet<LeaveGroupPacket> {
 
-    public static final ResourceLocation LEAVE_GROUP = new ResourceLocation(NetManager.CHANNEL, "leave_group");
+    public static final String LEAVE_GROUP = ConnectionUtil.format(NetManager.CHANNEL, "leave_group");
 
     public LeaveGroupPacket() {
 
     }
 
     @Override
-    public ResourceLocation getIdentifier() {
+    public String getIdentifier() {
         return LEAVE_GROUP;
     }
 
     @Override
-    public LeaveGroupPacket fromBytes(PacketBuffer buf) {
+    public LeaveGroupPacket fromBytes(DataInputStream buf) {
         return this;
     }
 
     @Override
-    public void toBytes(PacketBuffer buf) {
+    public void toBytes(DataOutputStream buf) {
 
     }
 

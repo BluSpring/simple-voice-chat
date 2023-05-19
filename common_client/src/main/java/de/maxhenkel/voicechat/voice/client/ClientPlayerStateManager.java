@@ -1,10 +1,12 @@
 package de.maxhenkel.voicechat.voice.client;
 
+import de.maxhenkel.voicechat.MinecraftAccessor;
 import de.maxhenkel.voicechat.Voicechat;
 import de.maxhenkel.voicechat.VoicechatClient;
 import de.maxhenkel.voicechat.api.events.ClientVoicechatConnectionEvent;
 import de.maxhenkel.voicechat.api.events.MicrophoneMuteEvent;
 import de.maxhenkel.voicechat.api.events.VoicechatDisableEvent;
+import de.maxhenkel.voicechat.extensions.EntityPlayerExtension;
 import de.maxhenkel.voicechat.gui.CreateGroupScreen;
 import de.maxhenkel.voicechat.gui.EnterPasswordScreen;
 import de.maxhenkel.voicechat.gui.group.GroupList;
@@ -23,11 +25,8 @@ import de.maxhenkel.voicechat.plugins.impl.events.VoicechatDisableEventImpl;
 import de.maxhenkel.voicechat.voice.common.ClientGroup;
 import de.maxhenkel.voicechat.voice.common.PlayerState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.src.GuiScreen;
+import net.minecraft.src.EntityPlayer;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -67,17 +66,17 @@ public class ClientPlayerStateManager {
             GroupList.update();
         });
         CommonCompatibilityManager.INSTANCE.getNetManager().joinedGroupChannel.setClientListener((client, handler, packet) -> {
-            GuiScreen screen = Minecraft.getMinecraft().currentScreen;
+            GuiScreen screen = MinecraftAccessor.getMinecraft().currentScreen;
             this.group = packet.getGroup();
             if (packet.isWrongPassword()) {
                 if (screen instanceof JoinGroupScreen || screen instanceof CreateGroupScreen || screen instanceof EnterPasswordScreen) {
-                    Minecraft.getMinecraft().displayGuiScreen(null);
+                    MinecraftAccessor.getMinecraft().displayGuiScreen(null);
                 }
-                client.player.sendStatusMessage(new TextComponentTranslation("message.voicechat.wrong_password").setStyle(new Style().setColor(TextFormatting.DARK_RED)), true);
+                client.thePlayer.sendChatMessage(new TextComponentTranslation("message.voicechat.wrong_password").setStyle(new Style().setColor(TextFormatting.DARK_RED)), true);
             } else if (group != null && screen instanceof JoinGroupScreen || screen instanceof CreateGroupScreen || screen instanceof EnterPasswordScreen) {
                 ClientGroup clientGroup = getGroup();
                 if (clientGroup != null) {
-                    Minecraft.getMinecraft().displayGuiScreen(new GroupScreen(clientGroup));
+                    MinecraftAccessor.getMinecraft().displayGuiScreen(new GroupScreen(clientGroup));
                 } else {
                     Voicechat.LOGGER.warn("Received join group packet without group being present");
                 }
@@ -118,7 +117,7 @@ public class ClientPlayerStateManager {
     }
 
     public boolean isPlayerDisabled(EntityPlayer player) {
-        PlayerState playerState = states.get(player.getUniqueID());
+        PlayerState playerState = states.get(((EntityPlayerExtension) player).getUniqueID());
         if (playerState == null) {
             return false;
         }
@@ -127,7 +126,7 @@ public class ClientPlayerStateManager {
     }
 
     public boolean isPlayerDisconnected(EntityPlayer player) {
-        PlayerState playerState = states.get(player.getUniqueID());
+        PlayerState playerState = states.get(((EntityPlayerExtension) player).getUniqueID());
         if (playerState == null) {
             return VoicechatClient.CLIENT_CONFIG.showFakePlayersDisconnected.get();
         }
@@ -175,7 +174,7 @@ public class ClientPlayerStateManager {
     }
 
     public boolean isInGroup(EntityPlayer player) {
-        PlayerState state = states.get(player.getUniqueID());
+        PlayerState state = states.get(((EntityPlayerExtension) player).getUniqueID());
         if (state == null) {
             return false;
         }
@@ -184,7 +183,7 @@ public class ClientPlayerStateManager {
 
     @Nullable
     public UUID getGroup(EntityPlayer player) {
-        PlayerState state = states.get(player.getUniqueID());
+        PlayerState state = states.get(((EntityPlayerExtension) player).getUniqueID());
         if (state == null) {
             return null;
         }
@@ -220,7 +219,7 @@ public class ClientPlayerStateManager {
                 return connection.getData().getPlayerUUID();
             }
         }
-        return Minecraft.getMinecraft().getSession().getProfile().getId();
+        return ((EntityPlayerExtension) MinecraftAccessor.getMinecraft().thePlayer).getUniqueID();
     }
 
     @Nullable

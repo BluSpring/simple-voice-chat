@@ -21,6 +21,8 @@ public abstract class Voicechat {
     public static ServerConfig SERVER_CONFIG;
     public static Translations TRANSLATIONS;
 
+    public static VoicechatServer serverInstance;
+
     public static int COMPATIBILITY_VERSION = BuildConstants.COMPATIBILITY_VERSION;
 
     public static final Pattern GROUP_REGEX = Pattern.compile("^[^\\n\\r\\t\\s][^\\n\\r\\t]{0,23}$");

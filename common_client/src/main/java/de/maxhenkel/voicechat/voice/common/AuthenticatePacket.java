@@ -1,7 +1,8 @@
 package de.maxhenkel.voicechat.voice.common;
 
-import net.minecraft.network.PacketBuffer;
-
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.UUID;
 
 public class AuthenticatePacket implements Packet<AuthenticatePacket> {
@@ -27,16 +28,16 @@ public class AuthenticatePacket implements Packet<AuthenticatePacket> {
     }
 
     @Override
-    public AuthenticatePacket fromBytes(PacketBuffer buf) {
+    public AuthenticatePacket fromBytes(DataInputStream buf) throws IOException {
         AuthenticatePacket packet = new AuthenticatePacket();
-        packet.playerUUID = buf.readUniqueId();
-        packet.secret = buf.readUniqueId();
+        packet.playerUUID = UUID.fromString(buf.readUTF());
+        packet.secret = UUID.fromString(buf.readUTF());
         return packet;
     }
 
     @Override
-    public void toBytes(PacketBuffer buf) {
-        buf.writeUniqueId(playerUUID);
-        buf.writeUniqueId(secret);
+    public void toBytes(DataOutputStream buf) throws IOException {
+        buf.writeUTF(playerUUID.toString());
+        buf.writeUTF(secret.toString());
     }
 }

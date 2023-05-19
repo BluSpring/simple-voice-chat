@@ -1,13 +1,15 @@
 package de.maxhenkel.voicechat.net;
 
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
+import de.maxhenkel.voicechat.util.ConnectionUtil;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.UUID;
 
 public class RemoveGroupPacket implements Packet<RemoveGroupPacket> {
 
-    public static final ResourceLocation REMOVE_GROUP = new ResourceLocation(NetManager.CHANNEL, "remove_group");
+    public static final String REMOVE_GROUP = ConnectionUtil.format(NetManager.CHANNEL, "remove_group");
 
     private UUID groupId;
 
@@ -24,19 +26,19 @@ public class RemoveGroupPacket implements Packet<RemoveGroupPacket> {
     }
 
     @Override
-    public ResourceLocation getIdentifier() {
+    public String getIdentifier() {
         return REMOVE_GROUP;
     }
 
     @Override
-    public RemoveGroupPacket fromBytes(PacketBuffer buf) {
-        groupId = buf.readUniqueId();
+    public RemoveGroupPacket fromBytes(DataInputStream buf) throws IOException {
+        groupId = UUID.fromString(buf.readUTF());
         return this;
     }
 
     @Override
-    public void toBytes(PacketBuffer buf) {
-        buf.writeUniqueId(groupId);
+    public void toBytes(DataOutputStream buf) throws IOException {
+        buf.writeUTF(groupId.toString());
     }
 
 }

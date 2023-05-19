@@ -3,23 +3,25 @@ package de.maxhenkel.voicechat.gui.volume;
 import de.maxhenkel.voicechat.Voicechat;
 import de.maxhenkel.voicechat.gui.VoiceChatScreenBase;
 import de.maxhenkel.voicechat.gui.widgets.ListScreenBase;
+import de.maxhenkel.voicechat.util.TextureHelper;
 import net.minecraft.client.gui.GuiPageButtonList;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.src.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.GL11;
 
 import java.io.IOException;
 import java.util.Locale;
 
 public class AdjustVolumesScreen extends ListScreenBase {
 
-    protected static final ResourceLocation TEXTURE = new ResourceLocation(Voicechat.MODID, "textures/gui/gui_volumes.png");
+    protected static final String TEXTURE = TextureHelper.format(Voicechat.MODID, "textures/gui/gui_volumes.png");
     protected static final ITextComponent TITLE = new TextComponentTranslation("gui.voicechat.adjust_volume.title");
     protected static final ITextComponent SEARCH_HINT = new TextComponentTranslation("message.voicechat.search_hint").setStyle(new Style().setColor(TextFormatting.GRAY).setItalic(true));
     protected static final ITextComponent EMPTY_SEARCH = new TextComponentTranslation("message.voicechat.search_empty").setStyle(new Style().setColor(TextFormatting.GRAY));
@@ -51,7 +53,7 @@ public class AdjustVolumesScreen extends ListScreenBase {
         super.initGui();
         guiLeft = guiLeft + 2;
         guiTop = 32;
-        int minUnits = MathHelper.ceil((float) (CELL_HEIGHT + SEARCH_HEIGHT + 4) / (float) UNIT_SIZE);
+        int minUnits = (int) Math.ceil((float) (CELL_HEIGHT + SEARCH_HEIGHT + 4) / (float) UNIT_SIZE);
         units = Math.max(minUnits, (height - HEADER_SIZE - FOOTER_SIZE - guiTop * 2 - SEARCH_HEIGHT) / UNIT_SIZE);
         ySize = HEADER_SIZE + units * UNIT_SIZE + FOOTER_SIZE;
 
@@ -90,7 +92,7 @@ public class AdjustVolumesScreen extends ListScreenBase {
 
     @Override
     public void renderBackground(int mouseX, int mouseY, float delta) {
-        mc.getTextureManager().bindTexture(TEXTURE);
+        TextureHelper.bindTexture(TEXTURE);
         drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, HEADER_SIZE);
         for (int i = 0; i < units; i++) {
             drawTexturedModalRect(guiLeft, guiTop + HEADER_SIZE + UNIT_SIZE * i, 0, HEADER_SIZE, xSize, UNIT_SIZE);
@@ -115,8 +117,8 @@ public class AdjustVolumesScreen extends ListScreenBase {
         if (!searchBox.isFocused() && searchBox.getText().isEmpty()) {
             drawString(fontRenderer, SEARCH_HINT.getFormattedText(), searchBox.x, searchBox.y, -1);
         } else {
-            GlStateManager.disableLighting();
-            GlStateManager.disableBlend();
+            GL11.glDisable(GL11.GL_LIGHTING);
+            GL11.glDisable(GL11.GL_BLEND);
             searchBox.drawTextBox();
         }
     }

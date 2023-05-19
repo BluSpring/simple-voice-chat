@@ -6,6 +6,7 @@ import de.maxhenkel.voicechat.intercompatibility.ClientCompatibilityManager;
 import de.maxhenkel.voicechat.intercompatibility.CommonCompatibilityManager;
 import de.maxhenkel.voicechat.plugins.CategoryManager;
 import de.maxhenkel.voicechat.plugins.impl.VolumeCategoryImpl;
+import de.maxhenkel.voicechat.util.TextureHelper;
 import net.minecraft.client.renderer.texture.SimpleTexture;
 import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.client.resources.IResourceManager;
@@ -59,7 +60,7 @@ public class ClientCategoryManager extends CategoryManager {
     }
 
     private void registerImage(String id, BufferedImage image) {
-        ResourceLocation resourceLocation = new ResourceLocation(Voicechat.MODID, "category_" + id);//Minecraft.getMinecraft().getEntityRenderDispatcher().textureManager.register(id, new CustomTextureObject(image));
+        String resourceLocation = TextureHelper.format(Voicechat.MODID, "category_" + id);//Minecraft.getMinecraft().getEntityRenderDispatcher().textureManager.register(id, new CustomTextureObject(image));
         images.put(id, new CustomTextureObject(resourceLocation, image));
     }
 
@@ -87,7 +88,7 @@ public class ClientCategoryManager extends CategoryManager {
         return nativeImage;
     }
 
-    public ResourceLocation getTexture(String id, ResourceLocation defaultImage) {
+    public String getTexture(String id, String defaultImage) {
         CustomTextureObject customTextureObject = images.get(id);
         if (customTextureObject == null) {
             return defaultImage;

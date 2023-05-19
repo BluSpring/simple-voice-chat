@@ -1,6 +1,7 @@
 package de.maxhenkel.voicechat.voice.server;
 
 import de.maxhenkel.voicechat.Voicechat;
+import de.maxhenkel.voicechat.extensions.EntityPlayerExtension;
 import de.maxhenkel.voicechat.intercompatibility.CommonCompatibilityManager;
 import de.maxhenkel.voicechat.net.AddGroupPacket;
 import de.maxhenkel.voicechat.net.JoinedGroupPacket;
@@ -9,8 +10,7 @@ import de.maxhenkel.voicechat.net.RemoveGroupPacket;
 import de.maxhenkel.voicechat.permission.PermissionManager;
 import de.maxhenkel.voicechat.plugins.PluginManager;
 import de.maxhenkel.voicechat.voice.common.PlayerState;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.src.EntityPlayer;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -28,37 +28,37 @@ public class ServerGroupManager {
         this.server = server;
         groups = new ConcurrentHashMap<>();
         CommonCompatibilityManager.INSTANCE.onPlayerCompatibilityCheckSucceeded(this::onPlayerCompatibilityCheckSucceeded);
-        CommonCompatibilityManager.INSTANCE.getNetManager().joinGroupChannel.setServerListener((srv, player, handler, packet) -> {
+        CommonCompatibilityManager.INSTANCE.getNetManager().joinGroupChannel.setServerListener((player, handler, packet) -> {
             if (!Voicechat.SERVER_CONFIG.groupsEnabled.get()) {
                 return;
             }
             if (!PermissionManager.INSTANCE.GROUPS_PERMISSION.hasPermission(player)) {
-                player.sendStatusMessage(new TextComponentTranslation("message.voicechat.no_group_permission"), true);
+                //player.sendStatusMessage(new TextComponentTranslation("message.voicechat.no_group_permission"), true);
                 return;
             }
             joinGroup(groups.get(packet.getGroup()), player, packet.getPassword());
         });
-        CommonCompatibilityManager.INSTANCE.getNetManager().createGroupChannel.setServerListener((srv, player, handler, packet) -> {
+        CommonCompatibilityManager.INSTANCE.getNetManager().createGroupChannel.setServerListener((player, handler, packet) -> {
             if (!Voicechat.SERVER_CONFIG.groupsEnabled.get()) {
                 return;
             }
             if (!PermissionManager.INSTANCE.GROUPS_PERMISSION.hasPermission(player)) {
-                player.sendStatusMessage(new TextComponentTranslation("message.voicechat.no_group_permission"), true);
+                //player.sendStatusMessage(new TextComponentTranslation("message.voicechat.no_group_permission"), true);
                 return;
             }
             if (!Voicechat.GROUP_REGEX.matcher(packet.getName()).matches()) {
-                Voicechat.LOGGER.warn("Player {} tried to create a group with an invalid name: {}", player.getDisplayName().getUnformattedComponentText(), packet.getName());
+                Voicechat.LOGGER.warn("Player {} tried to create a group with an invalid name: {}", player.username, packet.getName());
                 return;
             }
             addGroup(new Group(UUID.randomUUID(), packet.getName(), packet.getPassword(), false, packet.getType()), player);
         });
-        CommonCompatibilityManager.INSTANCE.getNetManager().leaveGroupChannel.setServerListener((srv, player, handler, packet) -> {
+        CommonCompatibilityManager.INSTANCE.getNetManager().leaveGroupChannel.setServerListener((player, handler, packet) -> {
             leaveGroup(player);
         });
     }
 
-    private void onPlayerCompatibilityCheckSucceeded(EntityPlayerMP player) {
-        Voicechat.logDebug("Synchronizing {} groups with {}", groups.size(), player.getDisplayName().getUnformattedComponentText());
+    private void onPlayerCompatibilityCheckSucceeded(EntityPlayer player) {
+        Voicechat.logDebug("Synchronizing {} groups with {}", groups.size(), player.username);
         for (Group category : groups.values()) {
             broadcastAddGroup(category);
         }
@@ -68,7 +68,7 @@ public class ServerGroupManager {
         return server.getPlayerStateManager();
     }
 
-    public void addGroup(Group group, @Nullable EntityPlayerMP player) {
+    public void addGroup(Group group, @Nullable EntityPlayer player) {
         if (PluginManager.instance().onCreateGroup(player, group)) {
             return;
         }
@@ -85,7 +85,7 @@ public class ServerGroupManager {
         NetManager.sendToClient(player, new JoinedGroupPacket(group.getId(), false));
     }
 
-    public void joinGroup(@Nullable Group group, EntityPlayerMP player, @Nullable String password) {
+    public void joinGroup(@Nullable Group group, EntityPlayer player, @Nullable String password) {
         if (PluginManager.instance().onJoinGroup(player, group)) {
             return;
         }
@@ -106,7 +106,7 @@ public class ServerGroupManager {
         NetManager.sendToClient(player, new JoinedGroupPacket(group.getId(), false));
     }
 
-    public void leaveGroup(EntityPlayerMP player) {
+    public void leaveGroup(EntityPlayer player) {
         if (PluginManager.instance().onLeaveGroup(player)) {
             return;
         }
@@ -155,17 +155,17 @@ public class ServerGroupManager {
 
     private void broadcastAddGroup(Group group) {
         AddGroupPacket packet = new AddGroupPacket(group.toClientGroup());
-        server.getServer().getPlayerList().getPlayers().forEach(p -> NetManager.sendToClient(p, packet));
+        Voicechat.serverInstance.getPlayerList().forEach(p -> NetManager.sendToClient(p, packet));
     }
 
     private void broadcastRemoveGroup(UUID group) {
         RemoveGroupPacket packet = new RemoveGroupPacket(group);
-        server.getServer().getPlayerList().getPlayers().forEach(p -> NetManager.sendToClient(p, packet));
+        Voicechat.serverInstance.getPlayerList().forEach(p -> NetManager.sendToClient(p, packet));
     }
 
     @Nullable
-    public Group getPlayerGroup(EntityPlayerMP player) {
-        PlayerState state = server.getPlayerStateManager().getState(player.getUniqueID());
+    public Group getPlayerGroup(EntityPlayer player) {
+        PlayerState state = server.getPlayerStateManager().getState(((EntityPlayerExtension) player).getUniqueID());
         if (state == null) {
             return null;
         }

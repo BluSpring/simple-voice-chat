@@ -23,8 +23,8 @@ import de.maxhenkel.voicechat.voice.common.SoundPacket;
 import de.maxhenkel.voicechat.voice.server.ClientConnection;
 import de.maxhenkel.voicechat.voice.server.Server;
 import de.maxhenkel.voicechat.voice.server.ServerWorldUtils;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.world.WorldServer;
+import net.minecraft.src.EntityPlayer;
+import net.minecraft.src.World;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -171,7 +171,7 @@ public class VoicechatServerApiImpl extends VoicechatApiImpl implements Voicecha
             return;
         }
 
-        EntityPlayerMP player = (EntityPlayerMP) receiver.getPlayer().getPlayer();
+        EntityPlayer player = (EntityPlayer) receiver.getPlayer().getPlayer();
 
         @Nullable ClientConnection c = server.getConnections().get(receiver.getPlayer().getUuid());
         try {
@@ -188,7 +188,7 @@ public class VoicechatServerApiImpl extends VoicechatApiImpl implements Voicecha
         if (server == null) {
             return null;
         }
-        EntityPlayerMP player = server.getServer().getPlayerList().getPlayerByUUID(playerUuid);
+        EntityPlayer player = Voicechat.serverInstance.getPlayerByUuid(playerUuid);
         if (player == null) {
             return null;
         }
@@ -252,7 +252,7 @@ public class VoicechatServerApiImpl extends VoicechatApiImpl implements Voicecha
     public Collection<ServerPlayer> getPlayersInRange(ServerLevel level, Position pos, double range, Predicate<ServerPlayer> filter) {
         if (pos instanceof PositionImpl) {
             PositionImpl p = (PositionImpl) pos;
-            return ServerWorldUtils.getPlayersInRange((WorldServer) level.getServerLevel(), p.getPosition(), range, player -> filter.test(new ServerPlayerImpl(player))).stream().map(ServerPlayerImpl::new).collect(Collectors.toList());
+            return ServerWorldUtils.getPlayersInRange((World) level.getServerLevel(), p.getPosition(), range, player -> filter.test(new ServerPlayerImpl(player))).stream().map(ServerPlayerImpl::new).collect(Collectors.toList());
         } else {
             throw new IllegalArgumentException("Position is not an instance of PositionImpl");
         }

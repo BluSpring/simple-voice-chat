@@ -1,12 +1,13 @@
 package de.maxhenkel.voicechat.voice.client;
 
+import de.maxhenkel.voicechat.MinecraftAccessor;
 import de.maxhenkel.voicechat.Voicechat;
 import de.maxhenkel.voicechat.VoicechatClient;
 import de.maxhenkel.voicechat.debug.CooldownTimer;
 import de.maxhenkel.voicechat.voice.client.speaker.SpeakerException;
 import de.maxhenkel.voicechat.voice.common.SoundPacket;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.src.EntityPlayerSP;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
@@ -153,17 +154,17 @@ public class ClientVoicechat {
         if (recording == (recorder != null)) {
             return false;
         }
-        EntityPlayerSP player = Minecraft.getMinecraft().player;
+        EntityPlayerSP player = MinecraftAccessor.getMinecraft().player;
         if (recording) {
             if (connection == null || !connection.getData().allowRecording()) {
                 if (player != null) {
-                    player.sendStatusMessage(new TextComponentTranslation("message.voicechat.recording_disabled"), true);
+                    player.sendChatMessage(new TextComponentTranslation("message.voicechat.recording_disabled"), true);
                 }
                 return false;
             }
             recorder = AudioRecorder.create();
             if (player != null) {
-                player.sendStatusMessage(new TextComponentTranslation("message.voicechat.recording_started").setStyle(new Style().setColor(TextFormatting.DARK_RED)), true);
+                player.sendChatMessage(new TextComponentTranslation("message.voicechat.recording_started").setStyle(new Style().setColor(TextFormatting.DARK_RED)), true);
             }
             return true;
         }
@@ -171,7 +172,7 @@ public class ClientVoicechat {
         AudioRecorder rec = recorder;
         recorder = null;
         if (player != null) {
-            player.sendStatusMessage(new TextComponentTranslation("message.voicechat.recording_stopped").setStyle(new Style().setColor(TextFormatting.DARK_RED)), true);
+            player.sendChatMessage(new TextComponentTranslation("message.voicechat.recording_stopped").setStyle(new Style().setColor(TextFormatting.DARK_RED)), true);
         }
         rec.saveAndClose();
         return true;

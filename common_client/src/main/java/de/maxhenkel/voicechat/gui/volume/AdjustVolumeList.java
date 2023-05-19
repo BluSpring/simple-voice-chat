@@ -1,6 +1,7 @@
 package de.maxhenkel.voicechat.gui.volume;
 
 import com.google.common.collect.Lists;
+import de.maxhenkel.voicechat.MinecraftAccessor;
 import de.maxhenkel.voicechat.VoicechatClient;
 import de.maxhenkel.voicechat.gui.widgets.ListScreenListBase;
 import de.maxhenkel.voicechat.plugins.impl.VolumeCategoryImpl;
@@ -25,8 +26,8 @@ public class AdjustVolumeList extends ListScreenListBase<VolumeEntry> {
     }
 
     public static void update() {
-        if (Minecraft.getMinecraft().currentScreen instanceof AdjustVolumesScreen) {
-            ((AdjustVolumesScreen) Minecraft.getMinecraft().currentScreen).volumeList.updateEntryList();
+        if (MinecraftAccessor.getMinecraft().currentScreen instanceof AdjustVolumesScreen) {
+            ((AdjustVolumesScreen) MinecraftAccessor.getMinecraft().currentScreen).volumeList.updateEntryList();
         }
     }
 

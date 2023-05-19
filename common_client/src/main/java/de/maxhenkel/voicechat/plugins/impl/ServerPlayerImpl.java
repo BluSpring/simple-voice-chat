@@ -2,21 +2,20 @@ package de.maxhenkel.voicechat.plugins.impl;
 
 import de.maxhenkel.voicechat.api.ServerLevel;
 import de.maxhenkel.voicechat.api.ServerPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.world.WorldServer;
+import net.minecraft.src.EntityPlayer;
 
 public class ServerPlayerImpl extends PlayerImpl implements ServerPlayer {
 
-    public ServerPlayerImpl(EntityPlayerMP entity) {
+    public ServerPlayerImpl(EntityPlayer entity) {
         super(entity);
     }
 
-    public EntityPlayerMP getRealServerPlayer() {
-        return (EntityPlayerMP) entity;
+    public EntityPlayer getRealServerPlayer() {
+        return (EntityPlayer) entity;
     }
 
     @Override
     public ServerLevel getServerLevel() {
-        return new ServerLevelImpl((WorldServer) entity.world);
+        return new ServerLevelImpl(entity.worldObj);
     }
 }

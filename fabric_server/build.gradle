@@ -37,7 +37,7 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
 
     implementation project(path: ":common_client", configuration: "namedElements")
-    implementation project(path: ":common_server", configuration: "namedElements")
+    implementation project(path: ":common_client", configuration: "namedElements")
 
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
 
@@ -49,6 +49,8 @@ dependencies {
 
     shadow(implementation('org.apache.logging.log4j:log4j-api:2.20.0'))
     shadow(implementation('org.apache.logging.log4j:log4j-core:2.20.0'))
+    shadow(implementation("com.google.guava:guava:31.1-jre"))
+    shadow(implementation('com.google.code.gson:gson:2.10.1'))
 
     shadow(implementation(project(":api")))
 }
@@ -79,7 +81,6 @@ processResources {
 
 tasks.withType(JavaCompile).configureEach {
     source(project(':common_client').sourceSets.main.allSource)
-    source(project(':common_server').sourceSets.main.allSource)
 }
 
 tasks.withType(JavaCompile).configureEach {

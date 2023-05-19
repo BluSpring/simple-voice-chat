@@ -1,12 +1,15 @@
 package de.maxhenkel.voicechat.net;
 
 import de.maxhenkel.voicechat.plugins.impl.VolumeCategoryImpl;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
+import de.maxhenkel.voicechat.util.ConnectionUtil;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 public class AddCategoryPacket implements Packet<AddCategoryPacket> {
 
-    public static final ResourceLocation ADD_CATEGORY = new ResourceLocation(NetManager.CHANNEL, "add_category");
+    public static final String ADD_CATEGORY = ConnectionUtil.format(NetManager.CHANNEL, "add_category");
 
     private VolumeCategoryImpl category;
 
@@ -23,18 +26,18 @@ public class AddCategoryPacket implements Packet<AddCategoryPacket> {
     }
 
     @Override
-    public ResourceLocation getIdentifier() {
+    public String getIdentifier() {
         return ADD_CATEGORY;
     }
 
     @Override
-    public AddCategoryPacket fromBytes(PacketBuffer buf) {
+    public AddCategoryPacket fromBytes(DataInputStream buf) throws IOException {
         category = VolumeCategoryImpl.fromBytes(buf);
         return this;
     }
 
     @Override
-    public void toBytes(PacketBuffer buf) {
+    public void toBytes(DataOutputStream buf) throws IOException {
         category.toBytes(buf);
     }
 

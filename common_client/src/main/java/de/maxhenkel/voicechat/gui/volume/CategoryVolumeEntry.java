@@ -1,16 +1,19 @@
 package de.maxhenkel.voicechat.gui.volume;
 
 import de.maxhenkel.voicechat.VoicechatClient;
+import de.maxhenkel.voicechat.extensions.GuiExtension;
 import de.maxhenkel.voicechat.plugins.impl.VolumeCategoryImpl;
+import de.maxhenkel.voicechat.util.TextureHelper;
 import de.maxhenkel.voicechat.voice.client.ClientManager;
-import net.minecraft.client.gui.Gui;
+import net.minecraft.src.Gui;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
 public class CategoryVolumeEntry extends VolumeEntry {
 
     protected final VolumeCategoryImpl category;
-    protected final ResourceLocation texture;
+    protected final String texture;
 
     public CategoryVolumeEntry(VolumeCategoryImpl category, AdjustVolumesScreen screen) {
         super(screen, new CategoryVolumeConfigEntry(category.getId()));
@@ -24,9 +27,9 @@ public class CategoryVolumeEntry extends VolumeEntry {
 
     @Override
     public void renderElement(int slotIndex, int x, int y, int listWidth, int slotHeight, int mouseX, int mouseY, boolean isSelected, float partialTicks, int skinX, int skinY, int textX, int textY) {
-        GlStateManager.color(1F, 1F, 1F, 1F);
-        minecraft.getTextureManager().bindTexture(texture);
-        Gui.drawScaledCustomSizeModalRect(skinX, skinY, 16, 16, 16, 16, SKIN_SIZE, SKIN_SIZE, 16, 16);
+        GL11.glColor4f(1F, 1F, 1F, 1F);
+        TextureHelper.bindTexture(texture);
+        ((GuiExtension) screen).drawScaledCustomSizeModalRect(skinX, skinY, 16, 16, 16, 16, SKIN_SIZE, SKIN_SIZE, 16, 16);
         minecraft.fontRenderer.drawString(category.getName(), textX, textY, PLAYER_NAME_COLOR);
         if (isSelected && category.getDescription() != null) {
             screen.postRender(() -> {

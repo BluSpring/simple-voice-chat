@@ -4,13 +4,8 @@ import de.maxhenkel.voicechat.Voicechat;
 import de.maxhenkel.voicechat.gui.VoiceChatScreenBase;
 import de.maxhenkel.voicechat.gui.widgets.ButtonBase;
 import de.maxhenkel.voicechat.gui.widgets.ListScreenBase;
-import net.minecraft.client.audio.PositionedSoundRecord;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
+import de.maxhenkel.voicechat.util.TextureHelper;
+import net.minecraft.src.GuiScreen;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -19,7 +14,7 @@ import java.util.stream.Collectors;
 
 public abstract class SelectDeviceScreen extends ListScreenBase {
 
-    protected static final ResourceLocation TEXTURE = new ResourceLocation(Voicechat.MODID, "textures/gui/gui_audio_devices.png");
+    protected static final String TEXTURE = TextureHelper.format(Voicechat.MODID, "textures/gui/gui_audio_devices.png");
     protected static final ITextComponent BACK = new TextComponentTranslation("message.voicechat.back");
 
     protected static final int HEADER_SIZE = 16;
@@ -44,7 +39,7 @@ public abstract class SelectDeviceScreen extends ListScreenBase {
 
     public abstract void onSelect(String device);
 
-    public abstract ResourceLocation getIcon(String device);
+    public abstract String getIcon(String device);
 
     public abstract ITextComponent getEmptyListComponent();
 
@@ -55,7 +50,7 @@ public abstract class SelectDeviceScreen extends ListScreenBase {
         super.initGui();
         guiLeft = guiLeft + 2;
         guiTop = 32;
-        int minUnits = MathHelper.ceil((float) (CELL_HEIGHT + 4) / (float) UNIT_SIZE);
+        int minUnits = (int) Math.ceil((float) (CELL_HEIGHT + 4) / (float) UNIT_SIZE);
         units = Math.max(minUnits, (height - HEADER_SIZE - FOOTER_SIZE - guiTop * 2) / UNIT_SIZE);
         ySize = HEADER_SIZE + units * UNIT_SIZE + FOOTER_SIZE;
 
@@ -68,7 +63,7 @@ public abstract class SelectDeviceScreen extends ListScreenBase {
                 mc.displayGuiScreen(parent);
             }
         };
-        addButton(back);
+        controlList.add(back);
 
         deviceList.replaceEntries(getDevices().stream().map(s -> new AudioDeviceEntry(this, s)).collect(Collectors.toList()));
     }
@@ -76,7 +71,7 @@ public abstract class SelectDeviceScreen extends ListScreenBase {
     @Override
     public void renderBackground(int mouseX, int mouseY, float delta) {
         if (isIngame()) {
-            mc.getTextureManager().bindTexture(TEXTURE);
+            TextureHelper.bindTexture(TEXTURE);
             drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, HEADER_SIZE);
             for (int i = 0; i < units; i++) {
                 drawTexturedModalRect(guiLeft, guiTop + HEADER_SIZE + UNIT_SIZE * i, 0, HEADER_SIZE, xSize, UNIT_SIZE);
@@ -103,7 +98,7 @@ public abstract class SelectDeviceScreen extends ListScreenBase {
         for (AudioDeviceEntry entry : deviceList.children()) {
             if (entry.isSelected()) {
                 if (!getSelectedDevice().equals(entry.getDevice())) {
-                    mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.F));
+                    mc.sndManager.func_337_a("random.click", 1F, 1F);
                     onSelect(entry.getDevice());
                     return;
                 }

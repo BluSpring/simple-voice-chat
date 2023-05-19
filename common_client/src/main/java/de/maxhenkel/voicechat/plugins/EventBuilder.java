@@ -1,7 +1,7 @@
 package de.maxhenkel.voicechat.plugins;
 
 import de.maxhenkel.voicechat.api.events.Event;
-import net.minecraft.util.Tuple;
+import de.maxhenkel.voicechat.util.Tuple;
 
 import java.util.*;
 import java.util.function.Consumer;

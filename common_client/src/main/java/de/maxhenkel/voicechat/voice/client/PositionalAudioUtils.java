@@ -1,18 +1,18 @@
 package de.maxhenkel.voicechat.voice.client;
 
+import de.maxhenkel.voicechat.MinecraftAccessor;
 import de.maxhenkel.voicechat.VoicechatClient;
 import de.maxhenkel.voicechat.voice.client.speaker.AudioType;
 import de.maxhenkel.voicechat.voice.common.Utils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ActiveRenderInfo;
-import net.minecraft.util.math.Vec2f;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.src.Vec3D;
+import org.lwjgl.util.vector.Vector2f;
 
 import javax.annotation.Nullable;
 
 public class PositionalAudioUtils {
 
-    private static final Minecraft mc = Minecraft.getMinecraft();
+    private static final Minecraft mc = MinecraftAccessor.getMinecraft();
 
     /**
      * @param cameraPos the position of the listener
@@ -20,10 +20,10 @@ public class PositionalAudioUtils {
      * @param soundPos  the position of the sound
      * @return a float array of length 2, containing the left and right volume (0-1)
      */
-    private static float[] getStereoVolume(Vec3d cameraPos, float yRot, Vec3d soundPos) {
-        Vec3d d = soundPos.subtract(cameraPos).normalize();
-        Vec2f diff = new Vec2f((float) d.x, (float) d.z);
-        float diffAngle = Utils.angle(diff, new Vec2f(-1F, 0F));
+    private static float[] getStereoVolume(Vec3D cameraPos, float yRot, Vec3D soundPos) {
+        Vec3D d = soundPos.subtract(cameraPos).normalize();
+        Vector2f diff = new Vector2f((float) d.xCoord, (float) d.zCoord);
+        float diffAngle = Utils.angle(diff, new Vector2f(-1F, 0F));
         float angle = Utils.normalizeAngle(diffAngle - (yRot % 360F));
         float dif = (float) (Math.abs(cameraPos.y - soundPos.y) / 32);
 
@@ -52,8 +52,8 @@ public class PositionalAudioUtils {
      * @param soundPos the position of the sound
      * @return a float array of length 2, containing the left and right volume (0-1)
      */
-    private static float[] getStereoVolume(Vec3d soundPos) {
-        return getStereoVolume(getCameraPosition(), mc.player != null ? mc.player.rotationYaw : 0F, soundPos);
+    private static float[] getStereoVolume(Vec3D soundPos) {
+        return getStereoVolume(getCameraPosition(), mc.thePlayer != null ? mc.thePlayer.rotationYaw : 0F, soundPos);
     }
 
     /**
@@ -63,7 +63,7 @@ public class PositionalAudioUtils {
      * @param pos         the position of the audio
      * @return the resulting audio volume
      */
-    public static float getDistanceVolume(float maxDistance, Vec3d pos) {
+    public static float getDistanceVolume(float maxDistance, Vec3D pos) {
         return getDistanceVolume(maxDistance, getCameraPosition(), pos);
     }
 
@@ -75,7 +75,7 @@ public class PositionalAudioUtils {
      * @param pos         the position of the audio
      * @return the resulting audio volume
      */
-    public static float getDistanceVolume(float maxDistance, Vec3d listenerPos, Vec3d pos) {
+    public static float getDistanceVolume(float maxDistance, Vec3D listenerPos, Vec3D pos) {
         float distance = (float) pos.distanceTo(listenerPos);
         distance = Math.min(distance, maxDistance);
         return (1F - distance / maxDistance);
@@ -89,7 +89,7 @@ public class PositionalAudioUtils {
      * @param soundPos the position of the sound - Might be null in case of non-positional audio
      * @return the stereo audio data
      */
-    public static short[] convertToStereo(short[] audio, @Nullable Vec3d soundPos) {
+    public static short[] convertToStereo(short[] audio, @Nullable Vec3D soundPos) {
         if (soundPos == null) {
             return convertToStereo(audio);
         }
@@ -103,7 +103,7 @@ public class PositionalAudioUtils {
      * @param soundPos  the position of the sound - Might be null in case of non-positional audio
      * @return the stereo audio data
      */
-    public static short[] convertToStereo(short[] audio, Vec3d cameraPos, float yRot, @Nullable Vec3d soundPos) {
+    public static short[] convertToStereo(short[] audio, Vec3D cameraPos, float yRot, @Nullable Vec3D soundPos) {
         if (soundPos == null) {
             return convertToStereo(audio);
         }
@@ -166,19 +166,19 @@ public class PositionalAudioUtils {
         return convertToStereo(audio, volume, volume);
     }
 
-    public static short[] convertToStereoForRecording(float maxDistance, Vec3d pos, short[] monoData) {
+    public static short[] convertToStereoForRecording(float maxDistance, Vec3D pos, short[] monoData) {
         return convertToStereoForRecording(maxDistance, getCameraPosition(), ActiveRenderInfo.getRotationXZ(), pos, monoData);
     }
 
-    public static short[] convertToStereoForRecording(float maxDistance, Vec3d pos, short[] monoData, float volume) {
+    public static short[] convertToStereoForRecording(float maxDistance, Vec3D pos, short[] monoData, float volume) {
         return convertToStereoForRecording(maxDistance, getCameraPosition(), ActiveRenderInfo.getRotationXZ(), pos, monoData, volume);
     }
 
-    public static short[] convertToStereoForRecording(float maxDistance, Vec3d cameraPos, float yRot, Vec3d pos, short[] monoData) {
+    public static short[] convertToStereoForRecording(float maxDistance, Vec3D cameraPos, float yRot, Vec3D pos, short[] monoData) {
         return convertToStereoForRecording(maxDistance, cameraPos, yRot, pos, monoData, 1F);
     }
 
-    public static short[] convertToStereoForRecording(float maxDistance, Vec3d cameraPos, float yRot, Vec3d pos, short[] monoData, float volume) {
+    public static short[] convertToStereoForRecording(float maxDistance, Vec3D cameraPos, float yRot, Vec3D pos, short[] monoData, float volume) {
         float distanceVolume = getDistanceVolume(maxDistance, cameraPos, pos) * volume;
         if (!VoicechatClient.CLIENT_CONFIG.audioType.get().equals(AudioType.OFF)) {
             float[] stereoVolume = getStereoVolume(cameraPos, yRot, pos);
@@ -188,8 +188,8 @@ public class PositionalAudioUtils {
         }
     }
 
-    public static Vec3d getCameraPosition() {
-        return ActiveRenderInfo.getCameraPosition().add(mc.player == null ? Vec3d.ZERO : mc.player.getPositionVector());
+    public static Vec3D getCameraPosition() {
+        return ActiveRenderInfo.getCameraPosition().add(mc.player == null ? Vec3D.createVector(0.0, 0.0, 0.0) : mc.thePlayer.getLookVec());
     }
 
 }

@@ -22,6 +22,8 @@ loom {
     customManifest.set(custom_manifest_url)
     clientOnlyMinecraftJar()
     intermediaryUrl = "https://github.com/BluSpring/maven-repo/raw/main/xyz/bluspring/intermediary/empty/intermediary-empty.jar"
+
+    accessWidenerPath = file("src/main/resources/voicechat_client.accesswidener")
 }
 
 sourceSets {
@@ -52,6 +54,8 @@ dependencies {
 
     implementation 'org.apache.logging.log4j:log4j-api:2.20.0'
     implementation 'org.apache.logging.log4j:log4j-core:2.20.0'
+    implementation("com.google.guava:guava:31.1-jre")
+    implementation('com.google.code.gson:gson:2.10.1')
 
     implementation project(':api')
 }

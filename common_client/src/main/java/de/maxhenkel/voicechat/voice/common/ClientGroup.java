@@ -2,8 +2,11 @@ package de.maxhenkel.voicechat.voice.common;
 
 import de.maxhenkel.voicechat.api.Group;
 import de.maxhenkel.voicechat.plugins.impl.GroupImpl;
-import net.minecraft.network.PacketBuffer;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.util.Objects;
 import java.util.UUID;
 
 public class ClientGroup {
@@ -42,13 +45,13 @@ public class ClientGroup {
         return type;
     }
 
-    public static ClientGroup fromBytes(PacketBuffer buf) {
-        return new ClientGroup(buf.readUniqueId(), buf.readString(512), buf.readBoolean(), buf.readBoolean(), GroupImpl.TypeImpl.fromInt(buf.readShort()));
+    public static ClientGroup fromBytes(DataInputStream buf) throws IOException {
+        return new ClientGroup(UUID.fromString(buf.readUTF()), buf.readUTF(), buf.readBoolean(), buf.readBoolean(), GroupImpl.TypeImpl.fromInt(buf.readShort()));
     }
 
-    public void toBytes(PacketBuffer buf) {
-        buf.writeUniqueId(id);
-        buf.writeString(name);
+    public void toBytes(DataOutputStream buf) throws IOException {
+        buf.writeUTF(id.toString());
+        buf.writeUTF(name);
         buf.writeBoolean(hasPassword);
         buf.writeBoolean(persistent);
         buf.writeShort(GroupImpl.TypeImpl.toInt(type));
@@ -61,6 +64,6 @@ public class ClientGroup {
 
         ClientGroup group = (ClientGroup) o;
 
-        return id != null ? id.equals(group.id) : group.id == null;
+        return Objects.equals(id, group.id);
     }
 }

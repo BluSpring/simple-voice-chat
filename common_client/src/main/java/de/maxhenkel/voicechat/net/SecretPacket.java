@@ -2,15 +2,18 @@ package de.maxhenkel.voicechat.net;
 
 import de.maxhenkel.voicechat.config.ServerConfig;
 import de.maxhenkel.voicechat.plugins.PluginManager;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
+import de.maxhenkel.voicechat.util.ConnectionUtil;
+import net.minecraft.src.EntityPlayer;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
 public class SecretPacket implements Packet<SecretPacket> {
 
-    public static final ResourceLocation SECRET = new ResourceLocation(NetManager.CHANNEL, "secret");
+    public static final String SECRET = ConnectionUtil.format(NetManager.CHANNEL, "secret");
 
     private UUID secret;
     private int serverPort;
@@ -27,10 +30,10 @@ public class SecretPacket implements Packet<SecretPacket> {
 
     }
 
-    public SecretPacket(EntityPlayerMP player, UUID secret, int port, ServerConfig serverConfig) {
+    public SecretPacket(EntityPlayer player, UUID secret, int port, ServerConfig serverConfig) {
         this.secret = secret;
         this.serverPort = port;
-        this.playerUUID = player.getUniqueID();
+        this.playerUUID = UUID.nameUUIDFromBytes(player.username.getBytes(StandardCharsets.UTF_8));
         this.codec = serverConfig.voiceChatCodec.get();
         this.mtuSize = serverConfig.voiceChatMtuSize.get();
         this.voiceChatDistance = serverConfig.voiceChatDistance.get();
@@ -77,7 +80,7 @@ public class SecretPacket implements Packet<SecretPacket> {
     }
 
     @Override
-    public ResourceLocation getIdentifier() {
+    public String getIdentifier() {
         return SECRET;
     }
 
@@ -86,31 +89,31 @@ public class SecretPacket implements Packet<SecretPacket> {
     }
 
     @Override
-    public SecretPacket fromBytes(PacketBuffer buf) {
-        secret = buf.readUniqueId();
+    public SecretPacket fromBytes(DataInputStream buf) throws IOException {
+        secret = UUID.fromString(buf.readUTF());
         serverPort = buf.readInt();
-        playerUUID = buf.readUniqueId();
+        playerUUID = UUID.fromString(buf.readUTF());
         codec = ServerConfig.Codec.values()[buf.readByte()];
         mtuSize = buf.readInt();
         voiceChatDistance = buf.readDouble();
         keepAlive = buf.readInt();
         groupsEnabled = buf.readBoolean();
-        voiceHost = buf.readString(32767);
+        voiceHost = buf.readUTF();
         allowRecording = buf.readBoolean();
         return this;
     }
 
     @Override
-    public void toBytes(PacketBuffer buf) {
-        buf.writeUniqueId(secret);
+    public void toBytes(DataOutputStream buf) throws IOException {
+        buf.writeUTF(secret.toString());
         buf.writeInt(serverPort);
-        buf.writeUniqueId(playerUUID);
+        buf.writeUTF(playerUUID.toString());
         buf.writeByte(codec.ordinal());
         buf.writeInt(mtuSize);
         buf.writeDouble(voiceChatDistance);
         buf.writeInt(keepAlive);
         buf.writeBoolean(groupsEnabled);
-        buf.writeString(voiceHost);
+        buf.writeUTF(voiceHost.toString());
         buf.writeBoolean(allowRecording);
     }
 

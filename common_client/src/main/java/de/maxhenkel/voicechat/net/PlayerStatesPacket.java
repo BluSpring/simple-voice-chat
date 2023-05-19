@@ -1,9 +1,11 @@
 package de.maxhenkel.voicechat.net;
 
+import de.maxhenkel.voicechat.util.ConnectionUtil;
 import de.maxhenkel.voicechat.voice.common.PlayerState;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -12,7 +14,7 @@ public class PlayerStatesPacket implements Packet<PlayerStatesPacket> {
 
     private Map<UUID, PlayerState> playerStates;
 
-    public static final ResourceLocation PLAYER_STATES = new ResourceLocation(NetManager.CHANNEL, "player_states");
+    public static final String PLAYER_STATES = ConnectionUtil.format(NetManager.CHANNEL, "player_states");
 
     public PlayerStatesPacket() {
 
@@ -27,12 +29,12 @@ public class PlayerStatesPacket implements Packet<PlayerStatesPacket> {
     }
 
     @Override
-    public ResourceLocation getIdentifier() {
+    public String getIdentifier() {
         return PLAYER_STATES;
     }
 
     @Override
-    public PlayerStatesPacket fromBytes(PacketBuffer buf) {
+    public PlayerStatesPacket fromBytes(DataInputStream buf) throws IOException {
         playerStates = new HashMap<>();
         int count = buf.readInt();
         for (int i = 0; i < count; i++) {
@@ -44,7 +46,7 @@ public class PlayerStatesPacket implements Packet<PlayerStatesPacket> {
     }
 
     @Override
-    public void toBytes(PacketBuffer buf) {
+    public void toBytes(DataOutputStream buf) throws IOException {
         buf.writeInt(playerStates.size());
         for (Map.Entry<UUID, PlayerState> entry : playerStates.entrySet()) {
             entry.getValue().toBytes(buf);

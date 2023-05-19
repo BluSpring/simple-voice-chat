@@ -1,18 +1,17 @@
 package de.maxhenkel.voicechat.voice.client;
 
+import de.maxhenkel.voicechat.MinecraftAccessor;
 import de.maxhenkel.voicechat.Voicechat;
+import de.maxhenkel.voicechat.extensions.NetClientHandlerExtension;
 import de.maxhenkel.voicechat.intercompatibility.ClientCompatibilityManager;
 import de.maxhenkel.voicechat.intercompatibility.CommonCompatibilityManager;
 import de.maxhenkel.voicechat.net.NetManager;
 import de.maxhenkel.voicechat.net.RequestSecretPacket;
 import de.maxhenkel.voicechat.net.SecretPacket;
 import de.maxhenkel.voicechat.voice.server.Server;
-import io.netty.channel.local.LocalAddress;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.client.network.NetHandlerPlayClient;
-import net.minecraft.util.text.*;
-import net.minecraft.util.text.event.HoverEvent;
+import net.minecraft.src.EntityPlayerSP;
+import net.minecraft.src.NetClientHandler;
 
 import javax.annotation.Nullable;
 import java.net.InetSocketAddress;
@@ -37,7 +36,7 @@ public class ClientManager {
         pttKeyHandler = new PTTKeyHandler();
         renderEvents = new RenderEvents();
         keyEvents = new KeyEvents();
-        minecraft = Minecraft.getMinecraft();
+        minecraft = MinecraftAccessor.getMinecraft();
 
         ClientCompatibilityManager.INSTANCE.onJoinWorld(this::onJoinWorld);
         ClientCompatibilityManager.INSTANCE.onDisconnect(this::onDisconnect);
@@ -66,15 +65,13 @@ public class ClientManager {
         if (client.getConnection() != null) {
             ClientCompatibilityManager.INSTANCE.emitVoiceChatDisconnectedEvent();
         }
-        NetHandlerPlayClient connection = minecraft.getConnection();
+        NetClientHandler connection = minecraft.func_20001_q();
         if (connection != null) {
             try {
-                SocketAddress socketAddress = ClientCompatibilityManager.INSTANCE.getSocketAddress(connection.getNetworkManager());
+                SocketAddress socketAddress = ClientCompatibilityManager.INSTANCE.getSocketAddress(((NetClientHandlerExtension) connection).getNetworkManager());
                 if (socketAddress instanceof InetSocketAddress) {
                     InetSocketAddress address = (InetSocketAddress) socketAddress;
                     client.connect(new InitializationData(address.getHostString(), secretPacket));
-                } else if (socketAddress instanceof LocalAddress) {
-                    client.connect(new InitializationData("127.0.0.1", secretPacket));
                 }
             } catch (Exception e) {
                 Voicechat.LOGGER.error("Failed to determine server address", e);
@@ -93,7 +90,7 @@ public class ClientManager {
     }
 
     public static void sendPlayerError(String translationKey, @Nullable Exception e) {
-        EntityPlayerSP player = Minecraft.getMinecraft().player;
+        EntityPlayerSP player = MinecraftAccessor.getMinecraft().thePlayer;
         if (player == null) {
             return;
         }
@@ -101,7 +98,7 @@ public class ClientManager {
         if (e != null) {
             style.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString(e.getMessage()).setStyle(new Style().setColor(TextFormatting.RED))));
         }
-        player.sendMessage(
+        player.sendChatMessage(
                 wrapInSquareBrackets(new TextComponentString(CommonCompatibilityManager.INSTANCE.getModName()))
                         .setStyle(new Style().setColor(TextFormatting.GREEN))
                         .appendText(" ")
@@ -141,7 +138,7 @@ public class ClientManager {
         } catch (Exception e) {
             Voicechat.LOGGER.error("Failed to change voice chat port: {}", e.getMessage());
         }
-        Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(new TextComponentTranslation("message.voicechat.server_port", server.getPort()));
+        MinecraftAccessor.getMinecraft().ingameGUI.addChatMessage(new TextComponentTranslation("message.voicechat.server_port", server.getPort()));
     }
 
     @Nullable

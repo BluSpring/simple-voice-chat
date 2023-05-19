@@ -4,6 +4,7 @@ import de.maxhenkel.voicechat.Voicechat;
 import de.maxhenkel.voicechat.gui.widgets.ButtonBase;
 import de.maxhenkel.voicechat.net.JoinGroupPacket;
 import de.maxhenkel.voicechat.net.NetManager;
+import de.maxhenkel.voicechat.util.TextureHelper;
 import de.maxhenkel.voicechat.voice.common.ClientGroup;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiTextField;
@@ -16,7 +17,7 @@ import java.io.IOException;
 
 public class EnterPasswordScreen extends VoiceChatScreenBase {
 
-    private static final ResourceLocation TEXTURE = new ResourceLocation(Voicechat.MODID, "textures/gui/gui_enter_password.png");
+    private static final String TEXTURE = TextureHelper.format(Voicechat.MODID, "textures/gui/gui_enter_password.png");
     private static final ITextComponent TITLE = new TextComponentTranslation("gui.voicechat.enter_password.title");
     private static final ITextComponent JOIN_GROUP = new TextComponentTranslation("message.voicechat.join_group");
     private static final ITextComponent ENTER_GROUP_PASSWORD = new TextComponentTranslation("message.voicechat.enter_group_password");
@@ -35,8 +36,7 @@ public class EnterPasswordScreen extends VoiceChatScreenBase {
     public void initGui() {
         super.initGui();
         hoverAreas.clear();
-        hoverAreas.clear();
-        buttonList.clear();
+        controlList.clear();
 
         Keyboard.enableRepeatEvents(true);
 
@@ -50,7 +50,7 @@ public class EnterPasswordScreen extends VoiceChatScreenBase {
                 joinGroup();
             }
         };
-        addButton(joinGroup);
+        controlList.add(joinGroup);
     }
 
     private void joinGroup() {
@@ -77,7 +77,7 @@ public class EnterPasswordScreen extends VoiceChatScreenBase {
 
     @Override
     public void renderBackground(int mouseX, int mouseY, float delta) {
-        mc.getTextureManager().bindTexture(TEXTURE);
+        TextureHelper.bindTexture(TEXTURE);
         drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
     }
 
@@ -115,7 +115,7 @@ public class EnterPasswordScreen extends VoiceChatScreenBase {
     }
 
     @Override
-    public void onResize(Minecraft minecraft, int width, int height) {
+    public void setWorldAndResolution(Minecraft minecraft, int width, int height) {
         String passwordText = password.getText();
         super.onResize(minecraft, width, height);
         password.setText(passwordText);

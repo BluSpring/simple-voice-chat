@@ -1,11 +1,14 @@
 package de.maxhenkel.voicechat.net;
 
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
+import de.maxhenkel.voicechat.util.ConnectionUtil;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 public class RequestSecretPacket implements Packet<RequestSecretPacket> {
 
-    public static final ResourceLocation REQUEST_SECRET = new ResourceLocation(NetManager.CHANNEL, "request_secret");
+    public static final String REQUEST_SECRET = ConnectionUtil.format(NetManager.CHANNEL, "request_secret");
 
     private int compatibilityVersion;
 
@@ -22,18 +25,18 @@ public class RequestSecretPacket implements Packet<RequestSecretPacket> {
     }
 
     @Override
-    public ResourceLocation getIdentifier() {
+    public String getIdentifier() {
         return REQUEST_SECRET;
     }
 
     @Override
-    public RequestSecretPacket fromBytes(PacketBuffer buf) {
+    public RequestSecretPacket fromBytes(DataInputStream buf) throws IOException {
         compatibilityVersion = buf.readInt();
         return this;
     }
 
     @Override
-    public void toBytes(PacketBuffer buf) {
+    public void toBytes(DataOutputStream buf) throws IOException {
         buf.writeInt(compatibilityVersion);
     }
 

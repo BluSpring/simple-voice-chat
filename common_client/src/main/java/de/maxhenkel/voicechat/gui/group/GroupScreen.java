@@ -12,25 +12,26 @@ import de.maxhenkel.voicechat.gui.widgets.ListScreenBase;
 import de.maxhenkel.voicechat.gui.widgets.ToggleImageButton;
 import de.maxhenkel.voicechat.net.LeaveGroupPacket;
 import de.maxhenkel.voicechat.net.NetManager;
+import de.maxhenkel.voicechat.util.TextureHelper;
 import de.maxhenkel.voicechat.voice.client.ClientManager;
 import de.maxhenkel.voicechat.voice.client.ClientPlayerStateManager;
 import de.maxhenkel.voicechat.voice.client.MicrophoneActivationType;
 import de.maxhenkel.voicechat.voice.common.ClientGroup;
+import net.minecraft.src.MathHelper;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 
 public class GroupScreen extends ListScreenBase {
 
-    protected static final ResourceLocation TEXTURE = new ResourceLocation(Voicechat.MODID, "textures/gui/gui_group.png");
-    protected static final ResourceLocation LEAVE = new ResourceLocation(Voicechat.MODID, "textures/icons/leave.png");
-    protected static final ResourceLocation MICROPHONE = new ResourceLocation(Voicechat.MODID, "textures/icons/microphone_button.png");
-    protected static final ResourceLocation SPEAKER = new ResourceLocation(Voicechat.MODID, "textures/icons/speaker_button.png");
-    protected static final ResourceLocation GROUP_HUD = new ResourceLocation(Voicechat.MODID, "textures/icons/group_hud_button.png");
-    protected static final ITextComponent TITLE = new TextComponentTranslation("gui.voicechat.group.title");
-    protected static final ITextComponent LEAVE_GROUP = new TextComponentTranslation("message.voicechat.leave_group");
+    protected static final String TEXTURE = TextureHelper.format(Voicechat.MODID, "textures/gui/gui_group.png");
+    protected static final String LEAVE = TextureHelper.format(Voicechat.MODID, "textures/icons/leave.png");
+    protected static final String MICROPHONE = TextureHelper.format(Voicechat.MODID, "textures/icons/microphone_button.png");
+    protected static final String SPEAKER = TextureHelper.format(Voicechat.MODID, "textures/icons/speaker_button.png");
+    protected static final String GROUP_HUD = TextureHelper.format(Voicechat.MODID, "textures/icons/group_hud_button.png");
+    protected static final String TITLE = new TextComponentTranslation("gui.voicechat.group.title");
+    protected static final String LEAVE_GROUP = new TextComponentTranslation("message.voicechat.leave_group");
 
     protected static final int HEADER_SIZE = 16;
     protected static final int FOOTER_SIZE = 32;
@@ -56,7 +57,7 @@ public class GroupScreen extends ListScreenBase {
         super.initGui();
         guiLeft = guiLeft + 2;
         guiTop = 32;
-        int minUnits = MathHelper.ceil((float) (CELL_HEIGHT + 4) / (float) UNIT_SIZE);
+        int minUnits = (int) Math.ceil((float) (CELL_HEIGHT + 4) / (float) UNIT_SIZE);
         units = Math.max(minUnits, (height - HEADER_SIZE - FOOTER_SIZE - guiTop * 2) / UNIT_SIZE);
         ySize = HEADER_SIZE + units * UNIT_SIZE + FOOTER_SIZE;
 
@@ -71,25 +72,25 @@ public class GroupScreen extends ListScreenBase {
         mute = new ToggleImageButton(0, guiLeft + 7, buttonY, MICROPHONE, stateManager::isMuted, button -> {
             stateManager.setMuted(!stateManager.isMuted());
         }, new MuteTooltipSupplier(this, stateManager));
-        addButton(mute);
+        controlList.add(mute);
 
         disable = new ToggleImageButton(1, guiLeft + 7 + buttonSize + 3, buttonY, SPEAKER, stateManager::isDisabled, button -> {
             stateManager.setDisabled(!stateManager.isDisabled());
         }, new DisableTooltipSupplier(this, stateManager));
-        addButton(disable);
+        controlList.add(disable);
 
         showHUD = new ToggleImageButton(2, guiLeft + 7 + (buttonSize + 3) * 2, buttonY, GROUP_HUD, VoicechatClient.CLIENT_CONFIG.showGroupHUD::get, button -> {
             VoicechatClient.CLIENT_CONFIG.showGroupHUD.set(!VoicechatClient.CLIENT_CONFIG.showGroupHUD.get()).save();
         }, new HideGroupHudTooltipSupplier(this));
-        addButton(showHUD);
+        controlList.add(showHUD);
 
         leave = new ImageButton(3, guiLeft + xSize - buttonSize - 7, buttonY, LEAVE, button -> {
             NetManager.sendToServer(new LeaveGroupPacket());
             mc.displayGuiScreen(new JoinGroupScreen());
         }, (button, mouseX, mouseY) -> {
-            drawHoveringText(LEAVE_GROUP.getUnformattedComponentText(), mouseX, mouseY);
+            mc.fontRenderer.drawStringWithShadow(LEAVE_GROUP.getUnformattedComponentText(), mouseX, mouseY);
         });
-        addButton(leave);
+        controlList.add(leave);
 
         checkButtons();
     }
@@ -111,7 +112,7 @@ public class GroupScreen extends ListScreenBase {
 
     @Override
     public void renderBackground(int mouseX, int mouseY, float delta) {
-        mc.getTextureManager().bindTexture(TEXTURE);
+        TextureHelper.bindTexture(TEXTURE);
         drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, HEADER_SIZE);
         for (int i = 0; i < units; i++) {
             drawTexturedModalRect(guiLeft, guiTop + HEADER_SIZE + UNIT_SIZE * i, 0, HEADER_SIZE, xSize, UNIT_SIZE);

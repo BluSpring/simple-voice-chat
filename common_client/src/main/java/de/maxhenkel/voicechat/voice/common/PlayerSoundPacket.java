@@ -3,6 +3,9 @@ package de.maxhenkel.voicechat.voice.common;
 import net.minecraft.network.PacketBuffer;
 
 import javax.annotation.Nullable;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.UUID;
 
 public class PlayerSoundPacket extends SoundPacket<PlayerSoundPacket> {
@@ -39,25 +42,33 @@ public class PlayerSoundPacket extends SoundPacket<PlayerSoundPacket> {
     }
 
     @Override
-    public PlayerSoundPacket fromBytes(PacketBuffer buf) {
+    public PlayerSoundPacket fromBytes(DataInputStream buf) throws IOException {
         PlayerSoundPacket soundPacket = new PlayerSoundPacket();
-        soundPacket.sender = buf.readUniqueId();
-        soundPacket.data = buf.readByteArray();
+        soundPacket.sender = UUID.fromString(buf.readUTF());
+
+        int length = buf.readInt();
+        soundPacket.data = new byte[length];
+
+        for (int i = 0; i < length; i++) {
+            soundPacket.data[i] = buf.readByte();
+        }
+
         soundPacket.sequenceNumber = buf.readLong();
         soundPacket.distance = buf.readFloat();
 
         byte data = buf.readByte();
         soundPacket.whispering = hasFlag(data, WHISPER_MASK);
         if (hasFlag(data, HAS_CATEGORY_MASK)) {
-            soundPacket.category = buf.readString(16);
+            soundPacket.category = buf.readUTF();
         }
         return soundPacket;
     }
 
     @Override
-    public void toBytes(PacketBuffer buf) {
-        buf.writeUniqueId(sender);
-        buf.writeByteArray(data);
+    public void toBytes(DataOutputStream buf) throws IOException {
+        buf.writeUTF(sender.toString());
+        buf.writeInt(data.length);
+        buf.write(data);
         buf.writeLong(sequenceNumber);
         buf.writeFloat(distance);
 
@@ -70,7 +81,7 @@ public class PlayerSoundPacket extends SoundPacket<PlayerSoundPacket> {
         }
         buf.writeByte(data);
         if (category != null) {
-            buf.writeString(category);
+            buf.writeUTF(category);
         }
     }
 

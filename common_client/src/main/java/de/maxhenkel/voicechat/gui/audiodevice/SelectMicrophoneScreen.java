@@ -2,10 +2,11 @@ package de.maxhenkel.voicechat.gui.audiodevice;
 
 import de.maxhenkel.voicechat.Voicechat;
 import de.maxhenkel.voicechat.VoicechatClient;
+import de.maxhenkel.voicechat.util.TextureHelper;
 import de.maxhenkel.voicechat.voice.client.ClientManager;
 import de.maxhenkel.voicechat.voice.client.ClientVoicechat;
 import de.maxhenkel.voicechat.voice.client.microphone.MicrophoneManager;
-import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.src.GuiScreen;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
@@ -17,7 +18,7 @@ import java.util.List;
 
 public class SelectMicrophoneScreen extends SelectDeviceScreen {
 
-    protected static final ResourceLocation MICROPHONE_ICON = new ResourceLocation(Voicechat.MODID, "textures/icons/microphone.png");
+    protected static final String MICROPHONE_ICON = TextureHelper.format(Voicechat.MODID, "textures/icons/microphone.png");
     protected static final ITextComponent TITLE = new TextComponentTranslation("gui.voicechat.select_microphone.title");
     protected static final ITextComponent NO_MICROPHONE = new TextComponentTranslation("message.voicechat.no_microphone").setStyle(new Style().setColor(TextFormatting.GRAY));
 
@@ -36,7 +37,7 @@ public class SelectMicrophoneScreen extends SelectDeviceScreen {
     }
 
     @Override
-    public ResourceLocation getIcon(String device) {
+    public String getIcon(String device) {
         return MICROPHONE_ICON;
     }
 

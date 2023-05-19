@@ -2,7 +2,7 @@ package de.maxhenkel.voicechat.gui.widgets;
 
 import de.maxhenkel.voicechat.gui.VoiceChatScreenBase;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiButton;
+import net.minecraft.src.GuiButton;
 import net.minecraft.util.text.ITextComponent;
 
 import java.io.IOException;
@@ -17,7 +17,7 @@ public abstract class ListScreenBase extends VoiceChatScreenBase {
     }
 
     @Override
-    public void handleMouseInput() throws IOException {
+    public void handleMouseInput() {
         super.handleMouseInput();
         if (list != null) {
             list.handleMouseInput();
@@ -45,7 +45,7 @@ public abstract class ListScreenBase extends VoiceChatScreenBase {
     }
 
     @Override
-    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) {
         super.mouseClicked(mouseX, mouseY, mouseButton);
         if (list != null) {
             list.mouseClicked(mouseX, mouseY, mouseButton);
@@ -53,16 +53,16 @@ public abstract class ListScreenBase extends VoiceChatScreenBase {
     }
 
     @Override
-    protected void mouseReleased(int mouseX, int mouseY, int mouseButton) {
-        super.mouseReleased(mouseX, mouseY, mouseButton);
+    protected void mouseMovedOrUp(int mouseX, int mouseY, int mouseButton) {
+        super.mouseMovedOrUp(mouseX, mouseY, mouseButton);
         if (list != null) {
-            list.mouseReleased(mouseX, mouseY, mouseButton);
+            list.mouseMovedOrUp(mouseX, mouseY, mouseButton);
         }
     }
 
     @Override
-    public void onResize(Minecraft mcIn, int w, int h) {
-        super.onResize(mcIn, w, h);
+    public void setWorldAndResolution(Minecraft mcIn, int w, int h) {
+        super.setWorldAndResolution(mcIn, w, h);
     }
 
     public void setList(ListScreenListBase<?> list) {

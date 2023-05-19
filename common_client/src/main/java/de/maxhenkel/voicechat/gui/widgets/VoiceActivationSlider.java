@@ -2,6 +2,7 @@ package de.maxhenkel.voicechat.gui.widgets;
 
 import de.maxhenkel.voicechat.Voicechat;
 import de.maxhenkel.voicechat.VoicechatClient;
+import de.maxhenkel.voicechat.util.TextureHelper;
 import de.maxhenkel.voicechat.voice.common.Utils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -10,12 +11,13 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
+import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
 
 public class VoiceActivationSlider extends DebouncedSlider implements MicTestButton.MicListener {
 
-    private static final ResourceLocation SLIDER = new ResourceLocation(Voicechat.MODID, "textures/gui/voice_activation_slider.png");
+    private static final String SLIDER = TextureHelper.format(Voicechat.MODID, "textures/gui/voice_activation_slider.png");
     private static final ITextComponent NO_ACTIVATION = new TextComponentTranslation("message.voicechat.voice_activation.disabled").setStyle(new Style().setColor(TextFormatting.RED));
 
     private double micValue;
@@ -28,8 +30,8 @@ public class VoiceActivationSlider extends DebouncedSlider implements MicTestBut
     @Override
     public void mouseDragged(Minecraft mc, int mouseX, int mouseY) {
         super.mouseDragged(mc, mouseX, mouseY);
-        mc.getTextureManager().bindTexture(SLIDER);
-        GlStateManager.color(1F, 1F, 1F, 1F);
+        TextureHelper.bindTexture(SLIDER);
+        GL11.glColor4f(1F, 1F, 1F, 1F);
         int width = (int) (226D * micValue);
         drawTexturedModalRect(x + 1, y + 1, 0, 0, width, 18);
     }

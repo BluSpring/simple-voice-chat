@@ -1,7 +1,7 @@
 package de.maxhenkel.voicechat.plugins.impl;
 
 import de.maxhenkel.voicechat.api.Player;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.src.EntityPlayer;
 
 public class PlayerImpl extends EntityImpl implements Player {
 

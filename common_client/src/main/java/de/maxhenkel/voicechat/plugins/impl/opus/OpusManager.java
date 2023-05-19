@@ -1,6 +1,5 @@
 package de.maxhenkel.voicechat.plugins.impl.opus;
 
-import com.sun.jna.Platform;
 import de.maxhenkel.opus4j.OpusEncoder.Application;
 import de.maxhenkel.voicechat.Voicechat;
 import de.maxhenkel.voicechat.VoicechatClient;
@@ -14,6 +13,7 @@ import de.maxhenkel.voicechat.voice.client.ClientVoicechat;
 import de.maxhenkel.voicechat.voice.client.ClientVoicechatConnection;
 import de.maxhenkel.voicechat.voice.client.SoundManager;
 import de.maxhenkel.voicechat.voice.common.Utils;
+import jdk.internal.org.jline.utils.OSUtils;
 
 import javax.annotation.Nullable;
 
@@ -133,7 +133,7 @@ public class OpusManager {
     }
 
     public static boolean useNatives() {
-        if (Platform.isMac()) {
+        if (OSUtils.IS_OSX) {
             if (!VersionCheck.isMacOSNativeCompatible()) {
                 return false;
             }

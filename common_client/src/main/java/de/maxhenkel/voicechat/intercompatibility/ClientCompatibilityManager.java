@@ -3,8 +3,8 @@ package de.maxhenkel.voicechat.intercompatibility;
 import de.maxhenkel.voicechat.service.Service;
 import de.maxhenkel.voicechat.voice.client.ClientVoicechatConnection;
 import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.entity.Entity;
-import net.minecraft.network.NetworkManager;
+import net.minecraft.src.Entity;
+import net.minecraft.src.NetworkManager;
 
 import java.net.SocketAddress;
 import java.util.function.Consumer;

@@ -1,14 +1,16 @@
 package de.maxhenkel.voicechat.net;
 
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
+import de.maxhenkel.voicechat.util.ConnectionUtil;
 
 import javax.annotation.Nullable;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.UUID;
 
 public class JoinGroupPacket implements Packet<JoinGroupPacket> {
 
-    public static final ResourceLocation SET_GROUP = new ResourceLocation(NetManager.CHANNEL, "set_group");
+    public static final String SET_GROUP = ConnectionUtil.format(NetManager.CHANNEL, "set_group");
 
     private UUID group;
     @Nullable
@@ -33,25 +35,25 @@ public class JoinGroupPacket implements Packet<JoinGroupPacket> {
     }
 
     @Override
-    public ResourceLocation getIdentifier() {
+    public String getIdentifier() {
         return SET_GROUP;
     }
 
     @Override
-    public JoinGroupPacket fromBytes(PacketBuffer buf) {
-        group = buf.readUniqueId();
+    public JoinGroupPacket fromBytes(DataInputStream buf) throws IOException {
+        group = UUID.fromString(buf.readUTF());
         if (buf.readBoolean()) {
-            password = buf.readString(512);
+            password = buf.readUTF();
         }
         return this;
     }
 
     @Override
-    public void toBytes(PacketBuffer buf) {
-        buf.writeUniqueId(group);
+    public void toBytes(DataOutputStream buf) throws IOException {
+        buf.writeUTF(group.toString());
         buf.writeBoolean(password != null);
         if (password != null) {
-            buf.writeString(password);
+            buf.writeUTF(password);
         }
     }
 

@@ -1,10 +1,13 @@
 package de.maxhenkel.voicechat.gui.volume;
 
 import de.maxhenkel.voicechat.VoicechatClient;
+import de.maxhenkel.voicechat.extensions.GuiExtension;
 import de.maxhenkel.voicechat.gui.GameProfileUtils;
+import de.maxhenkel.voicechat.util.TextureHelper;
 import de.maxhenkel.voicechat.voice.common.PlayerState;
-import net.minecraft.client.gui.Gui;
+import net.minecraft.src.Gui;
 import net.minecraft.client.renderer.GlStateManager;
+import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
 import java.util.UUID;
@@ -26,17 +29,17 @@ public class PlayerVolumeEntry extends VolumeEntry {
 
     @Override
     public void renderElement(int slotIndex, int x, int y, int listWidth, int slotHeight, int mouseX, int mouseY, boolean isSelected, float partialTicks, int skinX, int skinY, int textX, int textY) {
-        GlStateManager.color(1F, 1F, 1F, 1F);
+        GL11.glColor4f(1F, 1F, 1F, 1F);
         if (state != null) {
-            minecraft.getTextureManager().bindTexture(GameProfileUtils.getSkin(state.getUuid()));
-            Gui.drawScaledCustomSizeModalRect(skinX, skinY, 8F, 8F, 8, 8, SKIN_SIZE, SKIN_SIZE, 64F, 64F);
-            GlStateManager.enableBlend();
-            Gui.drawScaledCustomSizeModalRect(skinX, skinY, 40F, 8F, 8, 8, SKIN_SIZE, SKIN_SIZE, 64F, 64F);
-            GlStateManager.disableBlend();
+            GameProfileUtils.bindSkinTexture(state.getName());
+            ((GuiExtension) screen).drawScaledCustomSizeModalRect(skinX, skinY, 8F, 8F, 8, 8, SKIN_SIZE, SKIN_SIZE, 64F, 64F);
+            GL11.glEnable(GL11.GL_BLEND);
+            ((GuiExtension) screen).drawScaledCustomSizeModalRect(skinX, skinY, 40F, 8F, 8, 8, SKIN_SIZE, SKIN_SIZE, 64F, 64F);
+            GL11.glDisable(GL11.GL_BLEND);
             minecraft.fontRenderer.drawString(state.getName(), textX, textY, PLAYER_NAME_COLOR);
         } else {
-            minecraft.getTextureManager().bindTexture(OTHER_VOLUME_ICON);
-            Gui.drawScaledCustomSizeModalRect(skinX, skinY, 16, 16, 16, 16, SKIN_SIZE, SKIN_SIZE, 16, 16);
+            TextureHelper.bindTexture(OTHER_VOLUME_ICON);
+            ((GuiExtension) screen).drawScaledCustomSizeModalRect(skinX, skinY, 16, 16, 16, 16, SKIN_SIZE, SKIN_SIZE, 16, 16);
             minecraft.fontRenderer.drawString(OTHER_VOLUME.getUnformattedComponentText(), textX, textY, PLAYER_NAME_COLOR);
             if (isSelected) {
                 screen.postRender(() -> {

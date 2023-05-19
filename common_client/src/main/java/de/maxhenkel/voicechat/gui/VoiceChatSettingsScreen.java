@@ -9,7 +9,7 @@ import de.maxhenkel.voicechat.gui.widgets.*;
 import de.maxhenkel.voicechat.voice.client.ClientManager;
 import de.maxhenkel.voicechat.voice.client.ClientVoicechat;
 import de.maxhenkel.voicechat.voice.client.Denoiser;
-import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.src.GuiScreen;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import de.maxhenkel.voicechat.voice.client.speaker.AudioType;

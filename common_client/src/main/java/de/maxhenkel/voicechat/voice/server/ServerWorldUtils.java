@@ -1,9 +1,8 @@
 package de.maxhenkel.voicechat.voice.server;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.WorldServer;
+import net.minecraft.src.EntityPlayer;
+import net.minecraft.src.Vec3D;
+import net.minecraft.src.World;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,20 +11,20 @@ import java.util.function.Predicate;
 
 public class ServerWorldUtils {
 
-    public static Collection<EntityPlayerMP> getPlayersInRange(WorldServer level, Vec3d pos, double range, Predicate<EntityPlayerMP> filter) {
-        List<EntityPlayerMP> nearbyPlayers = new ArrayList<>();
+    public static Collection<EntityPlayer> getPlayersInRange(World level, Vec3D pos, double range, Predicate<EntityPlayer> filter) {
+        List<EntityPlayer> nearbyPlayers = new ArrayList<>();
         List<EntityPlayer> players = level.playerEntities;
         for (int i = 0; i < players.size(); i++) {
-            EntityPlayerMP player = (EntityPlayerMP) players.get(i);
-            if (isInRange(player.getPositionVector(), pos, range) && filter.test(player)) {
+            EntityPlayer player = (EntityPlayer) players.get(i);
+            if (isInRange(player.getPosition(1f), pos, range) && filter.test(player)) {
                 nearbyPlayers.add(player);
             }
         }
         return nearbyPlayers;
     }
 
-    public static boolean isInRange(Vec3d pos1, Vec3d pos2, double range) {
-        return Math.abs(pos1.x - pos2.x) <= range && Math.abs(pos1.y - pos2.y) <= range && Math.abs(pos1.z - pos2.z) <= range;
+    public static boolean isInRange(Vec3D pos1, Vec3D pos2, double range) {
+        return Math.abs(pos1.xCoord - pos2.xCoord) <= range && Math.abs(pos1.yCoord - pos2.yCoord) <= range && Math.abs(pos1.zCoord - pos2.zCoord) <= range;
     }
 
 }

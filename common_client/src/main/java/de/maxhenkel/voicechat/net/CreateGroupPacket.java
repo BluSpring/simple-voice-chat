@@ -2,14 +2,16 @@ package de.maxhenkel.voicechat.net;
 
 import de.maxhenkel.voicechat.api.Group;
 import de.maxhenkel.voicechat.plugins.impl.GroupImpl;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
+import de.maxhenkel.voicechat.util.ConnectionUtil;
 
 import javax.annotation.Nullable;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 public class CreateGroupPacket implements Packet<CreateGroupPacket> {
 
-    public static final ResourceLocation CREATE_GROUP = new ResourceLocation(NetManager.CHANNEL, "create_group");
+    public static final String CREATE_GROUP = ConnectionUtil.format(NetManager.CHANNEL, "create_group");
 
     private String name;
     @Nullable
@@ -40,27 +42,27 @@ public class CreateGroupPacket implements Packet<CreateGroupPacket> {
     }
 
     @Override
-    public ResourceLocation getIdentifier() {
+    public String getIdentifier() {
         return CREATE_GROUP;
     }
 
     @Override
-    public CreateGroupPacket fromBytes(PacketBuffer buf) {
-        name = buf.readString(512);
+    public CreateGroupPacket fromBytes(DataInputStream buf) throws IOException {
+        name = buf.readUTF();
         password = null;
         if (buf.readBoolean()) {
-            password = buf.readString(512);
+            password = buf.readUTF();
         }
         type = GroupImpl.TypeImpl.fromInt(buf.readShort());
         return this;
     }
 
     @Override
-    public void toBytes(PacketBuffer buf) {
-        buf.writeString(name);
+    public void toBytes(DataOutputStream buf) throws IOException {
+        buf.writeUTF(name);
         buf.writeBoolean(password != null);
         if (password != null) {
-            buf.writeString(password);
+            buf.writeUTF(password);
         }
         buf.writeShort(GroupImpl.TypeImpl.toInt(type));
     }

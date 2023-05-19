@@ -1,9 +1,11 @@
 package de.maxhenkel.voicechat.plugins.impl;
 
 import de.maxhenkel.voicechat.api.VolumeCategory;
-import net.minecraft.network.PacketBuffer;
 
 import javax.annotation.Nullable;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.regex.Pattern;
 
 public class VolumeCategoryImpl implements VolumeCategory {
@@ -49,12 +51,12 @@ public class VolumeCategoryImpl implements VolumeCategory {
         return icon;
     }
 
-    public static VolumeCategoryImpl fromBytes(PacketBuffer buf) {
-        String id = buf.readString(16);
-        String name = buf.readString(16);
+    public static VolumeCategoryImpl fromBytes(DataInputStream buf) throws IOException {
+        String id = buf.readUTF();
+        String name = buf.readUTF();
         String description = null;
         if (buf.readBoolean()) {
-            description = buf.readString(32767);
+            description = buf.readUTF();
         }
         int[][] icon = null;
         if (buf.readBoolean()) {
@@ -68,12 +70,12 @@ public class VolumeCategoryImpl implements VolumeCategory {
         return new VolumeCategoryImpl(id, name, description, icon);
     }
 
-    public void toBytes(PacketBuffer buf) {
-        buf.writeString(id);
-        buf.writeString(name);
+    public void toBytes(DataOutputStream buf) throws IOException {
+        buf.writeUTF(id);
+        buf.writeUTF(name);
         buf.writeBoolean(description != null);
         if (description != null) {
-            buf.writeString(description);
+            buf.writeUTF(description);
         }
         buf.writeBoolean(icon != null);
         if (icon != null) {

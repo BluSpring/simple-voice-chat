@@ -7,21 +7,14 @@ import de.maxhenkel.voicechat.gui.widgets.ButtonBase;
 import de.maxhenkel.voicechat.gui.widgets.ListScreenBase;
 import de.maxhenkel.voicechat.net.JoinGroupPacket;
 import de.maxhenkel.voicechat.net.NetManager;
+import de.maxhenkel.voicechat.util.TextureHelper;
 import de.maxhenkel.voicechat.voice.common.ClientGroup;
-import net.minecraft.client.audio.PositionedSoundRecord;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.util.text.TextFormatting;
 
 import java.io.IOException;
 
 public class JoinGroupScreen extends ListScreenBase {
 
-    protected static final ResourceLocation TEXTURE = new ResourceLocation(Voicechat.MODID, "textures/gui/gui_join_group.png");
+    protected static final String TEXTURE = TextureHelper.format(Voicechat.MODID, "textures/gui/gui_join_group.png");
     protected static final ITextComponent TITLE = new TextComponentTranslation("gui.voicechat.join_create_group.title");
     protected static final ITextComponent CREATE_GROUP = new TextComponentTranslation("message.voicechat.create_group_button");
     protected static final ITextComponent JOIN_CREATE_GROUP = new TextComponentTranslation("message.voicechat.join_create_group");
@@ -45,7 +38,7 @@ public class JoinGroupScreen extends ListScreenBase {
         super.initGui();
         guiLeft = guiLeft + 2;
         guiTop = 32;
-        int minUnits = MathHelper.ceil((float) (CELL_HEIGHT + 4) / (float) UNIT_SIZE);
+        int minUnits = (int) Math.ceil((float) (CELL_HEIGHT + 4) / (float) UNIT_SIZE);
         units = Math.max(minUnits, (height - HEADER_SIZE - FOOTER_SIZE - guiTop * 2) / UNIT_SIZE);
         ySize = HEADER_SIZE + units * UNIT_SIZE + FOOTER_SIZE;
 
@@ -58,12 +51,12 @@ public class JoinGroupScreen extends ListScreenBase {
                 mc.displayGuiScreen(new CreateGroupScreen());
             }
         };
-        addButton(createGroup);
+        controlList.add(createGroup);
     }
 
     @Override
     public void renderBackground(int mouseX, int mouseY, float delta) {
-        mc.getTextureManager().bindTexture(TEXTURE);
+        TextureHelper.bindTexture(TEXTURE);
         drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, HEADER_SIZE);
         for (int i = 0; i < units; i++) {
             drawTexturedModalRect(guiLeft, guiTop + HEADER_SIZE + UNIT_SIZE * i, 0, HEADER_SIZE, xSize, UNIT_SIZE);
@@ -92,7 +85,7 @@ public class JoinGroupScreen extends ListScreenBase {
         for (JoinGroupEntry entry : groupList.children()) {
             if (entry.isSelected()) {
                 ClientGroup group = entry.getGroup().getGroup();
-                mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.F));
+                mc.sndManager.func_337_a("random.click", 1F, 1F);
                 if (group.hasPassword()) {
                     mc.displayGuiScreen(new EnterPasswordScreen(group));
                 } else {

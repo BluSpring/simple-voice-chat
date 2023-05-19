@@ -1,9 +1,10 @@
 package de.maxhenkel.voicechat.gui.widgets;
 
+import de.maxhenkel.voicechat.MinecraftAccessor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiListExtended;
-import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.src.ScaledResolution;
+import net.minecraft.src.Tessellator;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ public abstract class ListScreenListBase<T extends ListScreenEntryBase> extends 
     private final List<T> entries;
 
     public ListScreenListBase(int width, int height, int x, int y, int size) {
-        super(Minecraft.getMinecraft(), width, height, x, y, size);
+        super(MinecraftAccessor.getMinecraft(), width, height, x, y, size);
         entries = new ArrayList<>();
     }
 
@@ -70,7 +71,7 @@ public abstract class ListScreenListBase<T extends ListScreenEntryBase> extends 
     @Override
     public void drawScreen(int mouseXIn, int mouseYIn, float partialTicks) {
         ScaledResolution scaledResolution = new ScaledResolution(mc);
-        double scale = scaledResolution.getScaleFactor();
+        double scale = scaledResolution.scaleFactor;
         enableScissor((int) ((double) getRowLeft() * scale), (int) ((double) (height - bottom) * scale), (int) ((double) (getScrollBarX() + 6) * scale), (int) ((double) (height - (height - bottom + 4) - top + 4) * scale));
         super.drawScreen(mouseXIn, mouseYIn, partialTicks);
         disableScissor();

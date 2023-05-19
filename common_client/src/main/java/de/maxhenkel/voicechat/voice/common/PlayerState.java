@@ -1,8 +1,9 @@
 package de.maxhenkel.voicechat.voice.common;
 
-import net.minecraft.network.PacketBuffer;
-
 import javax.annotation.Nullable;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.UUID;
 
 public class PlayerState {
@@ -77,29 +78,29 @@ public class PlayerState {
                 '}';
     }
 
-    public static PlayerState fromBytes(PacketBuffer buf) {
+    public static PlayerState fromBytes(DataInputStream buf) throws IOException {
         boolean disabled = buf.readBoolean();
         boolean disconnected = buf.readBoolean();
-        UUID uuid = buf.readUniqueId();
-        String name = buf.readString(32767);
+        UUID uuid = UUID.fromString(buf.readUTF());
+        String name = buf.readUTF();
 
         PlayerState state = new PlayerState(uuid, name, disabled, disconnected);
 
         if (buf.readBoolean()) {
-            state.setGroup(buf.readUniqueId());
+            state.setGroup(UUID.fromString(buf.readUTF()));
         }
 
         return state;
     }
 
-    public void toBytes(PacketBuffer buf) {
+    public void toBytes(DataOutputStream buf) throws IOException {
         buf.writeBoolean(disabled);
         buf.writeBoolean(disconnected);
-        buf.writeUniqueId(uuid);
-        buf.writeString(name);
+        buf.writeUTF(uuid.toString());
+        buf.writeUTF(name);
         buf.writeBoolean(hasGroup());
         if (hasGroup()) {
-            buf.writeUniqueId(group);
+            buf.writeUTF(group.toString());
         }
     }
 

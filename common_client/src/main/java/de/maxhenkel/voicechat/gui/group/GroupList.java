@@ -1,11 +1,12 @@
 package de.maxhenkel.voicechat.gui.group;
 
+import de.maxhenkel.voicechat.MinecraftAccessor;
 import de.maxhenkel.voicechat.gui.widgets.ListScreenBase;
 import de.maxhenkel.voicechat.gui.widgets.ListScreenListBase;
 import de.maxhenkel.voicechat.voice.client.ClientManager;
 import de.maxhenkel.voicechat.voice.common.PlayerState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.src.GuiScreen;
 
 import java.util.Comparator;
 import java.util.LinkedList;
@@ -15,6 +16,7 @@ import java.util.UUID;
 public class GroupList extends ListScreenListBase<GroupEntry> {
 
     protected final ListScreenBase parent;
+    private final Minecraft mc = MinecraftAccessor.getMinecraft();
 
     public GroupList(ListScreenBase parent, int width, int height, int x, int y, int size) {
         super(width, height, x, y, size);
@@ -63,7 +65,7 @@ public class GroupList extends ListScreenListBase<GroupEntry> {
     }
 
     public static void update() {
-        GuiScreen screen = Minecraft.getMinecraft().currentScreen;
+        GuiScreen screen = MinecraftAccessor.getMinecraft().currentScreen;
         if (screen instanceof GroupScreen) {
             GroupScreen groupScreen = (GroupScreen) screen;
             groupScreen.groupList.updateMembers();

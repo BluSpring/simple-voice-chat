@@ -1,6 +1,7 @@
 package de.maxhenkel.voicechat.voice.common;
 
-import net.minecraft.network.PacketBuffer;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 
 public class ConnectionCheckAckPacket implements Packet<ConnectionCheckAckPacket> {
 
@@ -9,12 +10,12 @@ public class ConnectionCheckAckPacket implements Packet<ConnectionCheckAckPacket
     }
 
     @Override
-    public ConnectionCheckAckPacket fromBytes(PacketBuffer buf) {
+    public ConnectionCheckAckPacket fromBytes(DataInputStream buf) {
         return new ConnectionCheckAckPacket();
     }
 
     @Override
-    public void toBytes(PacketBuffer buf) {
+    public void toBytes(DataOutputStream buf) {
 
     }
 }

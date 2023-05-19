@@ -1,6 +1,6 @@
 package de.maxhenkel.voicechat.gui.widgets;
 
-import net.minecraft.client.gui.GuiButton;
+import net.minecraft.src.GuiButton;
 import net.minecraft.util.text.ITextComponent;
 
 public abstract class ButtonBase extends GuiButton {

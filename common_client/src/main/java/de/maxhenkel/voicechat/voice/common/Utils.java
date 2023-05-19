@@ -6,8 +6,8 @@ import de.maxhenkel.voicechat.intercompatibility.CommonCompatibilityManager;
 import de.maxhenkel.voicechat.voice.client.ClientManager;
 import de.maxhenkel.voicechat.voice.client.ClientVoicechat;
 import de.maxhenkel.voicechat.voice.client.ClientVoicechatConnection;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec2f;
+import net.minecraft.src.MathHelper;
+import org.lwjgl.util.vector.Vector2f;
 
 import javax.annotation.Nullable;
 import java.util.concurrent.atomic.AtomicReference;
@@ -136,20 +136,20 @@ public class Utils {
         return angle;
     }
 
-    public static float angle(Vec2f vec1, Vec2f vec2) {
+    public static float angle(Vector2f vec1, Vector2f vec2) {
         return (float) Math.toDegrees(Math.atan2(vec1.x * vec2.x + vec1.y * vec2.y, vec1.x * vec2.y - vec1.y * vec2.x));
     }
 
-    private static double magnitude(Vec2f vec1) {
+    private static double magnitude(Vector2f vec1) {
         return Math.sqrt(Math.pow(vec1.x, 2) + Math.pow(vec1.y, 2));
     }
 
-    private static float multiply(Vec2f vec1, Vec2f vec2) {
+    private static float multiply(Vector2f vec1, Vector2f vec2) {
         return vec1.x * vec2.x + vec1.y * vec2.y;
     }
 
-    private static Vec2f rotate(Vec2f vec, float angle) {
-        return new Vec2f(vec.x * MathHelper.cos(angle) - vec.y * MathHelper.sin(angle), vec.x * MathHelper.sin(angle) + vec.y * MathHelper.cos(angle));
+    private static Vector2f rotate(Vector2f vec, float angle) {
+        return new Vector2f(vec.x * MathHelper.cos(angle) - vec.y * MathHelper.sin(angle), vec.x * MathHelper.sin(angle) + vec.y * MathHelper.cos(angle));
     }
 
     /**

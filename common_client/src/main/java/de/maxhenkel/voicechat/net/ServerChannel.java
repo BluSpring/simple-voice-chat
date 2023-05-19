@@ -1,8 +1,7 @@
 package de.maxhenkel.voicechat.net;
 
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.network.NetHandlerPlayServer;
-import net.minecraft.server.MinecraftServer;
+import net.minecraft.src.EntityPlayer;
+import net.minecraft.src.NetHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,8 +18,8 @@ public class ServerChannel<T extends Packet<T>> {
         listeners.add(packetReceiver);
     }
 
-    public void onPacket(MinecraftServer server, EntityPlayerMP player, NetHandlerPlayServer handler, T packet) {
-        listeners.forEach(receiver -> receiver.onPacket(server, player, handler, packet));
+    public void onPacket(EntityPlayer player, NetHandler handler, T packet) {
+        listeners.forEach(receiver -> receiver.onPacket(player, handler, packet));
     }
 
     public List<NetManager.ServerReceiver<T>> getListeners() {

@@ -1,6 +1,8 @@
 package de.maxhenkel.voicechat.voice.common;
 
-import net.minecraft.network.PacketBuffer;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 public class MicPacket implements Packet<MicPacket> {
 
@@ -36,17 +38,24 @@ public class MicPacket implements Packet<MicPacket> {
     }
 
     @Override
-    public MicPacket fromBytes(PacketBuffer buf) {
+    public MicPacket fromBytes(DataInputStream buf) throws IOException {
         MicPacket soundPacket = new MicPacket();
-        soundPacket.data = buf.readByteArray();
+        int length = buf.readInt();
+        soundPacket.data = new byte[length];
+
+        for (int i = 0; i < length; i++) {
+            soundPacket.data[i] = buf.readByte();
+        }
+
         soundPacket.sequenceNumber = buf.readLong();
         soundPacket.whispering = buf.readBoolean();
         return soundPacket;
     }
 
     @Override
-    public void toBytes(PacketBuffer buf) {
-        buf.writeByteArray(data);
+    public void toBytes(DataOutputStream buf) throws IOException {
+        buf.writeInt(data.length);
+        buf.write(data);
         buf.writeLong(sequenceNumber);
         buf.writeBoolean(whispering);
     }

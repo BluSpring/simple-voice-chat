@@ -1,8 +1,8 @@
 package de.maxhenkel.voicechat.gui;
 
 import de.maxhenkel.voicechat.gui.widgets.ButtonBase;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.src.GuiButton;
+import net.minecraft.src.GuiScreen;
 import net.minecraft.util.text.ITextComponent;
 
 import javax.annotation.Nullable;
@@ -31,8 +31,7 @@ public abstract class VoiceChatScreenBase extends GuiScreen {
 
     @Override
     public void initGui() {
-        buttonList.clear();
-        labelList.clear();
+        controlList.clear();
         super.initGui();
 
         this.guiLeft = (width - this.xSize) / 2;
@@ -45,7 +44,7 @@ public abstract class VoiceChatScreenBase extends GuiScreen {
         renderBackground(mouseX, mouseY, delta);
         super.drawScreen(mouseX, mouseY, delta);
         renderForeground(mouseX, mouseY, delta);
-        for (GuiButton button : buttonList) {
+        for (GuiButton button : (List<GuiButton>) controlList) {
             if (button instanceof ButtonBase) {
                 ((ButtonBase) button).renderTooltips(mouseX, mouseY, delta);
             }
@@ -61,7 +60,7 @@ public abstract class VoiceChatScreenBase extends GuiScreen {
     }
 
     @Override
-    protected void actionPerformed(GuiButton button) throws IOException {
+    protected void actionPerformed(GuiButton button) {
         super.actionPerformed(button);
 
         if (!(button instanceof ButtonBase)) {

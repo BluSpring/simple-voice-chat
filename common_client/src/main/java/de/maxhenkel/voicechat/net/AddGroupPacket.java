@@ -1,13 +1,16 @@
 package de.maxhenkel.voicechat.net;
 
 import de.maxhenkel.voicechat.Voicechat;
+import de.maxhenkel.voicechat.util.ConnectionUtil;
 import de.maxhenkel.voicechat.voice.common.ClientGroup;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 public class AddGroupPacket implements Packet<AddGroupPacket> {
 
-    public static final ResourceLocation ADD_ADD_GROUP = new ResourceLocation(NetManager.CHANNEL, "add_group");
+    public static final String ADD_ADD_GROUP = ConnectionUtil.format(NetManager.CHANNEL, "add_group");
 
     private ClientGroup group;
 
@@ -24,18 +27,18 @@ public class AddGroupPacket implements Packet<AddGroupPacket> {
     }
 
     @Override
-    public ResourceLocation getIdentifier() {
+    public String getIdentifier() {
         return ADD_ADD_GROUP;
     }
 
     @Override
-    public AddGroupPacket fromBytes(PacketBuffer buf) {
+    public AddGroupPacket fromBytes(DataInputStream buf) throws IOException {
         group = ClientGroup.fromBytes(buf);
         return this;
     }
 
     @Override
-    public void toBytes(PacketBuffer buf) {
+    public void toBytes(DataOutputStream buf) throws IOException {
         group.toBytes(buf);
     }
 

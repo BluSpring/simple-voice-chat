@@ -1,6 +1,5 @@
 package de.maxhenkel.voicechat;
 
-import com.sun.jna.Platform;
 import de.maxhenkel.configbuilder.ConfigBuilder;
 import de.maxhenkel.voicechat.config.ClientConfig;
 import de.maxhenkel.voicechat.config.VolumeConfig;
@@ -8,10 +7,8 @@ import de.maxhenkel.voicechat.intercompatibility.CommonCompatibilityManager;
 import de.maxhenkel.voicechat.macos.VersionCheck;
 import de.maxhenkel.voicechat.plugins.impl.opus.OpusManager;
 import de.maxhenkel.voicechat.profile.UsernameCache;
-import de.maxhenkel.voicechat.resourcepacks.VoiceChatResourcePack;
 import de.maxhenkel.voicechat.voice.client.ClientManager;
-import net.minecraft.client.Minecraft;
-import net.minecraft.util.text.TextComponentTranslation;
+import jdk.internal.org.jline.utils.OSUtils;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -24,9 +21,9 @@ public abstract class VoicechatClient {
     public static VolumeConfig VOLUME_CONFIG;
     public static UsernameCache USERNAME_CACHE;
 
-    public static VoiceChatResourcePack CLASSIC_ICONS = new VoiceChatResourcePack("classic_icons", new TextComponentTranslation("resourcepack.voicechat.classic_icons"));
-    public static VoiceChatResourcePack WHITE_ICONS = new VoiceChatResourcePack("white_icons", new TextComponentTranslation("resourcepack.voicechat.white_icons"));
-    public static VoiceChatResourcePack BLACK_ICONS = new VoiceChatResourcePack("black_icons", new TextComponentTranslation("resourcepack.voicechat.black_icons"));
+    //public static VoiceChatResourcePack CLASSIC_ICONS = new VoiceChatResourcePack("classic_icons", new TextComponentTranslation("resourcepack.voicechat.classic_icons"));
+    //public static VoiceChatResourcePack WHITE_ICONS = new VoiceChatResourcePack("white_icons", new TextComponentTranslation("resourcepack.voicechat.white_icons"));
+    //public static VoiceChatResourcePack BLACK_ICONS = new VoiceChatResourcePack("black_icons", new TextComponentTranslation("resourcepack.voicechat.black_icons"));
 
     public void initializeConfigs() {
         fixVolumeConfig();
@@ -42,7 +39,7 @@ public abstract class VoicechatClient {
 
         OpusManager.opusNativeCheck();
 
-        if (Platform.isMac()) {
+        if (OSUtils.IS_OSX) {
             if (!VersionCheck.isMacOSNativeCompatible()) {
                 Voicechat.LOGGER.warn("Your MacOS version is incompatible with {}", CommonCompatibilityManager.INSTANCE.getModName());
             }

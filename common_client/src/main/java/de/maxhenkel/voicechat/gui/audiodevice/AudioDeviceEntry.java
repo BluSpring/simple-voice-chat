@@ -1,16 +1,17 @@
 package de.maxhenkel.voicechat.gui.audiodevice;
 
+import de.maxhenkel.voicechat.MinecraftAccessor;
 import de.maxhenkel.voicechat.Voicechat;
+import de.maxhenkel.voicechat.extensions.GuiExtension;
 import de.maxhenkel.voicechat.gui.VoiceChatScreenBase;
 import de.maxhenkel.voicechat.gui.widgets.ListScreenEntryBase;
+import de.maxhenkel.voicechat.util.TextureHelper;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
 public class AudioDeviceEntry extends ListScreenEntryBase {
 
-    protected static final ResourceLocation SELECTED = new ResourceLocation(Voicechat.MODID, "textures/icons/device_selected.png");
+    protected static final String SELECTED = TextureHelper.format(Voicechat.MODID, "textures/icons/device_selected.png");
 
     protected static final int PADDING = 4;
     protected static final int BG_FILL = VoiceChatScreenBase.color(255, 74, 74, 74);
@@ -27,7 +28,7 @@ public class AudioDeviceEntry extends ListScreenEntryBase {
         this.parent = parent;
         this.device = device;
         this.visibleDeviceName = parent.getVisibleName(device);
-        this.minecraft = Minecraft.getMinecraft();
+        this.minecraft = MinecraftAccessor.getMinecraft();
     }
 
     @Override
@@ -35,31 +36,31 @@ public class AudioDeviceEntry extends ListScreenEntryBase {
         super.drawEntry(slotIndex, x, y, listWidth, slotHeight, mouseX, mouseY, isSelected, partialTicks);
         boolean selected = parent.getSelectedDevice().equals(device);
         if (selected) {
-            GuiScreen.drawRect(x, y, x + listWidth, y + slotHeight, BG_FILL_SELECTED);
+            parent.drawRect(x, y, x + listWidth, y + slotHeight, BG_FILL_SELECTED);
         } else if (isSelected) {
-            GuiScreen.drawRect(x, y, x + listWidth, y + slotHeight, BG_FILL_HOVERED);
+            parent.drawRect(x, y, x + listWidth, y + slotHeight, BG_FILL_HOVERED);
         } else {
-            GuiScreen.drawRect(x, y, x + listWidth, y + slotHeight, BG_FILL);
+            parent.drawRect(x, y, x + listWidth, y + slotHeight, BG_FILL);
         }
-        GlStateManager.color(1F, 1F, 1F, 1F);
+        GL11.glColor4f(1F, 1F, 1F, 1F);
 
-        minecraft.getTextureManager().bindTexture(parent.getIcon(device));
-        GuiScreen.drawModalRectWithCustomSizedTexture(x + PADDING, y + slotHeight / 2 - 8, 16, 16, 16, 16, 16, 16);
+        TextureHelper.bindTexture(parent.getIcon(device));
+        ((GuiExtension) parent).drawModalRectWithCustomSizedTexture(x + PADDING, y + slotHeight / 2 - 8, 16, 16, 16, 16, 16, 16);
         if (selected) {
-            minecraft.getTextureManager().bindTexture(SELECTED);
-            GuiScreen.drawModalRectWithCustomSizedTexture(x + PADDING, y + slotHeight / 2 - 8, 16, 16, 16, 16, 16, 16);
+            TextureHelper.bindTexture(SELECTED);
+            ((GuiExtension) parent).drawModalRectWithCustomSizedTexture(x + PADDING, y + slotHeight / 2 - 8, 16, 16, 16, 16, 16, 16);
         }
 
         float deviceWidth = minecraft.fontRenderer.getStringWidth(visibleDeviceName);
         float space = listWidth - PADDING - 16 - PADDING - PADDING;
         float scale = Math.min(space / deviceWidth, 1F);
 
-        GlStateManager.pushMatrix();
-        GlStateManager.translate(x + PADDING + 16 + PADDING, y + slotHeight / 2 - (minecraft.fontRenderer.FONT_HEIGHT * scale) / 2, 0D);
-        GlStateManager.scale(scale, scale, 1F);
+        GL11.glPushMatrix();
+        GL11.glTranslated(x + PADDING + 16 + PADDING, y + slotHeight / 2 - (TextureHelper.FONT_HEIGHT * scale) / 2, 0D);
+        GL11.glScalef(scale, scale, 1F);
 
         minecraft.fontRenderer.drawString(visibleDeviceName, 0, 0, DEVICE_NAME_COLOR);
-        GlStateManager.popMatrix();
+        GL11.glPopMatrix();
     }
 
     public String getDevice() {

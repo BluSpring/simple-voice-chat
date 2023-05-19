@@ -7,8 +7,7 @@ import de.maxhenkel.voicechat.net.NetManager;
 import de.maxhenkel.voicechat.net.RemoveCategoryPacket;
 import de.maxhenkel.voicechat.plugins.CategoryManager;
 import de.maxhenkel.voicechat.plugins.impl.VolumeCategoryImpl;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.server.MinecraftServer;
+import net.minecraft.src.EntityPlayer;
 
 import javax.annotation.Nullable;
 
@@ -21,10 +20,10 @@ public class ServerCategoryManager extends CategoryManager {
         CommonCompatibilityManager.INSTANCE.onPlayerCompatibilityCheckSucceeded(this::onPlayerCompatibilityCheckSucceeded);
     }
 
-    private void onPlayerCompatibilityCheckSucceeded(EntityPlayerMP player) {
-        Voicechat.logDebug("Synchronizing {} volume categories with {}", categories.size(), player.getDisplayNameString());
+    private void onPlayerCompatibilityCheckSucceeded(EntityPlayer player) {
+        Voicechat.logDebug("Synchronizing {} volume categories with {}", categories.size(), player.username);
         for (VolumeCategoryImpl category : getCategories()) {
-            broadcastAddCategory(server.getServer(), category);
+            broadcastAddCategory(category);
         }
     }
 
@@ -32,7 +31,7 @@ public class ServerCategoryManager extends CategoryManager {
     public void addCategory(VolumeCategoryImpl category) {
         super.addCategory(category);
         Voicechat.logDebug("Synchronizing volume category {} with all players", category.getId());
-        broadcastAddCategory(server.getServer(), category);
+        broadcastAddCategory(category);
     }
 
     @Override
@@ -40,18 +39,18 @@ public class ServerCategoryManager extends CategoryManager {
     public VolumeCategoryImpl removeCategory(String categoryId) {
         VolumeCategoryImpl volumeCategory = super.removeCategory(categoryId);
         Voicechat.logDebug("Removing volume category {} for all players", categoryId);
-        broadcastRemoveCategory(server.getServer(), categoryId);
+        broadcastRemoveCategory(categoryId);
         return volumeCategory;
     }
 
-    private void broadcastAddCategory(MinecraftServer server, VolumeCategoryImpl category) {
+    private void broadcastAddCategory(VolumeCategoryImpl category) {
         AddCategoryPacket packet = new AddCategoryPacket(category);
-        server.getPlayerList().getPlayers().forEach(p -> NetManager.sendToClient(p, packet));
+        Voicechat.serverInstance.getPlayerList().forEach(p -> NetManager.sendToClient(p, packet));
     }
 
-    private void broadcastRemoveCategory(MinecraftServer server, String categoryId) {
+    private void broadcastRemoveCategory(String categoryId) {
         RemoveCategoryPacket packet = new RemoveCategoryPacket(categoryId);
-        server.getPlayerList().getPlayers().forEach(p -> NetManager.sendToClient(p, packet));
+        Voicechat.serverInstance.getPlayerList().forEach(p -> NetManager.sendToClient(p, packet));
     }
 
 }

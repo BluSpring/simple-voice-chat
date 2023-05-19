@@ -23,7 +23,7 @@
     ]
   },
   "mixins": [
-    "voicechat.mixins.json"
+    "voicechat_server.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=${fabric_loader_version}",

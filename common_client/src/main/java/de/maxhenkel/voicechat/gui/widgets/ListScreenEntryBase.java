@@ -1,8 +1,9 @@
 package de.maxhenkel.voicechat.gui.widgets;
 
 import com.google.common.collect.Lists;
+import de.maxhenkel.voicechat.MinecraftAccessor;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiButton;
+import net.minecraft.src.GuiButton;
 import net.minecraft.client.gui.GuiListExtended;
 
 import java.util.List;
@@ -15,7 +16,7 @@ public abstract class ListScreenEntryBase implements GuiListExtended.IGuiListEnt
 
     public ListScreenEntryBase() {
         this.children = Lists.newArrayList();
-        mc = Minecraft.getMinecraft();
+        mc = MinecraftAccessor.getMinecraft();
     }
 
     public List<? extends GuiButton> children() {

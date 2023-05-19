@@ -1,26 +1,30 @@
 package de.maxhenkel.voicechat.gui.group;
 
 import com.google.common.collect.Lists;
+import de.maxhenkel.voicechat.MinecraftAccessor;
 import de.maxhenkel.voicechat.Voicechat;
+import de.maxhenkel.voicechat.extensions.GuiExtension;
 import de.maxhenkel.voicechat.gui.GameProfileUtils;
 import de.maxhenkel.voicechat.gui.VoiceChatScreenBase;
 import de.maxhenkel.voicechat.gui.GroupType;
 import de.maxhenkel.voicechat.gui.widgets.ListScreenBase;
 import de.maxhenkel.voicechat.gui.widgets.ListScreenEntryBase;
+import de.maxhenkel.voicechat.util.TextureHelper;
 import de.maxhenkel.voicechat.voice.common.ClientGroup;
 import de.maxhenkel.voicechat.voice.common.PlayerState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.src.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.*;
+import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class JoinGroupEntry extends ListScreenEntryBase {
 
-    protected static final ResourceLocation LOCK = new ResourceLocation(Voicechat.MODID, "textures/icons/lock.png");
+    protected static final String LOCK = TextureHelper.format(Voicechat.MODID, "textures/icons/lock.png");
     protected static final ITextComponent GROUP_MEMBERS = new TextComponentTranslation("message.voicechat.group_members").setStyle(new Style().setColor(TextFormatting.GRAY));
     protected static final ITextComponent NO_GROUP_MEMBERS = new TextComponentTranslation("message.voicechat.no_group_members").setStyle(new Style().setColor(TextFormatting.GRAY));
 
@@ -36,7 +40,7 @@ public class JoinGroupEntry extends ListScreenEntryBase {
 
     public JoinGroupEntry(ListScreenBase parent, Group group) {
         this.parent = parent;
-        this.minecraft = Minecraft.getMinecraft();
+        this.minecraft = MinecraftAccessor.getMinecraft();
         this.group = group;
     }
 
@@ -44,20 +48,20 @@ public class JoinGroupEntry extends ListScreenEntryBase {
     public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, int mouseX, int mouseY, boolean isSelected, float partialTicks) {
         super.drawEntry(slotIndex, x, y, listWidth, slotHeight, mouseX, mouseY, isSelected, partialTicks);
         if (isSelected) {
-            GuiScreen.drawRect(x, y, x + listWidth, y + slotHeight, BG_FILL_SELECTED);
+            parent.drawRect(x, y, x + listWidth, y + slotHeight, BG_FILL_SELECTED);
         } else {
-            GuiScreen.drawRect(x, y, x + listWidth, y + slotHeight, BG_FILL);
+            parent.drawRect(x, y, x + listWidth, y + slotHeight, BG_FILL);
         }
 
         boolean hasPassword = group.group.hasPassword();
 
         if (hasPassword) {
-            GlStateManager.color(1F, 1F, 1F, 1F);
-            minecraft.getTextureManager().bindTexture(LOCK);
-            GuiScreen.drawModalRectWithCustomSizedTexture(x + PADDING, y + slotHeight / 2 - 8, 0, 0, 16, 16, 16, 16);
+            GL11.glColor4f(1F, 1F, 1F, 1F);
+            TextureHelper.bindTexture(LOCK);
+            ((GuiExtension) parent).drawModalRectWithCustomSizedTexture(x + PADDING, y + slotHeight / 2 - 8, 0, 0, 16, 16, 16, 16);
         }
 
-        minecraft.fontRenderer.drawString(group.group.getName(), x + PADDING + (hasPassword ? 16 + PADDING : 0), y + slotHeight / 2 - minecraft.fontRenderer.FONT_HEIGHT / 2, PLAYER_NAME_COLOR);
+        minecraft.fontRenderer.drawString(group.group.getName(), x + PADDING + (hasPassword ? 16 + PADDING : 0), (int) (y + slotHeight / 2 - TextureHelper.FONT_HEIGHT / 2), PLAYER_NAME_COLOR);
 
         int textWidth = minecraft.fontRenderer.getStringWidth(group.group.getName()) + (hasPassword ? 16 + PADDING : 0);
 
@@ -77,17 +81,17 @@ public class JoinGroupEntry extends ListScreenEntryBase {
             int headPosX = x + listWidth - SKIN_SIZE - PADDING - headXIndex * (SKIN_SIZE + 1);
             int headPosY = y + slotHeight / 2 - ((SKIN_SIZE * 2 + 2) / 2) + ((SKIN_SIZE * 2 + 2) / 2) * headYIndex;
 
-            GlStateManager.pushMatrix();
-            GlStateManager.color(1F, 1F, 1F, 1F);
-            minecraft.getTextureManager().bindTexture(GameProfileUtils.getSkin(state.getUuid()));
-            GlStateManager.translate(headPosX, headPosY, 0);
+            GL11.glPushMatrix();
+            GL11.glColor4f(1F, 1F, 1F, 1F);
+            GameProfileUtils.bindSkinTexture(state.getName());
+            GL11.glTranslatef(headPosX, headPosY, 0);
             float scale = (float) SKIN_SIZE / 8F;
-            GlStateManager.scale(scale, scale, scale);
-            GuiScreen.drawModalRectWithCustomSizedTexture(0, 0, 8, 8, 8, 8, 64, 64);
-            GlStateManager.enableBlend();
-            GuiScreen.drawModalRectWithCustomSizedTexture(0, 0, 40, 8, 8, 8, 64, 64);
-            GlStateManager.disableBlend();
-            GlStateManager.popMatrix();
+            GL11.glScalef(scale, scale, scale);
+            ((GuiExtension) parent).drawModalRectWithCustomSizedTexture(0, 0, 8, 8, 8, 8, 64, 64);
+            GL11.glEnable(GL11.GL_BLEND);
+            ((GuiExtension) parent).drawModalRectWithCustomSizedTexture(0, 0, 40, 8, 8, 8, 64, 64);
+            GL11.glDisable(GL11.GL_BLEND);
+            GL11.glPopMatrix();
         }
 
         if (!isSelected) {
@@ -116,7 +120,10 @@ public class JoinGroupEntry extends ListScreenEntryBase {
         }
 
         parent.postRender(() -> {
-            parent.drawHoveringText(tooltip, mouseX, mouseY);
+            for (int i = 0; i < tooltip.size(); i++) {
+                String s = tooltip.get(i);
+                mc.fontRenderer.drawStringWithShadow(s, mouseX, (int) (i * TextureHelper.FONT_HEIGHT + 2) + mouseY, 16777215);
+            }
         });
     }
 

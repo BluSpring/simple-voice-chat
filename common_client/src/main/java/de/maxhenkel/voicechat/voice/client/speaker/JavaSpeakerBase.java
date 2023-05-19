@@ -7,7 +7,7 @@ import de.maxhenkel.voicechat.voice.client.DataLines;
 import de.maxhenkel.voicechat.voice.client.PositionalAudioUtils;
 import de.maxhenkel.voicechat.voice.client.SoundManager;
 import de.maxhenkel.voicechat.voice.common.Utils;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.src.Vec3D;
 
 import javax.annotation.Nullable;
 import javax.sound.sampled.FloatControl;
@@ -41,13 +41,13 @@ public abstract class JavaSpeakerBase implements Speaker {
     }
 
     @Override
-    public void play(short[] data, float volume, @Nullable Vec3d position, @Nullable String category, float maxDistance) {
+    public void play(short[] data, float volume, @Nullable Vec3D position, @Nullable String category, float maxDistance) {
         synchronized (speaker) {
             playInternal(data, volume, position, category, maxDistance);
         }
     }
 
-    private void playInternal(short[] data, float volume, @Nullable Vec3d position, @Nullable String category, float maxDistance) {
+    private void playInternal(short[] data, float volume, @Nullable Vec3D position, @Nullable String category, float maxDistance) {
         if (getAvailableSamples() <= 0) {
             byte[] emptyData = new byte[Math.min(SoundManager.FRAME_SIZE * 4 * VoicechatClient.CLIENT_CONFIG.outputBufferSize.get(), speaker.getBufferSize() - SoundManager.FRAME_SIZE * 4)];
             speaker.write(emptyData, 0, emptyData.length);
@@ -66,7 +66,7 @@ public abstract class JavaSpeakerBase implements Speaker {
         speaker.start();
     }
 
-    protected abstract short[] convertToStereo(short[] data, @Nullable Vec3d position);
+    protected abstract short[] convertToStereo(short[] data, @Nullable Vec3D position);
 
     @Override
     public void close() {
