@@ -63,6 +63,10 @@ public class FabricClientCompatibilityManager extends ClientCompatibilityManager
         renderNameplateEvents.forEach(renderNameplateEvent -> renderNameplateEvent.render(entity, str, x, y, z, maxDistance));
     }
 
+    public void onRenderHUD(float delta) {
+        renderHUDEvents.forEach(renderHUDEvent -> renderHUDEvent.render(delta));
+    }
+
     public void onTickKey() {
         keyboardEvents.forEach(KeyboardEvent::onKeyboardEvent);
     }
