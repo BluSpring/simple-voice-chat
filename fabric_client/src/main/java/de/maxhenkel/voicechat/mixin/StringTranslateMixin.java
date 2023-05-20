@@ -26,9 +26,9 @@ public class StringTranslateMixin {
 
     @Inject(method = "translateKey", at = @At("HEAD"), cancellable = true)
     public void useVoiceChatLangTranslation(String par1, CallbackInfoReturnable<String> cir) {
-        String translation = voiceChatLangTable.getProperty(par1, par1);
+        String translation = voiceChatLangTable.getProperty(par1);
 
-        if (!translation.equals(par1))
-            cir.setReturnValue(par1);
+        if (translation != null)
+            cir.setReturnValue(translation);
     }
 }
