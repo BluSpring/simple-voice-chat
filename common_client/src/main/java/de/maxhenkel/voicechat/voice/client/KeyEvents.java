@@ -47,6 +47,9 @@ public class KeyEvents {
     }
 
     private void handleKeybinds() {
+        if (minecraft.thePlayer == null)
+            return;
+
         ClientVoicechat client = ClientManager.getClient();
         ClientPlayerStateManager playerStateManager = ClientManager.getPlayerStateManager();
         if (((KeyBindingExtension) KEY_VOICE_CHAT).isPressed()) {
