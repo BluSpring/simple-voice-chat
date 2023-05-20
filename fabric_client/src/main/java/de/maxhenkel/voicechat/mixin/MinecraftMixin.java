@@ -4,15 +4,12 @@ import de.maxhenkel.voicechat.FabricVoicechatClientMod;
 import de.maxhenkel.voicechat.MinecraftAccessor;
 import de.maxhenkel.voicechat.intercompatibility.FabricClientCompatibilityManager;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.MinecraftApplet;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import java.awt.*;
 
 @Mixin(Minecraft.class)
 public class MinecraftMixin {
