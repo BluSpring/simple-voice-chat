@@ -144,16 +144,16 @@ public class RenderEvents {
         GL11.glDepthMask(false);
 
         if (!entity.isSneaking()) {
-            GL11.glDisable(GL11.GL_DEPTH);
+            GL11.glDisable(GL11.GL_DEPTH_TEST);
         }
 
         GL11.glEnable(GL11.GL_BLEND);
-        GL14.glBlendFuncSeparate(GL14.GL_BLEND_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
+        GL14.glBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
         int halfNameWidth = minecraft.fontRenderer.getStringWidth(str) / 2;
         GL11.glTranslatef(halfNameWidth, verticalShift - 1F, 0F);
         if (!entity.isSneaking()) {
             drawIcon(texture, true);
-            GL11.glEnable(GL11.GL_DEPTH);
+            GL11.glEnable(GL11.GL_DEPTH_TEST);
         }
 
         GL11.glDepthMask(true);

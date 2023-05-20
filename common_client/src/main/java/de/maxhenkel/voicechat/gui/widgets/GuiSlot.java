@@ -1,5 +1,6 @@
 package de.maxhenkel.voicechat.gui.widgets;
 
+import de.maxhenkel.voicechat.MinecraftAccessor;
 import de.maxhenkel.voicechat.util.MathHelper2;
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.Gui;
@@ -189,12 +190,12 @@ public abstract class GuiSlot {
             }
 
             this.drawSelectionBox(k, l, mouseXIn, mouseYIn, partialTicks);
-            GL11.glDisable(GL11.GL_DEPTH);
+            GL11.glDisable(GL11.GL_DEPTH_TEST);
             this.overlayBackground(0, this.top, 255, 255);
             this.overlayBackground(this.bottom, this.height, 255, 255);
             GL11.glEnable(GL11.GL_BLEND);
-            GL14.glBlendFuncSeparate(GL14.GL_BLEND_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ZERO, GL11.GL_ONE);
-            GL11.glDisable(GL11.GL_ALPHA);
+            GL14.glBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ZERO, GL11.GL_ONE);
+            GL11.glDisable(GL11.GL_ALPHA_TEST);
             GL11.glShadeModel(7425);
             GL11.glDisable(GL11.GL_TEXTURE_2D);
             int i1 = 4;
@@ -286,8 +287,9 @@ public abstract class GuiSlot {
             this.renderDecorations(mouseXIn, mouseYIn);
             GL11.glEnable(GL11.GL_TEXTURE_2D);
             GL11.glShadeModel(7424);
-            GL11.glEnable(GL11.GL_ALPHA);
+            GL11.glEnable(GL11.GL_ALPHA_TEST);
             GL11.glDisable(GL11.GL_BLEND);
+            GL11.glEnable(GL11.GL_DEPTH_TEST);
         }
     }
 
@@ -440,6 +442,7 @@ public abstract class GuiSlot {
                 int j1 = this.left + this.width / 2 + this.getListWidth() / 2;
                 GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
                 GL11.glDisable(GL11.GL_TEXTURE_2D);
+                MinecraftAccessor.checkGLError("disable tex2d dsb");
                 tessellator.startDrawing(7);
                 tessellator.setColorRGBA(128, 128, 128, 255);
                 tessellator.addVertexWithUV((double)i1, (double)(k + l + 2), 0.0D, 0.0D, 1.0D);

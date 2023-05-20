@@ -61,7 +61,7 @@ public class GuiLabel extends Gui {
         if (this.visible)
         {
             GL11.glEnable(GL11.GL_BLEND);
-            GL14.glBlendFuncSeparate(GL14.GL_BLEND_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
+            GL14.glBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
             this.drawLabelBackground(mc, mouseX, mouseY);
             int i = this.y + this.height / 2 + this.border / 2;
             int j = i - this.labels.size() * 10 / 2;
