@@ -29,6 +29,7 @@ repositories {
     maven { url = 'https://repo.viaversion.com/' }
     maven { url = 'https://maven.bluspring.xyz/' }
     mavenLocal()
+    maven { url = "https://mcphackers.github.io/libraries/" }
 }
 
 dependencies {
