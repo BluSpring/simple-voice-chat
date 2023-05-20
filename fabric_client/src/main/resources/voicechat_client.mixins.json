@@ -16,6 +16,7 @@
     "NetHandlerMixin",
     "NetworkManagerAccessor",
     "PacketMixin",
+    "RenderEngineMixin",
     "StringTranslateMixin",
     "TexturePackBaseMixin",
     "TexturePackCustomMixin",
