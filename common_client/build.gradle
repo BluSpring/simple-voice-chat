@@ -63,4 +63,5 @@ dependencies {
 
 
     implementation project(':api')
+    implementation project(path: ":common", configuration: "namedElements")
 }

@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class ClientVoicechat {
+public class ClientVoicechat implements ClientVoicechatApi {
 
     // @Nullable
     // private SoundManager soundManager;

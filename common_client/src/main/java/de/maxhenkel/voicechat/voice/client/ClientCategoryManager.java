@@ -2,9 +2,13 @@ package de.maxhenkel.voicechat.voice.client;
 
 import de.maxhenkel.voicechat.MinecraftAccessor;
 import de.maxhenkel.voicechat.Voicechat;
+import de.maxhenkel.voicechat.api.VolumeCategory;
 import de.maxhenkel.voicechat.gui.volume.AdjustVolumeList;
 import de.maxhenkel.voicechat.intercompatibility.ClientCompatibilityManager;
 import de.maxhenkel.voicechat.intercompatibility.CommonCompatibilityManager;
+import de.maxhenkel.voicechat.net.AddCategoryPacket;
+import de.maxhenkel.voicechat.net.ClientChannel;
+import de.maxhenkel.voicechat.net.RemoveCategoryPacket;
 import de.maxhenkel.voicechat.plugins.CategoryManager;
 import de.maxhenkel.voicechat.plugins.impl.VolumeCategoryImpl;
 import de.maxhenkel.voicechat.util.TextureHelper;
@@ -16,17 +20,17 @@ import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class ClientCategoryManager extends CategoryManager {
+public class ClientCategoryManager extends CategoryManager implements ClientCategoryManagerApi {
 
     protected final Map<String, CustomTextureObject> images;
 
     public ClientCategoryManager() {
         images = new ConcurrentHashMap<>();
-        CommonCompatibilityManager.INSTANCE.getNetManager().addCategoryChannel.setClientListener((client, handler, packet) -> {
+        ((ClientChannel<AddCategoryPacket>) CommonCompatibilityManager.INSTANCE.getNetManager().addCategoryChannel).setClientListener((client, handler, packet) -> {
             addCategory(packet.getCategory());
             Voicechat.logDebug("Added category {}", packet.getCategory().getId());
         });
-        CommonCompatibilityManager.INSTANCE.getNetManager().removeCategoryChannel.setClientListener((client, handler, packet) -> {
+        ((ClientChannel<RemoveCategoryPacket>) CommonCompatibilityManager.INSTANCE.getNetManager().removeCategoryChannel).setClientListener((client, handler, packet) -> {
             removeCategory(packet.getCategoryId());
             Voicechat.logDebug("Removed category {}", packet.getCategoryId());
         });
@@ -34,7 +38,7 @@ public class ClientCategoryManager extends CategoryManager {
     }
 
     @Override
-    public void addCategory(VolumeCategoryImpl category) {
+    public void addCategory(VolumeCategory category) {
         super.addCategory(category);
 
         if (category.getIcon() != null) {
@@ -45,8 +49,8 @@ public class ClientCategoryManager extends CategoryManager {
 
     @Override
     @Nullable
-    public VolumeCategoryImpl removeCategory(String categoryId) {
-        VolumeCategoryImpl volumeCategory = super.removeCategory(categoryId);
+    public VolumeCategory removeCategory(String categoryId) {
+        VolumeCategory volumeCategory = super.removeCategory(categoryId);
         unRegisterImage(categoryId);
         AdjustVolumeList.update();
         return volumeCategory;

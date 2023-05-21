@@ -4,7 +4,6 @@ import de.maxhenkel.voicechat.MinecraftAccessor;
 import de.maxhenkel.voicechat.VoicechatClient;
 import de.maxhenkel.voicechat.util.ActiveRenderInfo;
 import de.maxhenkel.voicechat.voice.client.speaker.AudioType;
-import de.maxhenkel.voicechat.voice.common.Utils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.Vec3D;
 import org.lwjgl.util.vector.Vector2f;

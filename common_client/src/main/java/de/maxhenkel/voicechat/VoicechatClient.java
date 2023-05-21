@@ -35,6 +35,7 @@ public abstract class VoicechatClient {
     public void initializeClient() {
         initializeConfigs();
         //Load instance
+        Voicechat.clientInstance = new VoicechatClientInstance();
         ClientManager.instance();
 
         OpusManager.opusNativeCheck();

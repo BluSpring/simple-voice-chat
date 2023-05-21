@@ -5,6 +5,7 @@ import de.maxhenkel.voicechat.gui.CreateGroupScreen;
 import de.maxhenkel.voicechat.gui.EnterPasswordScreen;
 import de.maxhenkel.voicechat.gui.widgets.ButtonBase;
 import de.maxhenkel.voicechat.gui.widgets.ListScreenBase;
+import de.maxhenkel.voicechat.net.ClientNetManager;
 import de.maxhenkel.voicechat.net.JoinGroupPacket;
 import de.maxhenkel.voicechat.net.NetManager;
 import de.maxhenkel.voicechat.util.TextureHelper;
@@ -90,7 +91,7 @@ public class JoinGroupScreen extends ListScreenBase {
                 if (group.hasPassword()) {
                     mc.displayGuiScreen(new EnterPasswordScreen(group));
                 } else {
-                    NetManager.sendToServer(new JoinGroupPacket(group.getId(), null));
+                    ClientNetManager.sendToServer(new JoinGroupPacket(group.getId(), null));
                 }
                 return;
             }

@@ -10,6 +10,7 @@ import de.maxhenkel.voicechat.gui.tooltips.MuteTooltipSupplier;
 import de.maxhenkel.voicechat.gui.widgets.ImageButton;
 import de.maxhenkel.voicechat.gui.widgets.ListScreenBase;
 import de.maxhenkel.voicechat.gui.widgets.ToggleImageButton;
+import de.maxhenkel.voicechat.net.ClientNetManager;
 import de.maxhenkel.voicechat.net.LeaveGroupPacket;
 import de.maxhenkel.voicechat.net.NetManager;
 import de.maxhenkel.voicechat.util.TextureHelper;
@@ -82,7 +83,7 @@ public class GroupScreen extends ListScreenBase {
         controlList.add(showHUD);
 
         leave = new ImageButton(3, guiLeft + xSize - buttonSize - 7, buttonY, LEAVE, button -> {
-            NetManager.sendToServer(new LeaveGroupPacket());
+            ClientNetManager.sendToServer(new LeaveGroupPacket());
             mc.displayGuiScreen(new JoinGroupScreen());
         }, (button, mouseX, mouseY) -> {
             mc.fontRenderer.drawStringWithShadow(LEAVE_GROUP, mouseX, mouseY, 16777215);

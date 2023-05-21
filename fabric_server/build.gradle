@@ -37,8 +37,7 @@ dependencies {
 
     modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
 
-    implementation project(path: ":common_client", configuration: "namedElements")
-    implementation project(path: ":common_client", configuration: "namedElements")
+    implementation project(path: ":common", configuration: "namedElements")
 
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
 
@@ -58,7 +57,7 @@ dependencies {
 }
 
 tasks.register('generateJava', Copy) {
-    from project(':common_client').file('src/template/java')
+    from project(':common').file('src/template/java')
     into "${buildDir}/generated/java"
     expand 'compatibility_version': mod_compatibility_version
 }
@@ -82,7 +81,7 @@ processResources {
 }
 
 tasks.withType(JavaCompile).configureEach {
-    source(project(':common_client').sourceSets.main.allSource)
+    source(project(':common').sourceSets.main.allSource)
 }
 
 tasks.withType(JavaCompile).configureEach {

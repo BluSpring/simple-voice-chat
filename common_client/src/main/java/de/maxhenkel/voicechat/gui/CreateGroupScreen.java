@@ -5,6 +5,7 @@ import de.maxhenkel.voicechat.extensions.FontRendererExtension;
 import de.maxhenkel.voicechat.extensions.GuiButtonExtension;
 import de.maxhenkel.voicechat.gui.widgets.ButtonBase;
 import de.maxhenkel.voicechat.gui.widgets.GuiTextField;
+import de.maxhenkel.voicechat.net.ClientNetManager;
 import de.maxhenkel.voicechat.net.CreateGroupPacket;
 import de.maxhenkel.voicechat.net.NetManager;
 import de.maxhenkel.voicechat.util.TextureHelper;
@@ -71,7 +72,7 @@ public class CreateGroupScreen extends VoiceChatScreenBase {
 
     private void createGroup() {
         if (!groupName.getText().isEmpty()) {
-            NetManager.sendToServer(new CreateGroupPacket(groupName.getText(), password.getText().isEmpty() ? null : password.getText(), groupType.getType()));
+            ClientNetManager.sendToServer(new CreateGroupPacket(groupName.getText(), password.getText().isEmpty() ? null : password.getText(), groupType.getType()));
         }
     }
 

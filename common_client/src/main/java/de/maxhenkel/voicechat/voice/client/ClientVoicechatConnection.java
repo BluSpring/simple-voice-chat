@@ -9,7 +9,7 @@ import de.maxhenkel.voicechat.voice.common.*;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 
-public class ClientVoicechatConnection extends Thread {
+public class ClientVoicechatConnection extends Thread implements ClientVoicechatConnectionApi {
 
     private ClientVoicechat client;
     private final InitializationData data;

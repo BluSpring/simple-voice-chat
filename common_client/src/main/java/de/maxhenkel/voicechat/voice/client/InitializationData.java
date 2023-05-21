@@ -7,7 +7,7 @@ import de.maxhenkel.voicechat.net.SecretPacket;
 import java.net.URI;
 import java.util.UUID;
 
-public class InitializationData {
+public class InitializationData implements InitializationDataApi {
 
     private final String serverIP;
     private final int serverPort;

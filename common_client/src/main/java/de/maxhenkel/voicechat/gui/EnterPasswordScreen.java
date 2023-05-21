@@ -3,6 +3,7 @@ package de.maxhenkel.voicechat.gui;
 import de.maxhenkel.voicechat.Voicechat;
 import de.maxhenkel.voicechat.gui.widgets.ButtonBase;
 import de.maxhenkel.voicechat.gui.widgets.GuiTextField;
+import de.maxhenkel.voicechat.net.ClientNetManager;
 import de.maxhenkel.voicechat.net.JoinGroupPacket;
 import de.maxhenkel.voicechat.net.NetManager;
 import de.maxhenkel.voicechat.util.TextureHelper;
@@ -53,7 +54,7 @@ public class EnterPasswordScreen extends VoiceChatScreenBase {
 
     private void joinGroup() {
         if (!password.getText().isEmpty()) {
-            NetManager.sendToServer(new JoinGroupPacket(group.getId(), password.getText()));
+            ClientNetManager.sendToServer(new JoinGroupPacket(group.getId(), password.getText()));
         }
     }
 

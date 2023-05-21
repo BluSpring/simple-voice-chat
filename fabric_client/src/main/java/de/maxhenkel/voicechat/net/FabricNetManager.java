@@ -5,10 +5,10 @@ import de.maxhenkel.voicechat.MinecraftAccessor;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 
-public class FabricNetManager extends NetManager {
+public class FabricNetManager extends ClientNetManager {
     @Override
     public <T extends Packet<T>> Channel<T> registerReceiver(Class<T> packetType, boolean toClient, boolean toServer) {
-        Channel<T> c = new Channel<>();
+        ClientChannel<T> c = new ClientChannel<>();
 
         try {
             T dummy = packetType.getDeclaredConstructor().newInstance();
@@ -36,7 +36,7 @@ public class FabricNetManager extends NetManager {
         return c;
     }
 
-    private <T extends Packet<T>> void onClientPacket(Channel<T> channel, T packet) {
+    private <T extends Packet<T>> void onClientPacket(ClientChannel<T> channel, T packet) {
         channel.onClientPacket(MinecraftAccessor.getMinecraft(), MinecraftAccessor.getMinecraft().func_20001_q(), packet);
     }
 }

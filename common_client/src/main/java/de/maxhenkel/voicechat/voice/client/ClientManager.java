@@ -5,9 +5,7 @@ import de.maxhenkel.voicechat.Voicechat;
 import de.maxhenkel.voicechat.extensions.NetClientHandlerExtension;
 import de.maxhenkel.voicechat.intercompatibility.ClientCompatibilityManager;
 import de.maxhenkel.voicechat.intercompatibility.CommonCompatibilityManager;
-import de.maxhenkel.voicechat.net.NetManager;
-import de.maxhenkel.voicechat.net.RequestSecretPacket;
-import de.maxhenkel.voicechat.net.SecretPacket;
+import de.maxhenkel.voicechat.net.*;
 import de.maxhenkel.voicechat.voice.server.Server;
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.EntityPlayerSP;
@@ -54,7 +52,7 @@ public class ClientManager {
             }
         });
 
-        CommonCompatibilityManager.INSTANCE.getNetManager().secretChannel.setClientListener((client, handler, packet) -> authenticate(packet));
+        ((ClientChannel<SecretPacket>) CommonCompatibilityManager.INSTANCE.getNetManager().secretChannel).setClientListener((client, handler, packet) -> authenticate(packet));
     }
 
     private void authenticate(SecretPacket secretPacket) {
@@ -86,7 +84,7 @@ public class ClientManager {
             onDisconnect();
         }
         Voicechat.LOGGER.info("Sending secret request to the server");
-        NetManager.sendToServer(new RequestSecretPacket(Voicechat.COMPATIBILITY_VERSION));
+        ClientNetManager.sendToServer(new RequestSecretPacket(Voicechat.COMPATIBILITY_VERSION));
         client = new ClientVoicechat();
     }
 
@@ -121,7 +119,7 @@ public class ClientManager {
                     connection.disconnect();
                 }
             }
-            NetManager.sendToServer(new RequestSecretPacket(Voicechat.COMPATIBILITY_VERSION));
+            ClientNetManager.sendToServer(new RequestSecretPacket(Voicechat.COMPATIBILITY_VERSION));
         } catch (Exception e) {
             Voicechat.LOGGER.error("Failed to change voice chat port: {}", e.getMessage());
         }
