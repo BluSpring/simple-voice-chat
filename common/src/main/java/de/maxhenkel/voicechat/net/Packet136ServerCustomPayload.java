@@ -61,7 +61,7 @@ public class Packet136ServerCustomPayload extends Packet {
 
     @Override
     public int getPacketSize() {
-        return 20 + this.buf.length;
+        return 64 + this.buf.length;
     }
 
     public byte[] getBuf() {
