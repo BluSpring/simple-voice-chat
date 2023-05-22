@@ -11,11 +11,18 @@ import java.util.List;
 import java.util.UUID;
 
 public class VoicechatServerImpl implements VoicechatServer {
+    public static VoicechatServerImpl instance;
+
     private final MinecraftServer server;
     private final HashMap<UUID, String> uuidToUsernameMap = new HashMap<>();
 
     public VoicechatServerImpl(MinecraftServer server) {
+        instance = this;
         this.server = server;
+    }
+
+    public MinecraftServer getServer() {
+        return this.server;
     }
 
     @Override

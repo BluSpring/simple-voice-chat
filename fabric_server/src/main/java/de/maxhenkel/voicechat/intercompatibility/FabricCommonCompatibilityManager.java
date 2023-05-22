@@ -1,5 +1,6 @@
 package de.maxhenkel.voicechat.intercompatibility;
 
+import de.maxhenkel.voicechat.VoicechatServerImpl;
 import de.maxhenkel.voicechat.api.VoicechatPlugin;
 import de.maxhenkel.voicechat.net.FabricNetManager;
 import de.maxhenkel.voicechat.net.NetManager;
@@ -16,6 +17,8 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 public class FabricCommonCompatibilityManager extends CommonCompatibilityManager {
+    public static FabricCommonCompatibilityManager instance;
+
     private final List<Consumer<Object>> serverStartingEvents;
     private final List<Consumer<Object>> serverStoppingEvents;
     private final List<Consumer<EntityPlayer>> playerLoggedInEvents;
@@ -25,6 +28,8 @@ public class FabricCommonCompatibilityManager extends CommonCompatibilityManager
     private final List<Consumer<UUID>> voicechatDisconnectEvents;
 
     public FabricCommonCompatibilityManager() {
+        instance = this;
+
         serverStartingEvents = new ArrayList<>();
         serverStoppingEvents = new ArrayList<>();
         playerLoggedInEvents = new ArrayList<>();
@@ -32,6 +37,22 @@ public class FabricCommonCompatibilityManager extends CommonCompatibilityManager
         voicechatConnectEvents = new ArrayList<>();
         voicechatCompatibilityCheckSucceededEvents = new ArrayList<>();
         voicechatDisconnectEvents = new ArrayList<>();
+    }
+
+    public void onServerStart() {
+        this.serverStartingEvents.forEach(a -> a.accept(VoicechatServerImpl.instance.getServer()));
+    }
+
+    public void onServerStop() {
+        this.serverStoppingEvents.forEach(a -> a.accept(VoicechatServerImpl.instance.getServer()));
+    }
+
+    public void onPlayerLogIn(EntityPlayer player) {
+        this.playerLoggedInEvents.forEach(a -> a.accept(player));
+    }
+
+    public void onPlayerLogOut(EntityPlayer player) {
+        this.playerLoggedOutEvents.forEach(a -> a.accept(player));
     }
 
     @Override
