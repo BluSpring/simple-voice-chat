@@ -7,8 +7,9 @@
     "EntityMixin",
     "MinecraftServerMixin",
     "NetHandlerMixin",
-    "ServerConfigurationManagerMixin",
-    "NetworkListenThreadAccessor"
+    "NetworkListenThreadAccessor",
+    "PacketMixin",
+    "ServerConfigurationManagerMixin"
   ],
   "client": [
   ]
