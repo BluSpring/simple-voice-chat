@@ -12,6 +12,9 @@ public class Packet135ClientCustomPayload extends Packet {
     private String channel;
     private byte[] buf;
 
+    public Packet135ClientCustomPayload() {}
+
+
     public Packet135ClientCustomPayload(String channel, byte[] buf) {
         this.channel = channel;
         this.buf = buf;
