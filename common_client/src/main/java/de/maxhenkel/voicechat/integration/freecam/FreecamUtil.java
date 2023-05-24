@@ -17,7 +17,7 @@ public class FreecamUtil {
         if (mc.thePlayer == null) {
             return false;
         }
-        return VoicechatClient.CLIENT_CONFIG.freecamSupport.get();
+        return VoicechatClient.CLIENT_CONFIG.freecamSupport.get() && false;
     }
 
     /**
