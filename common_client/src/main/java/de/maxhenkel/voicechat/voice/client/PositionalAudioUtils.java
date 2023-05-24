@@ -53,7 +53,7 @@ public class PositionalAudioUtils {
      * @return a float array of length 2, containing the left and right volume (0-1)
      */
     private static float[] getStereoVolume(Vec3D soundPos) {
-        return getStereoVolume(getCameraPosition(), mc.thePlayer != null ? mc.thePlayer.rotationYaw : 0F, soundPos);
+        return getStereoVolume(getCameraPosition(), mc.thePlayer != null ? -mc.thePlayer.rotationYaw : 0F, soundPos);
     }
 
     /**
@@ -189,8 +189,8 @@ public class PositionalAudioUtils {
     }
 
     public static Vec3D getCameraPosition() {
-        Vec3D vec = mc.thePlayer == null ? Vec3D.createVector(0.0, 0.0, 0.0) : mc.thePlayer.getLookVec();
-        return ActiveRenderInfo.getCameraPosition().addVector(vec.xCoord, vec.yCoord, vec.zCoord);
+        Vec3D vec = mc.thePlayer == null ? Vec3D.createVector(0.0, 0.0, 0.0) : mc.thePlayer.getPosition(1.0f);
+        return vec;
     }
 
 }

@@ -213,7 +213,8 @@ public class AudioChannel extends Thread {
 
             short[] processedMonoData = PluginManager.instance().onReceiveEntityClientSound(uuid, monoData, soundPacket.isWhispering(), soundPacket.getDistance());
 
-            if (FreecamUtil.getDistanceTo(pos) > soundPacket.getDistance() + 1D) {
+            double totalDistance = FreecamUtil.getDistanceTo(pos);
+            if (totalDistance > soundPacket.getDistance() + 1D) {
                 return;
             }
 

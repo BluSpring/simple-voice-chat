@@ -29,7 +29,7 @@ public class FreecamUtil {
         if (mc.thePlayer == null) {
             return Vec3D.createVector(0.0, 0.0, 0.0);
         }
-        return isFreecamEnabled() ? mc.thePlayer.getPosition(1F) : PositionalAudioUtils.getCameraPosition();
+        return mc.thePlayer.getPosition(1F);
     }
 
     /**
