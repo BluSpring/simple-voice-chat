@@ -442,7 +442,6 @@ public abstract class GuiSlot {
                 int j1 = this.left + this.width / 2 + this.getListWidth() / 2;
                 GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
                 GL11.glDisable(GL11.GL_TEXTURE_2D);
-                MinecraftAccessor.checkGLError("disable tex2d dsb");
                 tessellator.startDrawing(7);
                 tessellator.setColorRGBA(128, 128, 128, 255);
                 tessellator.addVertexWithUV((double)i1, (double)(k + l + 2), 0.0D, 0.0D, 1.0D);
