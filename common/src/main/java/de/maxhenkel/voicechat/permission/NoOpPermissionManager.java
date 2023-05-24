@@ -14,12 +14,12 @@ public class NoOpPermissionManager extends PermissionManager {
 
         @Override
         public boolean hasPermission(EntityPlayer player) {
-            return false;
+            return true;
         }
 
         @Override
         public PermissionType getPermissionType() {
-            return PermissionType.NOONE;
+            return PermissionType.EVERYONE;
         }
     }
 }
