@@ -28,7 +28,7 @@ public class Packet135ClientCustomPayload extends Packet {
     public void readPacketData(DataInputStream dataInputStream) {
         try {
             this.channel = dataInputStream.readUTF();
-            int i = dataInputStream.available();
+            int i = dataInputStream.readInt();
 
             if (i >= 0 && i <= 32767) {
                 this.buf = new byte[i];
@@ -47,6 +47,7 @@ public class Packet135ClientCustomPayload extends Packet {
     public void writePacketData(DataOutputStream dataOutputStream) {
         try {
             dataOutputStream.writeUTF(this.channel);
+            dataOutputStream.writeInt(this.buf.length);
             dataOutputStream.write(this.buf);
         } catch (Exception e) {
             e.printStackTrace();
@@ -62,9 +63,22 @@ public class Packet135ClientCustomPayload extends Packet {
         }
     }
 
+    private int utfLength = -1;
+
     @Override
     public int getPacketSize() {
-        return 64 + this.buf.length;
+        if (utfLength == -1) {
+            int strLength = this.channel.length();
+            utfLength = strLength;
+
+            for (int i = 0; i < strLength; i++) {
+                int c = this.channel.charAt(i);
+                if (c >= 0x80 || c == 0)
+                    utfLength += (c >= 0x800) ? 2 : 1;
+            }
+        }
+
+        return utfLength + 4 + this.buf.length;
     }
 
     public byte[] getBuf() {
