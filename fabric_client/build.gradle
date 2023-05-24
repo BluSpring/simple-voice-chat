@@ -47,7 +47,8 @@ dependencies {
     shadow(implementation("de.maxhenkel.rnnoise4j:rnnoise4j:${rnnoise4j_version}"))
     shadow(implementation("org.concentus:Concentus:${concentus_version}"))
     shadow(implementation("de.maxhenkel.opus4j:opus4j:${opus4j_version}"))
-    shadow(implementation("de.maxhenkel.configbuilder:configbuilder:${configbuilder_version}"))
+    // why does this one want to be special
+    include(implementation("de.maxhenkel.configbuilder:configbuilder:${configbuilder_version}"))
 
     shadow(implementation('org.apache.logging.log4j:log4j-api:2.20.0'))
     shadow(implementation('org.apache.logging.log4j:log4j-core:2.20.0'))

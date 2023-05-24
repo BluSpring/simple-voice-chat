@@ -4,30 +4,19 @@ import de.maxhenkel.voicechat.extensions.GuiButtonExtension;
 import net.minecraft.src.GuiButton;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.gen.Accessor;
 
 @Mixin(GuiButton.class)
-public class GuiButtonMixin implements GuiButtonExtension {
-    @Shadow protected int width;
+public abstract class GuiButtonMixin implements GuiButtonExtension {
+    @Accessor
+    public abstract void setWidth(int width);
 
-    @Shadow protected int height;
+    @Accessor
+    public abstract void setHeight(int height);
 
-    @Override
-    public void setWidth(int width) {
-        this.width = width;
-    }
+    @Accessor
+    public abstract int getWidth();
 
-    @Override
-    public void setHeight(int height) {
-        this.height = height;
-    }
-
-    @Override
-    public int getWidth() {
-        return this.width;
-    }
-
-    @Override
-    public int getHeight() {
-        return this.height;
-    }
+    @Accessor
+    public abstract int getHeight();
 }
