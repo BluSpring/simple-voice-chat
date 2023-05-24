@@ -7,8 +7,11 @@ import de.maxhenkel.voicechat.voice.client.ClientVoicechatConnection;
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.Entity;
 import net.minecraft.src.KeyBinding;
+import net.minecraft.src.NetClientHandler;
 import net.minecraft.src.NetworkManager;
 
+import java.net.InetSocketAddress;
+import java.net.Socket;
 import java.net.SocketAddress;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -190,6 +193,27 @@ public class FabricClientCompatibilityManager extends ClientCompatibilityManager
 
     @Override
     public SocketAddress getSocketAddress(NetworkManager connection) {
-        return ((NetworkManagerAccessor) connection).getNetworkSocket().getRemoteSocketAddress();
+        if (connection != null) {
+            Socket socket = ((NetworkManagerAccessor) connection).getNetworkSocket();
+            if (socket != null)
+                return socket.getRemoteSocketAddress();
+        }
+
+        String lastServer = MinecraftAccessor.getMinecraft().gameSettings.lastServer;
+
+        if (lastServer != null) {
+            String[] split = lastServer.replaceAll("_", ":").split(":");
+            String address = split[0];
+            int port;
+            try {
+                port = split.length > 1 ? Integer.parseInt(split[1]) : 25565;
+            } catch (Exception ignored) {
+                port = 25565;
+            }
+
+            return new InetSocketAddress(address, port);
+        }
+
+        return null;
     }
 }
