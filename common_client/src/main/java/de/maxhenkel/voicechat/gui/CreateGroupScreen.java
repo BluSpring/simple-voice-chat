@@ -142,6 +142,11 @@ public class CreateGroupScreen extends VoiceChatScreenBase {
 
     @Override
     public void setWorldAndResolution(Minecraft minecraft, int width, int height) {
+        if (groupName == null || password == null) {
+            super.setWorldAndResolution(minecraft, width, height);
+            return;
+        }
+
         String groupNameText = groupName.getText();
         String passwordText = password.getText();
         super.setWorldAndResolution(minecraft, width, height);

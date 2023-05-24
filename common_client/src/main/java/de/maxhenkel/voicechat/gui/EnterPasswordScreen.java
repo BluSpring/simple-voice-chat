@@ -115,6 +115,11 @@ public class EnterPasswordScreen extends VoiceChatScreenBase {
 
     @Override
     public void setWorldAndResolution(Minecraft minecraft, int width, int height) {
+        if (password == null) {
+            super.setWorldAndResolution(minecraft, width, height);
+            return;
+        }
+
         String passwordText = password.getText();
         super.setWorldAndResolution(minecraft, width, height);
         password.setText(passwordText);
