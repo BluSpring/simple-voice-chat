@@ -1,5 +1,6 @@
 package de.maxhenkel.voicechat.mixin;
 
+import de.maxhenkel.voicechat.MinecraftAccessor;
 import de.maxhenkel.voicechat.extensions.KeyBindingExtension;
 import net.minecraft.src.KeyBinding;
 import org.lwjgl.input.Keyboard;
@@ -14,6 +15,9 @@ public abstract class KeyBindingMixin implements KeyBindingExtension {
 
     @Override
     public boolean isPressed() {
-        return Keyboard.isKeyDown(this.getKeyCode());
+        if (MinecraftAccessor.getMinecraft().currentScreen == null)
+            return false;
+
+        return Keyboard.getEventKey() == this.getKeyCode();
     }
 }
