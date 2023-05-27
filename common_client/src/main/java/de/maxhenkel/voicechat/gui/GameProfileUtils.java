@@ -8,7 +8,10 @@ import de.maxhenkel.voicechat.util.ConnectionUtil;
 import net.minecraft.client.Minecraft;
 
 import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class GameProfileUtils {
 
@@ -51,8 +54,17 @@ public class GameProfileUtils {
         return texturesJson.getAsJsonObject("SKIN").get("url").getAsString();
     }
 
+    private static final Map<String, Integer> usernameToIdMap = new ConcurrentHashMap<>();
+
     public static void bindSkinTexture(String username) {
-        int skinTextureId = mc.renderEngine.getTextureForDownloadableImage(getSkinUrl(username), null);
+        int skinTextureId;
+
+        if (!usernameToIdMap.containsKey(username)) {
+            skinTextureId = mc.renderEngine.getTextureForDownloadableImage(getSkinUrl(username), null);
+            usernameToIdMap.put(username, skinTextureId);
+        } else {
+            skinTextureId = usernameToIdMap.get(username);
+        }
 
         if (skinTextureId >= 0) {
             mc.renderEngine.bindTexture(skinTextureId);
