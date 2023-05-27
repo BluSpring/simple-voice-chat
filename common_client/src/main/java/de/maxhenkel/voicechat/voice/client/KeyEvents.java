@@ -65,7 +65,7 @@ public class KeyEvents {
                     minecraft.displayGuiScreen(new JoinGroupScreen());
                 }
             } else {
-                minecraft.thePlayer.sendChatMessage(StringTranslate.getInstance().translateKey("message.voicechat.groups_disabled"));
+                minecraft.ingameGUI.addChatMessage(StringTranslate.getInstance().translateKey("message.voicechat.groups_disabled"));
             }
         }
 
@@ -102,9 +102,9 @@ public class KeyEvents {
             VoicechatClient.CLIENT_CONFIG.hideIcons.set(hidden).save();
 
             if (hidden) {
-                minecraft.thePlayer.sendChatMessage(StringTranslate.getInstance().translateKey("message.voicechat.icons_hidden"));
+                minecraft.ingameGUI.addChatMessage(StringTranslate.getInstance().translateKey("message.voicechat.icons_hidden"));
             } else {
-                minecraft.thePlayer.sendChatMessage(StringTranslate.getInstance().translateKey("message.voicechat.icons_visible"));
+                minecraft.ingameGUI.addChatMessage(StringTranslate.getInstance().translateKey("message.voicechat.icons_visible"));
             }
         }
     }
@@ -118,7 +118,7 @@ public class KeyEvents {
     }
 
     private void sendUnavailableMessage() {
-        minecraft.thePlayer.sendChatMessage(StringTranslate.getInstance().translateKey("message.voicechat.voice_chat_not_connected"));
+        minecraft.ingameGUI.addChatMessage(StringTranslate.getInstance().translateKey("message.voicechat.voice_chat_not_connected"));
     }
 
 }

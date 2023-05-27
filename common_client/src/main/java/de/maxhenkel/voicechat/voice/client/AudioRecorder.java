@@ -287,7 +287,7 @@ public class AudioRecorder {
         Minecraft mc = MinecraftAccessor.getMinecraft();
         EntityPlayerSP player = mc.thePlayer;
         if (player != null && mc.theWorld != null) {
-            player.sendChatMessage(msg);
+            mc.ingameGUI.addChatMessage(msg);
         } else {
             Voicechat.LOGGER.info("{}", msg);
         }

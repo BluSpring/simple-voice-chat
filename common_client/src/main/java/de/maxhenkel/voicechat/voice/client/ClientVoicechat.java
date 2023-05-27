@@ -152,17 +152,18 @@ public class ClientVoicechat implements ClientVoicechatApi {
         if (recording == (recorder != null)) {
             return false;
         }
-        EntityPlayerSP player = MinecraftAccessor.getMinecraft().thePlayer;
+        Minecraft mc = MinecraftAccessor.getMinecraft();
+        EntityPlayerSP player = mc.thePlayer;
         if (recording) {
             if (connection == null || !connection.getData().allowRecording()) {
                 if (player != null) {
-                    player.sendChatMessage(StringTranslate.getInstance().translateKey("message.voicechat.recording_disabled"));
+                    mc.ingameGUI.addChatMessage(StringTranslate.getInstance().translateKey("message.voicechat.recording_disabled"));
                 }
                 return false;
             }
             recorder = AudioRecorder.create();
             if (player != null) {
-                player.sendChatMessage("§4" + StringTranslate.getInstance().translateKey("message.voicechat.recording_started"));
+                mc.ingameGUI.addChatMessage("§4" + StringTranslate.getInstance().translateKey("message.voicechat.recording_started"));
             }
             return true;
         }
@@ -170,7 +171,7 @@ public class ClientVoicechat implements ClientVoicechatApi {
         AudioRecorder rec = recorder;
         recorder = null;
         if (player != null) {
-            player.sendChatMessage("§4" + StringTranslate.getInstance().translateKey("message.voicechat.recording_stopped"));
+            mc.ingameGUI.addChatMessage("§4" + StringTranslate.getInstance().translateKey("message.voicechat.recording_stopped"));
         }
         rec.saveAndClose();
         return true;

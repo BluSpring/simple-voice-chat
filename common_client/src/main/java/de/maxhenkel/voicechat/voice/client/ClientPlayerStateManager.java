@@ -72,7 +72,7 @@ public class ClientPlayerStateManager implements ClientPlayerStateManagerApi {
                 if (screen instanceof JoinGroupScreen || screen instanceof CreateGroupScreen || screen instanceof EnterPasswordScreen) {
                     MinecraftAccessor.getMinecraft().displayGuiScreen(null);
                 }
-                client.thePlayer.sendChatMessage("§4" + StringTranslate.getInstance().translateKey("message.voicechat.wrong_password"));
+                client.ingameGUI.addChatMessage("§4" + StringTranslate.getInstance().translateKey("message.voicechat.wrong_password"));
             } else if (group != null && screen instanceof JoinGroupScreen || screen instanceof CreateGroupScreen || screen instanceof EnterPasswordScreen) {
                 ClientGroup clientGroup = getGroup();
                 if (clientGroup != null) {
