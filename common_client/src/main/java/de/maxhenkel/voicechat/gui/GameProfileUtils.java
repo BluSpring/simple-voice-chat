@@ -16,8 +16,12 @@ import java.util.concurrent.ConcurrentHashMap;
 public class GameProfileUtils {
 
     private static final Minecraft mc = MinecraftAccessor.getMinecraft();
+    private static final Map<String, String> skinUrlCache = new ConcurrentHashMap<>();
 
     public static String getSkinUrl(String username) {
+        if (skinUrlCache.containsKey(username))
+            return skinUrlCache.get(username);
+
         String data = ConnectionUtil.readText("https://api.mojang.com/users/profiles/minecraft/" + username);
         if (data == null)
             return null;
@@ -51,7 +55,10 @@ public class GameProfileUtils {
         if (!texturesJson.has("SKIN"))
             return null;
 
-        return texturesJson.getAsJsonObject("SKIN").get("url").getAsString();
+        String skinUrl = texturesJson.getAsJsonObject("SKIN").get("url").getAsString();
+        skinUrlCache.put(username, skinUrl);
+
+        return skinUrl;
     }
 
     private static final Map<String, Integer> usernameToIdMap = new ConcurrentHashMap<>();
@@ -71,6 +78,10 @@ public class GameProfileUtils {
         } else {
             mc.renderEngine.bindTexture(mc.renderEngine.getTexture("/mob/char.png"));
         }
+    }
+
+    public static void refreshTextures() {
+        usernameToIdMap.clear();
     }
 
     /*public static ResourceLocation getSkin(UUID uuid) {
