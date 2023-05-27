@@ -76,6 +76,7 @@ public class RenderEvents {
 
     private void renderIcon(String texture) {
         GL11.glPushMatrix();
+        GL11.glColor4f(1F, 1F, 1F, 1F);
         ScaledResolution scaledResolution = new ScaledResolution(minecraft.displayWidth, minecraft.displayHeight);
         TextureHelper.bindTexture(texture);
         int posX = VoicechatClient.CLIENT_CONFIG.hudIconPosX.get();

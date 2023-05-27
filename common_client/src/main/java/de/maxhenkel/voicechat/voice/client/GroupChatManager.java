@@ -67,6 +67,7 @@ public class GroupChatManager {
             }
 
             if (client.getTalkCache().isTalking(state.getUuid())) {
+                GL11.glColor4f(1F, 1F, 1F, 1F);
                 TextureHelper.bindTexture(TALK_OUTLINE);
                 GuiExtension.staticDrawModalRectWithCustomSizedTexture(posX < 0 ? -10 : 0, posY < 0 ? -10 : 0, 0, 0, 10, 10, 16, 16);
             }
