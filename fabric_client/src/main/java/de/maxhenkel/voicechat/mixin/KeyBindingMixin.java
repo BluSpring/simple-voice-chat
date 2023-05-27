@@ -15,7 +15,7 @@ public abstract class KeyBindingMixin implements KeyBindingExtension {
 
     @Override
     public boolean isPressed() {
-        if (MinecraftAccessor.getMinecraft().currentScreen == null)
+        if (MinecraftAccessor.getMinecraft().currentScreen != null)
             return false;
 
         return Keyboard.getEventKey() == this.getKeyCode();
