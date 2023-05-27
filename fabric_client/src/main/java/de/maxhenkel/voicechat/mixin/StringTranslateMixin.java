@@ -5,6 +5,7 @@ import net.minecraft.src.StringTranslate;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -22,6 +23,16 @@ public class StringTranslateMixin {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Redirect(method = "translateKeyFormat", at = @At(value = "INVOKE", target = "Ljava/util/Properties;getProperty(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;"))
+    public String useVoiceChatLangTranslationInFormat(Properties instance, String key, String defaultValue) {
+        String translation = voiceChatLangTable.getProperty(key);
+
+        if (translation != null)
+            return translation;
+        else
+            return instance.getProperty(key, defaultValue);
     }
 
     @Inject(method = "translateKey", at = @At("HEAD"), cancellable = true)
