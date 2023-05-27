@@ -16,6 +16,7 @@ import de.maxhenkel.voicechat.util.TextureHelper;
 import de.maxhenkel.voicechat.voice.client.*;
 import de.maxhenkel.voicechat.voice.common.ClientGroup;
 import net.minecraft.src.StringTranslate;
+import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -138,8 +139,10 @@ public class VoiceChatScreen extends VoiceChatScreenBase {
 
     @Override
     public void renderBackground(int mouseX, int mouseY, float delta) {
+        GL11.glDisable(GL11.GL_SHADE_MODEL);
         TextureHelper.bindTexture(TEXTURE);
         drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
+        GL11.glEnable(GL11.GL_SHADE_MODEL);
     }
 
     @Override
