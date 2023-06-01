@@ -139,6 +139,7 @@ public class VoiceChatScreen extends VoiceChatScreenBase {
 
     @Override
     public void renderBackground(int mouseX, int mouseY, float delta) {
+        GL11.glColor4f(1F, 1F, 1F, 1F);
         TextureHelper.bindTexture(TEXTURE);
         drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
     }
