@@ -25,7 +25,11 @@ public class ImageButton extends ButtonBase {
         this.onPress.onPress(this);
     }
 
-    protected void renderImage(int x, int y) {
+    protected void renderImage(int mouseX, int mouseY) {
+        // oh.
+        int x = xPosition;
+        int y = yPosition;
+
         TextureHelper.bindTexture(texture);
         ((GuiExtension) this).drawModalRectWithCustomSizedTexture(x + 2, y + 2, 0, 0, 16, 16, 16, 16);
     }
