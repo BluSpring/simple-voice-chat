@@ -50,7 +50,7 @@ public class GuiEnhancedControls extends GuiScreen {
                 maxPage++;
             }
 
-            this.scrollableList.add(new GuiSmallButton(i, buttonWidth + j % 2 * 160, y, 70, 20, this.options.getOptionDisplayString(i)));
+            this.scrollableList.add(new GuiSmallButton(i, buttonWidth + j % 2 * 160, y, 70, 20, this.getOptionDisplayString(i)));
             j++;
         }
 
@@ -60,6 +60,10 @@ public class GuiEnhancedControls extends GuiScreen {
         this.controlList.add(new GuiSmallButton(203, this.width / 2 + 60, this.height / 6 + 138, 20, 20, ">"));
     }
 
+    private String getOptionDisplayString(int id) {
+        return Keyboard.getKeyName(this.mergedKeyBindings.get(id).keyCode);
+    }
+
     @Override
     public void onGuiClosed() {
         KeyBindingHelper.saveKeyBindings();
@@ -67,7 +71,7 @@ public class GuiEnhancedControls extends GuiScreen {
 
     protected void actionPerformed(GuiButton guiButton) {
         for(int var2 = 0; var2 < this.mergedKeyBindings.size(); ++var2) {
-            (this.scrollableList.get(var2)).displayString = this.options.getOptionDisplayString(var2);
+            (this.scrollableList.get(var2)).displayString = this.getOptionDisplayString(var2);
         }
 
         if (guiButton.id == 200) { // Ok
@@ -83,7 +87,7 @@ public class GuiEnhancedControls extends GuiScreen {
             }
         } else {
             this.buttonId = guiButton.id;
-            guiButton.displayString = "> " + this.options.getOptionDisplayString(guiButton.id) + " <";
+            guiButton.displayString = "> " + this.getOptionDisplayString(guiButton.id) + " <";
         }
 
     }
@@ -94,7 +98,7 @@ public class GuiEnhancedControls extends GuiScreen {
                 i = Keyboard.KEY_NONE;
 
             this.setKeyBinding(this.buttonId, i);
-            (this.scrollableList.get(this.buttonId)).displayString = this.options.getOptionDisplayString(this.buttonId);
+            (this.scrollableList.get(this.buttonId)).displayString = this.getOptionDisplayString(this.buttonId);
             this.buttonId = -1;
         } else {
             super.keyTyped(c, i);
