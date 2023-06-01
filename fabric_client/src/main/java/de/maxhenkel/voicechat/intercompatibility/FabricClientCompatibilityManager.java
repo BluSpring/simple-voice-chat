@@ -3,6 +3,7 @@ package de.maxhenkel.voicechat.intercompatibility;
 import de.maxhenkel.voicechat.MinecraftAccessor;
 import de.maxhenkel.voicechat.extensions.NetClientHandlerExtension;
 import de.maxhenkel.voicechat.mixin.NetworkManagerAccessor;
+import de.maxhenkel.voicechat.util.KeyBindingHelper;
 import de.maxhenkel.voicechat.voice.client.ClientVoicechatConnection;
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.Entity;
@@ -140,11 +141,7 @@ public class FabricClientCompatibilityManager extends ClientCompatibilityManager
         if (minecraft == null)
             minecraft = MinecraftAccessor.getMinecraft();
 
-        KeyBinding[] oldArray = minecraft.gameSettings.keyBindings;
-        KeyBinding[] newArray = Arrays.copyOf(oldArray, oldArray.length + 1);
-        newArray[oldArray.length] = keyBinding;
-
-        minecraft.gameSettings.keyBindings = newArray;
+        KeyBindingHelper.registerKeyBinding(keyBinding);
 
         return keyBinding;
     }

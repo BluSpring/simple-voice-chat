@@ -1,5 +1,6 @@
 package de.maxhenkel.voicechat.gui;
 
+import de.maxhenkel.voicechat.util.KeyBindingHelper;
 import net.minecraft.src.*;
 import org.lwjgl.input.Keyboard;
 
@@ -51,6 +52,11 @@ public class GuiEnhancedControls extends GuiScreen {
         this.controlList.add(new GuiSmallButton(203, this.width / 2 + 60, this.height / 6 + 138, 20, 20, ">"));
     }
 
+    @Override
+    public void onGuiClosed() {
+        KeyBindingHelper.saveKeyBindings();
+    }
+
     protected void actionPerformed(GuiButton guiButton) {
         for(int var2 = 0; var2 < this.options.keyBindings.length; ++var2) {
             (this.scrollableList.get(var2)).displayString = this.options.getOptionDisplayString(var2);
@@ -58,6 +64,7 @@ public class GuiEnhancedControls extends GuiScreen {
 
         if (guiButton.id == 200) { // Ok
             this.mc.displayGuiScreen(this.parent);
+            KeyBindingHelper.saveKeyBindings();
         } else if (guiButton.id == 201) { // Back
             if (currentPage > 0) {
                 currentPage--;
