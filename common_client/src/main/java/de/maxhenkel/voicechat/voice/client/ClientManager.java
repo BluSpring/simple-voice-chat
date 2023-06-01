@@ -89,10 +89,7 @@ public class ClientManager {
     }
 
     public static void sendPlayerError(String translationKey, @Nullable Exception e) {
-        EntityPlayerSP player = MinecraftAccessor.getMinecraft().thePlayer;
-        if (player == null) {
-            return;
-        }
+        MinecraftAccessor.getMinecraft().ingameGUI.addChatMessage(StringTranslate.getInstance().translateKeyFormat(translationKey, e.getMessage()));
     }
 
     private void onDisconnect() {
