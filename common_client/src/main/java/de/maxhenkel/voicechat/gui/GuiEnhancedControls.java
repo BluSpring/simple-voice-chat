@@ -64,6 +64,11 @@ public class GuiEnhancedControls extends GuiScreen {
         return Keyboard.getKeyName(this.mergedKeyBindings.get(id).keyCode);
     }
 
+    private String getKeyBindingDescription(int id) {
+        StringTranslate translate = StringTranslate.getInstance();
+        return translate.translateKey(this.mergedKeyBindings.get(id).keyDescription);
+    }
+
     @Override
     public void onGuiClosed() {
         KeyBindingHelper.saveKeyBindings();
@@ -142,7 +147,7 @@ public class GuiEnhancedControls extends GuiScreen {
 
             GuiButton button = this.scrollableList.get(var5);
             button.drawButton(mc, i, j);
-            this.drawString(this.fontRenderer, this.options.getKeyBindingDescription(var5), buttonWidth + var5 % 2 * 160 + 70 + 6, button.yPosition + 7, -1);
+            this.drawString(this.fontRenderer, this.getKeyBindingDescription(var5), buttonWidth + var5 % 2 * 160 + 70 + 6, button.yPosition + 7, -1);
         }
 
         this.drawCenteredString(this.fontRenderer, String.format("%d / %d", currentPage + 1, maxPage + 1), this.width / 2, this.height / 6 + 148 - 4, 16777215);
