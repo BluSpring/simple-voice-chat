@@ -4,6 +4,7 @@ import de.maxhenkel.voicechat.util.KeyBindingHelper;
 import net.minecraft.src.*;
 import org.lwjgl.input.Keyboard;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -23,8 +24,15 @@ public class GuiEnhancedControls extends GuiScreen {
 
     private int splitEvery = 10;
 
+    private final List<KeyBinding> mergedKeyBindings = new LinkedList<>();
+
     @Override
     public void initGui() {
+        mergedKeyBindings.clear();
+
+        mergedKeyBindings.addAll(Arrays.asList(this.options.keyBindings));
+        mergedKeyBindings.addAll(KeyBindingHelper.getKeyBindings());
+
         maxPage = 0;
         currentPage = 0;
 
@@ -33,7 +41,7 @@ public class GuiEnhancedControls extends GuiScreen {
 
         int baseY = this.height / 6;
         int j = 0;
-        for (int i = 0; i < this.options.keyBindings.length; ++i) {
+        for (int i = 0; i < this.mergedKeyBindings.size(); ++i) {
             int y = baseY + 24 * (j >> 1);
 
             if (splitEvery == j) {
@@ -58,7 +66,7 @@ public class GuiEnhancedControls extends GuiScreen {
     }
 
     protected void actionPerformed(GuiButton guiButton) {
-        for(int var2 = 0; var2 < this.options.keyBindings.length; ++var2) {
+        for(int var2 = 0; var2 < this.mergedKeyBindings.size(); ++var2) {
             (this.scrollableList.get(var2)).displayString = this.options.getOptionDisplayString(var2);
         }
 
@@ -85,12 +93,19 @@ public class GuiEnhancedControls extends GuiScreen {
             if (i == Keyboard.KEY_ESCAPE) // add the ability to not assign keys
                 i = Keyboard.KEY_NONE;
 
-            this.options.setKeyBinding(this.buttonId, i);
+            this.setKeyBinding(this.buttonId, i);
             (this.scrollableList.get(this.buttonId)).displayString = this.options.getOptionDisplayString(this.buttonId);
             this.buttonId = -1;
         } else {
             super.keyTyped(c, i);
         }
+    }
+
+    private void setKeyBinding(int id, int keyCode) {
+        this.mergedKeyBindings.get(id).keyCode = keyCode;
+
+        KeyBindingHelper.saveKeyBindings();
+        this.options.saveOptions();
     }
 
     @Override
@@ -117,7 +132,7 @@ public class GuiEnhancedControls extends GuiScreen {
         this.drawCenteredString(this.fontRenderer, "Controls", this.width / 2, 20, 16777215);
         int buttonWidth = this.width / 2 - 155;
 
-        for(int var5 = 0; var5 < this.options.keyBindings.length; ++var5) {
+        for(int var5 = 0; var5 < this.mergedKeyBindings.size(); ++var5) {
             if (!isItemVisible(var5))
                 continue;
 
