@@ -35,12 +35,4 @@ public class MinecraftMixin {
             FabricClientCompatibilityManager.getInstance().onDisconnect();
         }
     }
-
-    @Inject(method = "checkGLError", at = @At(value = "INVOKE", target = "Ljava/io/PrintStream;println(Ljava/lang/String;)V", ordinal = 2, shift = At.Shift.AFTER))
-    public void addStackTrace(String par1, CallbackInfo ci) {
-        StackTraceElement[] es2 = Thread.currentThread().getStackTrace();
-        for (StackTraceElement e2 : es2) {
-            System.out.println(" in class:" + e2.getClassName() + " in source file:" + e2.getFileName() + " in method:" + e2.getMethodName() + " at line:" + e2.getLineNumber() + " " + (e2.isNativeMethod() ? "native" : ""));
-        }
-    }
 }
