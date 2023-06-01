@@ -4,6 +4,7 @@ import de.maxhenkel.voicechat.gui.widgets.ButtonBase;
 import de.maxhenkel.voicechat.util.TextureHelper;
 import net.minecraft.src.GuiButton;
 import net.minecraft.src.GuiScreen;
+import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -41,6 +42,7 @@ public abstract class VoiceChatScreenBase extends GuiScreen {
     @Override
     public void drawScreen(int mouseX, int mouseY, float delta) {
         drawDefaultBackground();
+        GL11.glColor4f(1F, 1F, 1F, 1F);
         renderBackground(mouseX, mouseY, delta);
         super.drawScreen(mouseX, mouseY, delta);
         renderForeground(mouseX, mouseY, delta);
