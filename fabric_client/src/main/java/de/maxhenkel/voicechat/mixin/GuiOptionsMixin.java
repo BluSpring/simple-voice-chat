@@ -15,7 +15,7 @@ public abstract class GuiOptionsMixin {
     @Accessor
     public abstract GameSettings getOptions();
 
-    @Redirect(method = "actionPerformed", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;displayGuiScreen(Lnet/minecraft/src/GuiScreen;)V", ordinal = 0))
+    @Redirect(method = "actionPerformed", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;displayGuiScreen(Lnet/minecraft/src/GuiScreen;)V", ordinal = 1))
     public void useEnhancedControls(Minecraft instance, GuiScreen guiScreen) {
         instance.displayGuiScreen(new GuiEnhancedControls((GuiOptions) (Object) this, this.getOptions()));
     }
