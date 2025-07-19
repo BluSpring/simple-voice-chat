@@ -17,7 +17,7 @@ public abstract class PacketMixin {
 
     @Inject(method = "<clinit>", at = @At("TAIL"))
     private static void registerCustomPayloadPackets(CallbackInfo ci) {
-        invokeAddIdClassMapping(135, true, false, Packet135ClientCustomPayload.class);
-        invokeAddIdClassMapping(136, false, true, Packet136ServerCustomPayload.class);
+        invokeAddIdClassMapping(135, true, true, Packet135ClientCustomPayload.class);
+        invokeAddIdClassMapping(136, true, true, Packet136ServerCustomPayload.class);
     }
 }
