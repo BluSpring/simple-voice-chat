@@ -118,6 +118,7 @@ public class GuiEnhancedControls extends GuiScreen {
         this.mergedKeyBindings.get(id).keyCode = keyCode;
 
         KeyBindingHelper.saveKeyBindings();
+        KeyBinding.resetKeyBindingArrayAndHash();
         this.options.saveOptions();
     }
 
@@ -125,7 +126,7 @@ public class GuiEnhancedControls extends GuiScreen {
     protected void mouseClicked(int i, int j, int k) {
         if (this.buttonId >= 0) {
             this.setKeyBinding(this.buttonId, -100 + k);
-            (this.scrollableList.get(this.buttonId)).displayString = this.options.getOptionDisplayString(this.buttonId);
+            (this.scrollableList.get(this.buttonId)).displayString = this.getOptionDisplayString(this.buttonId);
             this.buttonId = -1;
             KeyBinding.resetKeyBindingArrayAndHash();
             return;
