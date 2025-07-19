@@ -69,7 +69,7 @@ public abstract class ListScreenListBase<T extends ListScreenEntryBase> extends 
 
     @Override
     public void drawScreen(int mouseXIn, int mouseYIn, float partialTicks) {
-        ScaledResolution scaledResolution = new ScaledResolution(mc.displayWidth, mc.displayHeight);
+        ScaledResolution scaledResolution = new ScaledResolution(mc.gameSettings, mc.displayWidth, mc.displayHeight);
         double scale = scaledResolution.scaleFactor;
         enableScissor((int) ((double) getRowLeft() * scale), (int) ((double) (height - bottom) * scale), (int) ((double) (getScrollBarX() + 6) * scale), (int) ((double) (height - (height - bottom + 4) - top + 4) * scale));
         super.drawScreen(mouseXIn, mouseYIn, partialTicks);

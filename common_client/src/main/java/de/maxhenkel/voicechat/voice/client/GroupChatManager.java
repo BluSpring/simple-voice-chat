@@ -29,7 +29,7 @@ public class GroupChatManager {
             return;
         }
         Minecraft mc = MinecraftAccessor.getMinecraft();
-        ScaledResolution scaledResolution = new ScaledResolution(mc.displayWidth, mc.displayHeight);
+        ScaledResolution scaledResolution = new ScaledResolution(mc.gameSettings, mc.displayWidth, mc.displayHeight);
 
         List<PlayerState> groupMembers = getGroupMembers(VoicechatClient.CLIENT_CONFIG.showOwnGroupIcon.get());
 

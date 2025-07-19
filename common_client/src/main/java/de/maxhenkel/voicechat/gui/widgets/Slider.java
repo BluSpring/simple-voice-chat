@@ -22,7 +22,7 @@ public abstract class Slider extends GuiButton {
 
     @Override
     protected void mouseDragged(Minecraft mc, int mouseX, int mouseY) {
-        if (!enabled2) {
+        if (!enabled) {
             return;
         }
         if (dragging) {

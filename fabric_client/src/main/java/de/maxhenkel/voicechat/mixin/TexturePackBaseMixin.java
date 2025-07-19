@@ -11,7 +11,7 @@ import java.io.InputStream;
 
 @Mixin(TexturePackBase.class)
 public class TexturePackBaseMixin {
-    @Inject(method = "func_6481_a", at = @At("RETURN"), cancellable = true)
+    @Inject(method = "getResourceAsStream", at = @At("RETURN"), cancellable = true)
     public void checkVoiceChatTexturesIfNull(String par1, CallbackInfoReturnable<InputStream> cir) {
         if (cir.getReturnValue() == null) {
             cir.setReturnValue(Voicechat.class.getResourceAsStream(par1));

@@ -59,7 +59,7 @@ public class GuiSliderModern extends GuiButton {
 
     protected void mouseDragged(Minecraft mc, int mouseX, int mouseY)
     {
-        if (this.enabled2)
+        if (this.enabled)
         {
             if (this.isMouseDown)
             {

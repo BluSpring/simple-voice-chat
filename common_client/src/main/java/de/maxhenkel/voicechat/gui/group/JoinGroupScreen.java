@@ -87,7 +87,7 @@ public class JoinGroupScreen extends ListScreenBase {
         for (JoinGroupEntry entry : groupList.children()) {
             if (entry.isSelected()) {
                 ClientGroup group = entry.getGroup().getGroup();
-                mc.sndManager.func_337_a("random.click", 1F, 1F);
+                mc.sndManager.playSoundFX("random.click", 1F, 1F);
                 if (group.hasPassword()) {
                     mc.displayGuiScreen(new EnterPasswordScreen(group));
                 } else {

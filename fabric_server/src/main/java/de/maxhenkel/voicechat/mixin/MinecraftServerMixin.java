@@ -12,12 +12,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(MinecraftServer.class)
 public class MinecraftServerMixin {
-    @Inject(method = "func_6008_d", at = @At("TAIL"))
+    @Inject(method = "startServer", at = @At("TAIL"))
     public void serverStart(CallbackInfoReturnable<Boolean> cir) {
         FabricCommonCompatibilityManager.instance.onServerStart();
     }
 
-    @Inject(method = "func_6013_g", at = @At("HEAD"))
+    @Inject(method = "stopServer", at = @At("HEAD"))
     public void serverStop(CallbackInfo ci) {
         FabricCommonCompatibilityManager.instance.onServerStop();
     }

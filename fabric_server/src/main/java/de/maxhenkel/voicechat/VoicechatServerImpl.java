@@ -62,6 +62,6 @@ public class VoicechatServerImpl implements VoicechatServer {
 
     @Override
     public String getServerIp() {
-        return ((NetworkListenThreadAccessor) server.field_6036_c).getServerSocket().getInetAddress().getHostAddress();
+        return ((NetworkListenThreadAccessor) server.networkServer).getServerSocket().getInetAddress().getHostAddress();
     }
 }

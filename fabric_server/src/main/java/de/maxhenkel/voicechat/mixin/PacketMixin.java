@@ -13,11 +13,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(Packet.class)
 public abstract class PacketMixin {
     @Invoker
-    private static void invokeAddIdClassMapping(int i, Class class_) {}
+    private static void invokeAddIdClassMapping(int i, boolean toClient, boolean toServer, Class class_) {}
 
     @Inject(method = "<clinit>", at = @At("TAIL"))
     private static void registerCustomPayloadPackets(CallbackInfo ci) {
-        invokeAddIdClassMapping(135, Packet135ClientCustomPayload.class);
-        invokeAddIdClassMapping(136, Packet136ServerCustomPayload.class);
+        invokeAddIdClassMapping(135, true, false, Packet135ClientCustomPayload.class);
+        invokeAddIdClassMapping(136, false, true, Packet136ServerCustomPayload.class);
     }
 }

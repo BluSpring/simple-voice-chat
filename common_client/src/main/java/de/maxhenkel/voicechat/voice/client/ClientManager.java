@@ -64,7 +64,7 @@ public class ClientManager {
         if (client.getConnection() != null) {
             ClientCompatibilityManager.INSTANCE.emitVoiceChatDisconnectedEvent();
         }
-        NetClientHandler connection = minecraft.func_20001_q();
+        NetClientHandler connection = minecraft.getSendQueue();
         if (connection != null) {
             try {
                 SocketAddress socketAddress = ClientCompatibilityManager.INSTANCE.getSocketAddress(((NetClientHandlerExtension) connection).getNetworkManager());

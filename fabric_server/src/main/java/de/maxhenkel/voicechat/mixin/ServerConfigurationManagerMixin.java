@@ -22,13 +22,8 @@ public class ServerConfigurationManagerMixin {
         FabricCommonCompatibilityManager.instance.onPlayerLogOut(par1);
     }
 
-    @Inject(method = "func_9242_d", at = @At("HEAD"))
-    public void onPlayerDeath(EntityPlayerMP par1, CallbackInfoReturnable<EntityPlayerMP> cir) {
-        FabricCommonCompatibilityManager.instance.onPlayerLogOut(par1);
-    }
-
-    @Inject(method = "func_9242_d", at = @At("RETURN"))
-    public void onPlayerRespawn(EntityPlayerMP par1, CallbackInfoReturnable<EntityPlayerMP> cir) {
+    @Inject(method = "recreatePlayerEntity", at = @At("RETURN"))
+    public void onPlayerRespawn(EntityPlayerMP i, int bl, boolean par3, CallbackInfoReturnable<EntityPlayerMP> cir) {
         FabricCommonCompatibilityManager.instance.onPlayerLogIn(cir.getReturnValue());
     }
 }

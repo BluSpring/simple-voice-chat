@@ -155,7 +155,7 @@ public class GuiPageButtonList extends GuiListExtended {
     {
         if (p_178066_1_ instanceof GuiButton)
         {
-            ((GuiButton)p_178066_1_).enabled2 = p_178066_2_;
+            ((GuiButton)p_178066_1_).enabled = p_178066_2_;
         }
         else if (p_178066_1_ instanceof GuiTextField)
         {
@@ -227,14 +227,14 @@ public class GuiPageButtonList extends GuiListExtended {
     private GuiSliderModern createSlider(int x, int y, GuiPageButtonList.GuiSlideEntry p_178067_3_)
     {
         GuiSliderModern GuiSliderModern = new GuiSliderModern(this.responder, p_178067_3_.getId(), x, y, p_178067_3_.getCaption(), p_178067_3_.getMinValue(), p_178067_3_.getMaxValue(), p_178067_3_.getInitalValue(), p_178067_3_.getFormatter());
-        GuiSliderModern.enabled2 = p_178067_3_.shouldStartVisible();
+        GuiSliderModern.enabled = p_178067_3_.shouldStartVisible();
         return GuiSliderModern;
     }
 
     private GuiListButton createButton(int p_178065_1_, int p_178065_2_, GuiPageButtonList.GuiButtonEntry p_178065_3_)
     {
         GuiListButton guilistbutton = new GuiListButton(this.responder, p_178065_3_.getId(), p_178065_1_, p_178065_2_, p_178065_3_.getCaption(), p_178065_3_.getInitialValue());
-        guilistbutton.enabled2 = p_178065_3_.shouldStartVisible();
+        guilistbutton.enabled = p_178065_3_.shouldStartVisible();
         return guilistbutton;
     }
 

@@ -1,3 +1,11 @@
+allprojects {
+    repositories {
+        maven {
+            url = "https://maven.glass-launcher.net/releases/"
+        }
+    }
+}
+
 task publishBukkit(type: GradleBuild) {
     group = 'voicechat'
     tasks = [

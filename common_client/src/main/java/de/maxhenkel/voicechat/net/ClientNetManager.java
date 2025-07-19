@@ -19,7 +19,7 @@ public abstract class ClientNetManager extends NetManager {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        NetClientHandler connection = MinecraftAccessor.getMinecraft().func_20001_q();
+        NetClientHandler connection = MinecraftAccessor.getMinecraft().getSendQueue();
         if (connection != null) {
             connection.addToSendQueue(new Packet135ClientCustomPayload(packet.getIdentifier().toString(), outputStream.toByteArray()));
         }

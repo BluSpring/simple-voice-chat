@@ -26,7 +26,7 @@ public class FabricNetManager extends NetManager {
                         DataInputStream stream = new DataInputStream(inputStream);
                         vcPacket.fromBytes(stream);
 
-                        c.onServerPacket(player, ((EntityPlayerMP) player).field_20908_a, vcPacket);
+                        c.onServerPacket(player, ((EntityPlayerMP) player).playerNetServerHandler, vcPacket);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

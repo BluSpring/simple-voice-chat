@@ -37,6 +37,6 @@ public class FabricNetManager extends ClientNetManager {
     }
 
     private <T extends Packet<T>> void onClientPacket(ClientChannel<T> channel, T packet) {
-        channel.onClientPacket(MinecraftAccessor.getMinecraft(), MinecraftAccessor.getMinecraft().func_20001_q(), packet);
+        channel.onClientPacket(MinecraftAccessor.getMinecraft(), MinecraftAccessor.getMinecraft().getSendQueue(), packet);
     }
 }

@@ -123,7 +123,7 @@ public class GuiEnhancedControls extends GuiScreen {
             for(int var4 = 0; var4 < this.scrollableList.size(); ++var4) {
                 GuiButton var5 = this.scrollableList.get(var4);
                 if (this.isItemVisible(var4) && var5.mousePressed(this.mc, i, j)) {
-                    this.mc.sndManager.func_337_a("random.click", 1.0F, 1.0F);
+                    this.mc.sndManager.playSoundFX("random.click", 1.0F, 1.0F);
                     this.actionPerformed(var5);
                 }
             }

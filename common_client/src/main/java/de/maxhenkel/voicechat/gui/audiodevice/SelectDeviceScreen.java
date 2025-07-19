@@ -99,7 +99,7 @@ public abstract class SelectDeviceScreen extends ListScreenBase {
         for (AudioDeviceEntry entry : deviceList.children()) {
             if (entry.isSelected()) {
                 if (!getSelectedDevice().equals(entry.getDevice())) {
-                    mc.sndManager.func_337_a("random.click", 1F, 1F);
+                    mc.sndManager.playSoundFX("random.click", 1F, 1F);
                     onSelect(entry.getDevice());
                     return;
                 }
