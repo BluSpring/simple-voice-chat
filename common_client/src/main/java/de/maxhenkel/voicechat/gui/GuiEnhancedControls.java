@@ -61,7 +61,11 @@ public class GuiEnhancedControls extends GuiScreen {
     }
 
     private String getOptionDisplayString(int id) {
-        return Keyboard.getKeyName(this.mergedKeyBindings.get(id).keyCode);
+        int keyCode = this.mergedKeyBindings.get(id).keyCode;
+        if (keyCode == -1 || keyCode == -100)
+            return "(none)";
+
+        return Keyboard.getKeyName(keyCode);
     }
 
     private String getKeyBindingDescription(int id) {
