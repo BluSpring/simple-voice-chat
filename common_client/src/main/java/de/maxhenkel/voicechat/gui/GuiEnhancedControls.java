@@ -123,6 +123,14 @@ public class GuiEnhancedControls extends GuiScreen {
 
     @Override
     protected void mouseClicked(int i, int j, int k) {
+        if (this.buttonId >= 0) {
+            this.setKeyBinding(this.buttonId, -100 + k);
+            (this.scrollableList.get(this.buttonId)).displayString = this.options.getOptionDisplayString(this.buttonId);
+            this.buttonId = -1;
+            KeyBinding.resetKeyBindingArrayAndHash();
+            return;
+        }
+
         if (k == 0) {
             for(int var4 = 0; var4 < this.scrollableList.size(); ++var4) {
                 GuiButton var5 = this.scrollableList.get(var4);
