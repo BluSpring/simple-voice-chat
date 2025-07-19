@@ -62,7 +62,7 @@ public class GuiEnhancedControls extends GuiScreen {
 
     private String getOptionDisplayString(int id) {
         try {
-            return Keyboard.getKeyName(this.mergedKeyBindings.get(id).keyCode);
+            return GameSettings.func_41085_c(this.mergedKeyBindings.get(id).keyCode);
         } catch (Throwable e) {
             return "(unknown)";
         }
