@@ -64,9 +64,9 @@ public class GroupEntry extends ListScreenEntryBase {
         //TextureHelper.bindTexture(GameProfileUtils.getSkin(state.getUuid()));
         GameProfileUtils.bindSkinTexture(state.getName());
 
-        ((GuiExtension) parent).drawScaledCustomSizeModalRect(1, 1, 8F, 8F, 8, 8, 8, 8, 64F, 64F);
+        ((GuiExtension) parent).drawScaledCustomSizeModalRect(1, 1, 8F, 8F, 8, 8, 8, 8, 64F, 32F);
         GL11.glEnable(GL11.GL_BLEND);
-        ((GuiExtension) parent).drawScaledCustomSizeModalRect(1, 1, 40F, 8F, 8, 8, 8, 8, 64F, 64F);
+        ((GuiExtension) parent).drawScaledCustomSizeModalRect(1, 1, 40F, 8F, 8, 8, 8, 8, 64F, 32F);
         GL11.glDisable(GL11.GL_BLEND);
 
         if (state.isDisabled()) {
