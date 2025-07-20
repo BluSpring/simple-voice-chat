@@ -73,8 +73,8 @@ public class GroupChatManager {
             }
             GL11.glEnable(GL11.GL_BLEND);
             GameProfileUtils.bindSkinTexture(state.getName());
-            GuiExtension.staticDrawModalRectWithCustomSizedTexture(posX < 0 ? -1 - 8 : 1, posY < 0 ? -1 - 8 : 1, 8, 8, 8, 8, 64, 64);
-            GuiExtension.staticDrawModalRectWithCustomSizedTexture(posX < 0 ? -1 - 8 : 1, posY < 0 ? -1 - 8 : 1, 40, 8, 8, 8, 64, 64);
+            GuiExtension.staticDrawModalRectWithCustomSizedTexture(posX < 0 ? -1 - 8 : 1, posY < 0 ? -1 - 8 : 1, 8, 8, 8, 8, 64, 32);
+            GuiExtension.staticDrawModalRectWithCustomSizedTexture(posX < 0 ? -1 - 8 : 1, posY < 0 ? -1 - 8 : 1, 40, 8, 8, 8, 64, 32);
 
             if (state.isDisabled()) {
                 GL11.glPushMatrix();
