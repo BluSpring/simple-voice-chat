@@ -13,6 +13,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class EntityPlayerMPMixin {
     @Inject(method = "onDeath", at = @At("HEAD"))
     public void onPlayerDeath(DamageSource par1, CallbackInfo ci) {
-        FabricCommonCompatibilityManager.instance.onPlayerLogOut((EntityPlayerMP) (Object) this);
+        //FabricCommonCompatibilityManager.instance.onPlayerLogOut((EntityPlayerMP) (Object) this);
     }
 }

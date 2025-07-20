@@ -5,14 +5,18 @@ import de.maxhenkel.voicechat.MinecraftAccessor;
 import de.maxhenkel.voicechat.intercompatibility.FabricClientCompatibilityManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.EntityPlayer;
+import net.minecraft.src.EntityPlayerSP;
 import net.minecraft.src.World;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Minecraft.class)
 public class MinecraftMixin {
+    @Shadow public EntityPlayerSP thePlayer;
+
     @Inject(method = "startGame", at = @At("TAIL"))
     public void assignMinecraft(CallbackInfo ci) {
         MinecraftAccessor.setInstance((Minecraft) (Object) this);
@@ -27,6 +31,11 @@ public class MinecraftMixin {
     @Inject(method = "changeWorld", at = @At(value = "INVOKE", target = "Lnet/minecraft/src/EntityPlayerSP;preparePlayerToSpawn()V", ordinal = 0))
     public void joinWorld(World string, String entityPlayer, EntityPlayer par3, CallbackInfo ci) {
         FabricClientCompatibilityManager.getInstance().onJoinServer();
+    }
+
+    @Inject(method = "respawn", at = @At("TAIL"))
+    private void respawnPlayer(boolean i, int bl2, boolean par3, CallbackInfo ci) {
+        FabricClientCompatibilityManager.getInstance().onJoinWorld(this.thePlayer);
     }
 
     @Inject(method = "changeWorld", at = @At("HEAD"))
