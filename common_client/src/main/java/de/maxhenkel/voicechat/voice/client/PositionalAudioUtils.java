@@ -45,7 +45,7 @@ public class PositionalAudioUtils {
         left += fill;
         right += fill;
 
-        return new float[]{left, right};
+        return new float[]{right, left}; // 1.0: flip
     }
 
     /**
